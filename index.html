@@ -92,6 +92,8 @@
       background-color:#f5f6fa;
       background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Ctext x='90' y='90' text-anchor='middle' dominant-baseline='central' font-family='Space%20Grotesk,sans-serif' font-size='22' font-weight='700' fill='%23111827' opacity='0.055' transform='rotate(-25,90,90)'%3ELnyeon%3C/text%3E%3C/svg%3E");
       background-repeat:repeat; background-size:180px 180px;
+      transform-style:preserve-3d; perspective:1200px;
+      transform:perspective(1200px) rotateX(calc(var(--hero-ry,0)*1deg));
     }
     .hero-text {
       position:relative; width:100%; min-height:100vh;
@@ -833,10 +835,17 @@
         var p = getLocalPos(e);
         spotlight.style.transition = 'none';
         moveSpotlight(p.x, p.y, RADIUS);
+        // 首屏随鼠标轻微下倾
+        var hr = hero.getBoundingClientRect();
+        var yr = (e.clientY - hr.top) / hr.height;
+        hero.style.setProperty('--hero-ry', ((yr - 0.5) * -3).toFixed(1));
       });
       hero.addEventListener('mouseleave', function () {
         spotlight.style.transition = 'clip-path 0.35s cubic-bezier(0.4, 0, 0.2, 1)';
         spotlight.style.clipPath = 'circle(0px at 0px 0px)';
+        hero.style.transition = 'transform 0.6s cubic-bezier(0.22,1,0.36,1)';
+        hero.style.setProperty('--hero-ry', '0');
+        setTimeout(function() { hero.style.transition = ''; }, 700);
       });
 
       /* ==========================================================
