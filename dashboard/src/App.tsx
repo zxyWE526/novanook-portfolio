@@ -9,6 +9,9 @@ import QuestionBankPage from './pages/QuestionBankPage';
 import WrongQuestionPage from './pages/WrongQuestionPage';
 import ReviewPage from './pages/ReviewPage';
 import AnalyticsPage from './pages/AnalyticsPage';
+import WorkspaceDashboard from './pages/workspace/WorkspaceDashboard';
+import WrongBookSandbox from './pages/wrongbook/WrongBookSandbox';
+import KnowledgeGraphTopology from './pages/knowledge/KnowledgeGraphTopology';
 
 export default function App() {
   return (
@@ -17,10 +20,13 @@ export default function App() {
         <Routes>
           <Route element={<MainLayout />}>
             <Route path="/dashboard" element={<DashboardPage />} />
+            <Route path="/workspace" element={<WorkspaceDashboard />} />
             <Route path="/subjects" element={<SubjectPage />} />
             <Route path="/knowledge-tree" element={<KnowledgeTreePage />} />
+            <Route path="/knowledge-graph" element={<KnowledgeGraphTopology />} />
             <Route path="/questions" element={<QuestionBankPage />} />
             <Route path="/wrong-questions" element={<WrongQuestionPage />} />
+            <Route path="/wrongbook" element={<WrongBookSandbox />} />
             <Route path="/review" element={<ReviewPage />} />
             <Route path="/analytics" element={<AnalyticsPage />} />
             <Route path="*" element={<Navigate to="/dashboard" replace />} />

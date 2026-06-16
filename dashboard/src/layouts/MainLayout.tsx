@@ -8,6 +8,8 @@ import {
   WarningOutlined,
   CheckCircleOutlined,
   BarChartOutlined,
+  PartitionOutlined,
+  ExperimentOutlined,
   MenuFoldOutlined,
   MenuUnfoldOutlined,
 } from '@ant-design/icons';
@@ -18,20 +20,26 @@ const { Title } = Typography;
 
 const menuItems = [
   { key: '/dashboard', icon: <DashboardOutlined />, label: '工作台' },
+  { key: '/workspace', icon: <ExperimentOutlined />, label: '专注看板' },
   { key: '/subjects', icon: <BookOutlined />, label: '学科管理' },
   { key: '/knowledge-tree', icon: <ApartmentOutlined />, label: '知识树' },
+  { key: '/knowledge-graph', icon: <PartitionOutlined />, label: '考点拓扑' },
   { key: '/questions', icon: <DatabaseOutlined />, label: '题库管理' },
   { key: '/wrong-questions', icon: <WarningOutlined />, label: '错题本' },
+  { key: '/wrongbook', icon: <ExperimentOutlined />, label: '错题沙盒' },
   { key: '/review', icon: <CheckCircleOutlined />, label: '复习任务' },
   { key: '/analytics', icon: <BarChartOutlined />, label: '数据分析' },
 ];
 
 const pageTitles: Record<string, string> = {
   '/dashboard': '工作台',
+  '/workspace': '专注看板',
   '/subjects': '学科管理',
   '/knowledge-tree': '知识树',
+  '/knowledge-graph': '考点拓扑',
   '/questions': '题库管理',
   '/wrong-questions': '错题本',
+  '/wrongbook': '错题沙盒',
   '/review': '复习任务',
   '/analytics': '数据分析',
 };
