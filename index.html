@@ -3,16 +3,33 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Lnyeon · 你好</title>
+  <title>Lnyeon · Portfolio</title>
 
-  <!-- ===== 字体：Space Grotesk（科技感几何字体） ===== -->
+  <!-- ===== 字体 ===== -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet" />
 
   <style>
     /* ============================================================
-       0. 全局重置
+       0. CSS 变量 — 设计令牌
+       ============================================================ */
+    :root {
+      --color-deep-space: #0B1120;
+      --color-starlight:  #F8FAFC;
+      --color-nova-teal:  #2DD4BF;
+      --color-warm-amber: #F59E0B;
+      --color-slate:      #1E293B;
+      --color-stardust:   #94A3B8;
+      --color-white:      #ffffff;
+      --color-dark-text:  #111827;
+      --font-display: 'Space Grotesk', 'PingFang SC', 'Microsoft YaHei', sans-serif;
+      --font-body:    'Inter', 'PingFang SC', 'Microsoft YaHei', sans-serif;
+      --nav-height: 64px;
+    }
+
+    /* ============================================================
+       1. 全局重置
        ============================================================ */
     *, *::before, *::after {
       margin: 0;
@@ -20,104 +37,183 @@
       box-sizing: border-box;
     }
 
-    html, body {
-      height: 100%;
-      /* 字体栈：英文字体用 Space Grotesk，中文字体回退到系统 */
-      font-family: 'Space Grotesk', 'PingFang SC', 'Microsoft YaHei', 'Hiragino Sans GB', sans-serif;
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      font-family: var(--font-body);
+      color: var(--color-dark-text);
+      background-color: var(--color-white);
     }
 
     /* ============================================================
-       1. 背景：纯白 + "L N Y E O N" 重复暗纹水印
+       2. 导航栏
        ============================================================ */
-    body {
-      background-color: #ffffff;
-      /* SVG 数据 URI：平铺斜体 "Lnyeon" 暗纹水印 */
-      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='400'%3E%3Ctext x='200' y='200' text-anchor='middle' dominant-baseline='central' font-family='Space%20Grotesk,sans-serif' font-size='44' font-weight='700' fill='%23111827' opacity='0.07' transform='rotate(-25,200,200)'%3ELnyeon%3C/text%3E%3C/svg%3E");
+    .nav {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      z-index: 1000;
+      padding: 0 2rem;
+      height: var(--nav-height);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: background 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .nav.scrolled {
+      background: rgba(255, 255, 255, 0.85);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      box-shadow: 0 1px 0 rgba(0, 0, 0, 0.05);
+    }
+
+    .nav-inner {
+      width: 100%;
+      max-width: 1200px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .nav-logo {
+      font-family: var(--font-display);
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: var(--color-dark-text);
+      text-decoration: none;
+      letter-spacing: -0.02em;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 2rem;
+    }
+
+    .nav-link {
+      font-size: 0.875rem;
+      font-weight: 500;
+      color: var(--color-stardust);
+      text-decoration: none;
+      transition: color 0.2s;
+      position: relative;
+    }
+
+    .nav-link::after {
+      content: '';
+      position: absolute;
+      bottom: -4px;
+      left: 0;
+      width: 0;
+      height: 2px;
+      background: var(--color-nova-teal);
+      transition: width 0.2s;
+    }
+
+    .nav-link:hover {
+      color: var(--color-dark-text);
+    }
+
+    .nav-link:hover::after {
+      width: 100%;
+    }
+
+    /* 移动端：三横菜单 */
+    .nav-toggle {
+      display: none;
+      flex-direction: column;
+      gap: 5px;
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 4px;
+    }
+
+    .nav-toggle span {
+      display: block;
+      width: 22px;
+      height: 2px;
+      background: var(--color-dark-text);
+      border-radius: 2px;
+      transition: 0.3s;
+    }
+
+    /* ===== 水印背景（统一用在全站浅色区块） ===== */
+    .watermark-bg {
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='400'%3E%3Ctext x='200' y='200' text-anchor='middle' dominant-baseline='central' font-family='Space%20Grotesk,sans-serif' font-size='44' font-weight='700' fill='%23111827' opacity='0.035' transform='rotate(-25,200,200)'%3ELnyeon%3C/text%3E%3C/svg%3E");
       background-repeat: repeat;
       background-size: 400px 400px;
     }
 
     /* ============================================================
-       2. 英雄区：全屏居中
+       3. 英雄区（探照灯特效）
        ============================================================ */
     .hero {
       min-height: 100vh;
       display: flex;
       align-items: center;
       justify-content: center;
-      /* 防止在小屏幕下被水印淹没 */
       padding: 1.5rem;
+      background-color: #ffffff;
+      /* 水印暗纹 */
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='400'%3E%3Ctext x='200' y='200' text-anchor='middle' dominant-baseline='central' font-family='Space%20Grotesk,sans-serif' font-size='44' font-weight='700' fill='%23111827' opacity='0.07' transform='rotate(-25,200,200)'%3ELnyeon%3C/text%3E%3C/svg%3E");
+      background-repeat: repeat;
+      background-size: 400px 400px;
     }
 
-    /* ============================================================
-       3. 文字容器（中英文共用定位）
-       ============================================================ */
     .hero-text {
-      position: relative;           /* 探照灯绝对定位的参考 */
-      width: 100%;                  /* 铺满全屏 */
-      min-height: 100vh;            /* 全屏高度 */
-      display: flex;                /* 弹性布局居中文字 */
+      position: relative;
+      width: 100%;
+      min-height: 100vh;
+      display: flex;
       align-items: center;
       justify-content: center;
       cursor: default;
     }
 
-    /* ===== 通用文字样式（中英文完全一致，保证完美重叠） ===== */
     .hero-text .text {
       display: block;
+      font-family: var(--font-display);
       font-size: clamp(2.5rem, 10vw, 5.5rem);
       font-weight: 600;
       line-height: 1.2;
       letter-spacing: 0.02em;
       white-space: nowrap;
       user-select: none;
-      /* 内边距让探照灯有更多活动空间 */
       padding: 0.6em 1.2em;
     }
 
-    /* ===== 中文基底（始终可见，深色字） ===== */
     .hero-text .chinese {
-      color: #111827;
+      color: var(--color-dark-text);
     }
 
-    /* ============================================================
-       4. 探照灯层（黑色圆形遮罩）
-       ============================================================
-       原理：clip-path 只显示圆形区域内的部分，
-       区域内是黑色背景 + 白色英文字，
-       区域外透明，露出底下的中文。
-       ============================================================ */
     .spotlight {
       position: absolute;
       top: 0;
       left: 0;
       width: 100%;
       height: 100%;
-      /* 黑色背景——这就是"黑色圆形遮罩" */
       background: #0a0a0a;
-      /* 默认圆形半径为 0，即完全隐藏 */
       clip-path: circle(0px at 50% 50%);
-      /* 弹性布局，让英文居中 */
       display: flex;
       align-items: center;
       justify-content: center;
-      /* 不拦截鼠标事件，让底层的 hero-text 收到事件 */
       pointer-events: none;
-      /* GPU 加速提示 */
       will-change: clip-path;
-      /* 离场过渡（入场由 JS 控制） */
       transition: clip-path 0.35s cubic-bezier(0.4, 0, 0.2, 1);
       z-index: 2;
     }
 
-    /* ===== 探照灯内的英文（白字） ===== */
     .spotlight .english {
       color: #ffffff;
       position: relative;
       z-index: 1;
     }
 
-    /* ===== 探照灯内反色水印：鼠标划过时水印呈现白字 ===== */
+    /* 探照灯内反色水印 */
     .spotlight::before {
       content: '';
       position: absolute;
@@ -130,42 +226,436 @@
     }
 
     /* ============================================================
-       5. 响应式适配
+       4. 通用区块样式
        ============================================================ */
+    .section {
+      padding: 6rem 2rem;
+    }
+
+    .section-inner {
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+
+    .section-label {
+      font-family: var(--font-display);
+      font-size: 0.75rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.15em;
+      color: var(--color-nova-teal);
+      margin-bottom: 0.75rem;
+    }
+
+    .section-title {
+      font-family: var(--font-display);
+      font-size: clamp(2rem, 5vw, 3rem);
+      font-weight: 700;
+      line-height: 1.15;
+      color: var(--color-dark-text);
+      margin-bottom: 1.5rem;
+    }
+
+    .section-desc {
+      font-size: 1.125rem;
+      line-height: 1.7;
+      color: var(--color-stardust);
+      max-width: 560px;
+    }
+
+    /* 区块分隔装饰 */
+    .section-divider {
+      width: 2.5rem;
+      height: 3px;
+      background: var(--color-nova-teal);
+      border-radius: 2px;
+      margin-bottom: 2rem;
+    }
+
+    /* 深色区变体 */
+    .section--dark {
+      background-color: var(--color-deep-space);
+    }
+
+    .section--dark .section-title {
+      color: var(--color-starlight);
+    }
+
+    .section--dark .section-desc {
+      color: var(--color-stardust);
+    }
+
+    /* 淡入滚动动画 */
+    .fade-up {
+      opacity: 0;
+      transform: translateY(30px);
+      transition: opacity 0.6s ease, transform 0.6s ease;
+    }
+
+    .fade-up.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* ============================================================
+       5. 项目作品区
+       ============================================================ */
+    .projects-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+      gap: 1.5rem;
+      margin-top: 3rem;
+    }
+
+    .project-card {
+      background: var(--color-white);
+      border: 1px solid rgba(0, 0, 0, 0.06);
+      border-radius: 16px;
+      overflow: hidden;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      cursor: pointer;
+    }
+
+    .project-card:hover {
+      transform: translateY(-6px);
+      box-shadow: 0 12px 40px rgba(0, 0, 0, 0.08);
+    }
+
+    .project-thumb {
+      width: 100%;
+      aspect-ratio: 16 / 9;
+      background: linear-gradient(135deg, var(--color-stardust), var(--color-slate));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 2rem;
+      color: rgba(255, 255, 255, 0.3);
+      font-family: var(--font-display);
+      font-weight: 700;
+    }
+
+    .project-body {
+      padding: 1.5rem;
+    }
+
+    .project-title {
+      font-family: var(--font-display);
+      font-size: 1.125rem;
+      font-weight: 600;
+      color: var(--color-dark-text);
+      margin-bottom: 0.5rem;
+    }
+
+    .project-desc {
+      font-size: 0.875rem;
+      line-height: 1.6;
+      color: var(--color-stardust);
+      margin-bottom: 1rem;
+    }
+
+    .project-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+    }
+
+    .project-tag {
+      font-size: 0.75rem;
+      font-weight: 500;
+      padding: 0.25rem 0.75rem;
+      border-radius: 999px;
+      background: rgba(45, 212, 191, 0.1);
+      color: var(--color-nova-teal);
+    }
+
+    /* ============================================================
+       6. 技能区
+       ============================================================ */
+    .skills-content {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+      gap: 2.5rem;
+      margin-top: 3rem;
+    }
+
+    .skill-group-title {
+      font-family: var(--font-display);
+      font-size: 0.875rem;
+      font-weight: 600;
+      color: var(--color-starlight);
+      margin-bottom: 1rem;
+      letter-spacing: 0.05em;
+    }
+
+    .skill-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.625rem;
+    }
+
+    .skill-tag {
+      font-size: 0.8125rem;
+      padding: 0.4rem 1rem;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.06);
+      color: var(--color-stardust);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      transition: background 0.2s, color 0.2s, border-color 0.2s;
+    }
+
+    .skill-tag:hover {
+      background: rgba(45, 212, 191, 0.12);
+      color: var(--color-nova-teal);
+      border-color: rgba(45, 212, 191, 0.2);
+    }
+
+    /* 技能延迟入场 */
+    .skill-group {
+      opacity: 0;
+      transform: translateY(20px);
+      transition: opacity 0.5s ease, transform 0.5s ease;
+    }
+
+    .skill-group.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .skill-group:nth-child(1) { transition-delay: 0s; }
+    .skill-group:nth-child(2) { transition-delay: 0.1s; }
+    .skill-group:nth-child(3) { transition-delay: 0.2s; }
+    .skill-group:nth-child(4) { transition-delay: 0.3s; }
+
+    /* ============================================================
+       7. 关于我
+       ============================================================ */
+    .about-grid {
+      display: grid;
+      grid-template-columns: 1fr 1.5fr;
+      gap: 4rem;
+      align-items: center;
+      margin-top: 2rem;
+    }
+
+    .about-avatar {
+      width: 100%;
+      aspect-ratio: 1;
+      border-radius: 20px;
+      background: linear-gradient(135deg, var(--color-nova-teal), var(--color-warm-amber));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 3rem;
+      color: rgba(255, 255, 255, 0.6);
+      font-family: var(--font-display);
+      font-weight: 700;
+    }
+
+    .about-text {
+      font-size: 1rem;
+      line-height: 1.8;
+      color: var(--color-stardust);
+    }
+
+    .about-text p + p {
+      margin-top: 1rem;
+    }
+
+    .about-text strong {
+      color: var(--color-dark-text);
+      font-weight: 600;
+    }
+
+    /* ============================================================
+       8. 联系方式
+       ============================================================ */
+    .contact-content {
+      text-align: center;
+      max-width: 520px;
+      margin: 0 auto;
+    }
+
+    .contact-content .section-divider {
+      margin: 0 auto 2rem;
+    }
+
+    .contact-email {
+      display: inline-block;
+      font-family: var(--font-display);
+      font-size: clamp(1.25rem, 3vw, 1.75rem);
+      font-weight: 600;
+      color: var(--color-starlight);
+      text-decoration: none;
+      margin-top: 1.5rem;
+      padding-bottom: 2px;
+      border-bottom: 2px solid var(--color-nova-teal);
+      transition: color 0.2s;
+    }
+
+    .contact-email:hover {
+      color: var(--color-nova-teal);
+    }
+
+    .contact-socials {
+      display: flex;
+      justify-content: center;
+      gap: 1.5rem;
+      margin-top: 2.5rem;
+    }
+
+    .contact-social-link {
+      font-size: 0.875rem;
+      font-weight: 500;
+      color: var(--color-stardust);
+      text-decoration: none;
+      padding: 0.5rem 1.25rem;
+      border-radius: 999px;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      transition: all 0.2s;
+    }
+
+    .contact-social-link:hover {
+      color: var(--color-nova-teal);
+      border-color: rgba(45, 212, 191, 0.3);
+      background: rgba(45, 212, 191, 0.06);
+    }
+
+    /* ============================================================
+       9. 页脚
+       ============================================================ */
+    .footer {
+      padding: 2.5rem 2rem;
+      background: var(--color-deep-space);
+      border-top: 1px solid rgba(255, 255, 255, 0.05);
+      text-align: center;
+    }
+
+    .footer p {
+      font-size: 0.8125rem;
+      color: var(--color-stardust);
+      opacity: 0.6;
+    }
+
+    .footer a {
+      color: var(--color-nova-teal);
+      text-decoration: none;
+    }
+
+    /* ============================================================
+       10. 响应式适配
+       ============================================================ */
+    /* 平板 */
+    @media (max-width: 768px) {
+      .nav-links { gap: 1.25rem; }
+      .nav-link { font-size: 0.8125rem; }
+
+      .section { padding: 4rem 1.5rem; }
+
+      .projects-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .about-grid {
+        grid-template-columns: 1fr;
+        gap: 2rem;
+      }
+
+      .about-avatar {
+        max-width: 240px;
+        margin: 0 auto;
+      }
+
+      .skills-content {
+        grid-template-columns: 1fr 1fr;
+        gap: 1.5rem;
+      }
+    }
+
+    /* 手机 */
     @media (max-width: 480px) {
+      .nav-links {
+        position: fixed;
+        top: var(--nav-height);
+        left: 0;
+        width: 100%;
+        flex-direction: column;
+        gap: 0;
+        background: rgba(255, 255, 255, 0.95);
+        backdrop-filter: blur(12px);
+        padding: 1rem 2rem;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+        transform: translateY(-110%);
+        transition: transform 0.3s ease;
+      }
+
+      .nav-links.open { transform: translateY(0); }
+
+      .nav-link {
+        padding: 0.75rem 0;
+        font-size: 1rem;
+      }
+
+      .nav-toggle { display: flex; }
+
+      .section { padding: 3rem 1.25rem; }
+      .section-title { font-size: 1.75rem; }
+
+      .projects-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .skills-content {
+        grid-template-columns: 1fr;
+      }
+
       .hero-text .text {
         font-size: 1.6rem;
         padding: 0.4em 0.6em;
       }
+
+      .contact-socials {
+        flex-direction: column;
+        align-items: center;
+      }
     }
 
     @media (min-width: 481px) and (max-width: 768px) {
-      .hero-text .text {
-        font-size: 2.8rem;
-      }
+      .hero-text .text { font-size: 2.8rem; }
     }
   </style>
 </head>
 <body>
 
   <!-- ============================================================
-       英雄区
+       导航栏
        ============================================================ -->
-  <section class="hero">
+  <nav class="nav" id="nav">
+    <div class="nav-inner">
+      <a href="#" class="nav-logo">Lnyeon</a>
+
+      <button class="nav-toggle" id="navToggle" aria-label="菜单">
+        <span></span><span></span><span></span>
+      </button>
+
+      <div class="nav-links" id="navLinks">
+        <a href="#work" class="nav-link">Work</a>
+        <a href="#skills" class="nav-link">Skills</a>
+        <a href="#about" class="nav-link">About</a>
+        <a href="#contact" class="nav-link">Contact</a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- ============================================================
+       英雄区（探照灯特效）
+       ============================================================ -->
+  <section class="hero" id="hero">
     <div class="hero-text" id="heroText">
 
-      <!--
-        第 1 层：中文基底
-        直接可见，颜色 #111827（深灰，接近黑但不刺眼）
-      -->
+      <!-- 第 1 层：中文基底 -->
       <h1 class="text chinese">你好，我是 Lnyeon</h1>
 
-      <!--
-        第 2 层：探照灯遮罩
-        - 黑色背景 clip-path 圆形区域
-        - 圆形内显示白色英文 "Hello, I'm Lnyeon"
-        - 圆形外透明，露出中文
-      -->
+      <!-- 第 2 层：探照灯遮罩 -->
       <div class="spotlight" id="spotlight">
         <h1 class="text english">Hello, I'm Lnyeon</h1>
       </div>
@@ -174,25 +664,208 @@
   </section>
 
   <!-- ============================================================
-       JavaScript：探照灯交互逻辑
+       项目作品
+       ============================================================ -->
+  <section class="section" id="work">
+    <div class="section-inner">
+      <div class="fade-up">
+        <p class="section-label">Selected Work</p>
+        <div class="section-divider"></div>
+        <h2 class="section-title">Things I've built</h2>
+        <p class="section-desc">
+          A selection of projects that reflect my curiosity and craft.
+        </p>
+      </div>
+
+      <div class="projects-grid">
+        <!-- 项目卡片模板（可替换实际内容） -->
+        <div class="project-card fade-up">
+          <div class="project-thumb">01</div>
+          <div class="project-body">
+            <h3 class="project-title">Project Name</h3>
+            <p class="project-desc">A short description of the project, the problem it solves, and what you learned building it.</p>
+            <div class="project-tags">
+              <span class="project-tag">React</span>
+              <span class="project-tag">TypeScript</span>
+              <span class="project-tag">Tailwind</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="project-card fade-up">
+          <div class="project-thumb">02</div>
+          <div class="project-body">
+            <h3 class="project-title">Project Name</h3>
+            <p class="project-desc">A short description of the project, the problem it solves, and what you learned building it.</p>
+            <div class="project-tags">
+              <span class="project-tag">Python</span>
+              <span class="project-tag">FastAPI</span>
+              <span class="project-tag">Docker</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="project-card fade-up">
+          <div class="project-thumb">03</div>
+          <div class="project-body">
+            <h3 class="project-title">Project Name</h3>
+            <p class="project-desc">A short description of the project, the problem it solves, and what you learned building it.</p>
+            <div class="project-tags">
+              <span class="project-tag">Next.js</span>
+              <span class="project-tag">Prisma</span>
+              <span class="project-tag">PostgreSQL</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================================
+       技能
+       ============================================================ -->
+  <section class="section section--dark" id="skills">
+    <div class="section-inner">
+      <div class="fade-up">
+        <p class="section-label">Toolbox</p>
+        <div class="section-divider"></div>
+        <h2 class="section-title">Skills & tools</h2>
+        <p class="section-desc">
+          Technologies I work with regularly.
+        </p>
+      </div>
+
+      <div class="skills-content">
+        <div class="skill-group">
+          <p class="skill-group-title">Frontend</p>
+          <div class="skill-tags">
+            <span class="skill-tag">React</span>
+            <span class="skill-tag">TypeScript</span>
+            <span class="skill-tag">Next.js</span>
+            <span class="skill-tag">Tailwind CSS</span>
+            <span class="skill-tag">HTML/CSS</span>
+          </div>
+        </div>
+
+        <div class="skill-group">
+          <p class="skill-group-title">Backend</p>
+          <div class="skill-tags">
+            <span class="skill-tag">Node.js</span>
+            <span class="skill-tag">Python</span>
+            <span class="skill-tag">Go</span>
+            <span class="skill-tag">FastAPI</span>
+            <span class="skill-tag">PostgreSQL</span>
+          </div>
+        </div>
+
+        <div class="skill-group">
+          <p class="skill-group-title">DevOps</p>
+          <div class="skill-tags">
+            <span class="skill-tag">Docker</span>
+            <span class="skill-tag">GitHub Actions</span>
+            <span class="skill-tag">Cloudflare</span>
+            <span class="skill-tag">Linux</span>
+          </div>
+        </div>
+
+        <div class="skill-group">
+          <p class="skill-group-title">Design</p>
+          <div class="skill-tags">
+            <span class="skill-tag">Figma</span>
+            <span class="skill-tag">UI Design</span>
+            <span class="skill-tag">Animation</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================================
+       关于我
+       ============================================================ -->
+  <section class="section" id="about">
+    <div class="section-inner">
+      <div class="fade-up">
+        <p class="section-label">About</p>
+        <div class="section-divider"></div>
+        <h2 class="section-title">Who I am</h2>
+      </div>
+
+      <div class="about-grid">
+        <div class="about-avatar fade-up">
+          LN
+        </div>
+        <div class="about-text fade-up">
+          <p>
+            Hey, I'm <strong>Lnyeon</strong> — a developer who enjoys building things
+            that live on the internet. I focus on creating clean,
+            performant, and thoughtfully designed experiences.
+          </p>
+          <p>
+            When I'm not coding, you'll find me exploring new tools,
+            breaking things to learn how they work, and occasionally
+            writing about what I discover.
+          </p>
+          <p>
+            This site is my corner of the web — a place to share my work
+            and connect with like-minded people.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================================
+       联系方式
+       ============================================================ -->
+  <section class="section section--dark" id="contact">
+    <div class="section-inner">
+      <div class="contact-content fade-up">
+        <p class="section-label">Contact</p>
+        <div class="section-divider"></div>
+        <h2 class="section-title">Let's work together</h2>
+        <p class="section-desc" style="margin: 0 auto;">
+          Have a project in mind or just want to say hi? Drop me a line.
+        </p>
+
+        <a href="mailto:hello@novanook.cloud" class="contact-email">
+          hello@novanook.cloud →
+        </a>
+
+        <div class="contact-socials">
+          <a href="https://github.com/zxyWE526" target="_blank" rel="noopener" class="contact-social-link">
+            GitHub
+          </a>
+          <a href="mailto:hello@novanook.cloud" class="contact-social-link">
+            Email
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================================
+       页脚
+       ============================================================ -->
+  <footer class="footer">
+    <p>© 2026 <a href="#">Lnyeon</a>. Built with curiosity.</p>
+  </footer>
+
+  <!-- ============================================================
+       JavaScript
        ============================================================ -->
   <script>
     (function () {
       'use strict';
 
-      /* ---- DOM 引用 ---- */
+      /* ==========================================================
+         1. 探照灯交互（英雄区）
+         ========================================================== */
       const hero = document.querySelector('.hero');
       const heroText = document.getElementById('heroText');
       const spotlight = document.getElementById('spotlight');
+      const RADIUS = 200;
 
-      /* ---- 配置 ---- */
-      const RADIUS = 200; // 探照灯圆形半径（像素）
-
-      /* ---- 核心逻辑 ---- */
-
-      /**
-       * 获取鼠标相对于 heroText 容器的坐标
-       */
       function getLocalPos(e) {
         const rect = heroText.getBoundingClientRect();
         return {
@@ -201,52 +874,115 @@
         };
       }
 
-      /**
-       * 将探照灯定位到指定坐标
-       * @param {number} x 相对容器的 X 坐标
-       * @param {number} y 相对容器的 Y 坐标
-       * @param {number} r 圆形半径
-       */
       function moveSpotlight(x, y, r) {
-        spotlight.style.clipPath = `circle(${r}px at ${x}px ${y}px)`;
+        spotlight.style.clipPath = 'circle(' + r + 'px at ' + x + 'px ' + y + 'px)';
       }
 
-      // ---- (1) 鼠标进入英雄区：探照灯在光标位置亮起 ----
       hero.addEventListener('mouseenter', function (e) {
-        const pos = getLocalPos(e);
-
-        // 第一步：取消过渡，瞬间将圆形缩到 0（在鼠标位置）
+        var pos = getLocalPos(e);
         spotlight.style.transition = 'none';
         moveSpotlight(pos.x, pos.y, 0);
-
-        // 第二步：强制浏览器应用上述样式变更
-        // eslint-disable-next-line no-unused-expressions
-        spotlight.offsetHeight;
-
-        // 第三步：启用过渡动画，将圆形展开到目标半径
-        spotlight.style.transition =
-          'clip-path 0.3s cubic-bezier(0.34, 1.56, 0.64, 1)'; // 弹性入场
+        var _ = spotlight.offsetHeight; // force reflow
+        spotlight.style.transition = 'clip-path 0.3s cubic-bezier(0.34, 1.56, 0.64, 1)';
         moveSpotlight(pos.x, pos.y, RADIUS);
       });
 
-      // ---- (2) 鼠标移动：探照灯严丝合缝跟随 ----
       hero.addEventListener('mousemove', function (e) {
-        const pos = getLocalPos(e);
-        // 移动时必须取消过渡，否则会有滞后感
+        var pos = getLocalPos(e);
         spotlight.style.transition = 'none';
         moveSpotlight(pos.x, pos.y, RADIUS);
       });
 
-      // ---- (3) 鼠标离开英雄区：探照灯平滑熄灭 ----
       hero.addEventListener('mouseleave', function () {
-        // 平滑缩小到 0，transition 已在 CSS 中定义
-        spotlight.style.transition =
-          'clip-path 0.35s cubic-bezier(0.4, 0, 0.2, 1)';
+        spotlight.style.transition = 'clip-path 0.35s cubic-bezier(0.4, 0, 0.2, 1)';
         spotlight.style.clipPath = 'circle(0px at 0px 0px)';
       });
 
+      /* ==========================================================
+         2. 导航栏滚动效果
+         ========================================================== */
+      var nav = document.getElementById('nav');
+      var lastScrollY = 0;
+
+      window.addEventListener('scroll', function () {
+        var scrollY = window.scrollY;
+        if (scrollY > 60) {
+          nav.classList.add('scrolled');
+        } else {
+          nav.classList.remove('scrolled');
+        }
+        lastScrollY = scrollY;
+      }, { passive: true });
+
+      /* ==========================================================
+         3. 淡入滚动动画 (IntersectionObserver)
+         ========================================================== */
+      var fadeElements = document.querySelectorAll('.fade-up');
+
+      if ('IntersectionObserver' in window) {
+        var fadeObserver = new IntersectionObserver(function (entries) {
+          entries.forEach(function (entry) {
+            if (entry.isIntersecting) {
+              entry.target.classList.add('visible');
+              fadeObserver.unobserve(entry.target);
+            }
+          });
+        }, { threshold: 0.15, rootMargin: '0px 0px -40px 0px' });
+
+        fadeElements.forEach(function (el) {
+          fadeObserver.observe(el);
+        });
+      } else {
+        // 降级：不支持 IntersectionObserver 时全部显示
+        fadeElements.forEach(function (el) {
+          el.classList.add('visible');
+        });
+      }
+
+      /* ==========================================================
+         4. 技能组入场动画
+         ========================================================== */
+      var skillGroups = document.querySelectorAll('.skill-group');
+
+      if ('IntersectionObserver' in window) {
+        var skillObserver = new IntersectionObserver(function (entries) {
+          entries.forEach(function (entry) {
+            if (entry.isIntersecting) {
+              entry.target.classList.add('visible');
+              skillObserver.unobserve(entry.target);
+            }
+          });
+        }, { threshold: 0.2 });
+
+        skillGroups.forEach(function (el) {
+          skillObserver.observe(el);
+        });
+      } else {
+        skillGroups.forEach(function (el) {
+          el.classList.add('visible');
+        });
+      }
+
+      /* ==========================================================
+         5. 移动端菜单切换
+         ========================================================== */
+      var navToggle = document.getElementById('navToggle');
+      var navLinks = document.getElementById('navLinks');
+
+      if (navToggle) {
+        navToggle.addEventListener('click', function () {
+          navLinks.classList.toggle('open');
+        });
+
+        // 点击链接后关闭菜单
+        navLinks.querySelectorAll('.nav-link').forEach(function (link) {
+          link.addEventListener('click', function () {
+            navLinks.classList.remove('open');
+          });
+        });
+      }
+
     })();
   </script>
-
 </body>
 </html>
