@@ -142,30 +142,26 @@
       border-radius:2px; margin-bottom:1.5rem;
     }
 
-    /* 深色区块 */
-    .section--dark {
-      background:var(--deep-space);
-      margin-top:-1px; /* 消除间隙 */
+    /* ===== 联系区亮色表单覆盖 ===== */
+    .section--contact .form-group input,
+    .section--contact .form-group textarea {
+      border-color: #e0e0e0;
+      background: #fff;
+      color: #333;
     }
-    .section--dark .section-title { color:var(--starlight); }
-    .section--dark .section-desc { color:var(--stardust); }
-
-    /* 渐变过渡：白 → 深色之间 */
-    .section--to-dark::after {
-      content:''; position:absolute; bottom:0; left:0; right:0;
-      height:120px;
-      background:linear-gradient(to bottom, transparent, var(--deep-space));
-      pointer-events:none;
+    .section--contact .form-group input:focus,
+    .section--contact .form-group textarea:focus {
+      border-color: var(--nova-teal);
+      box-shadow: 0 0 0 3px rgba(45,212,191,.15);
     }
-
-    /* 渐变过渡：深色 → 白之间 */
-    .section--from-dark::before {
-      content:''; position:absolute; top:0; left:0; right:0;
-      height:120px;
-      background:linear-gradient(to bottom, var(--deep-space), transparent);
-      pointer-events:none; z-index:1;
+    .section--contact .contact-social-link {
+      border-color: #e0e0e0;
+      color: #666;
     }
-    .section--from-dark { margin-top:-120px; padding-top:calc(6rem + 120px); }
+    .section--contact .contact-social-link:hover {
+      color: var(--nova-teal);
+      border-color: rgba(45,212,191,.3);
+    }
 
     /* 滚动动画 */
     .fade-up {
@@ -281,7 +277,7 @@
     }
     .skill-group-title {
       font-family:var(--font-display); font-size:.875rem;
-      font-weight:600; color:var(--starlight); margin-bottom:1rem;
+      font-weight:600; color:var(--dark-text); margin-bottom:1rem;
       letter-spacing:.05em;
     }
     .skill-bar-wrap { margin-bottom:1rem; }
@@ -290,7 +286,7 @@
       font-size:.8125rem; color:var(--stardust); margin-bottom:.35rem;
     }
     .skill-bar-track {
-      width:100%; height:6px; background:rgba(255,255,255,.08);
+      width:100%; height:6px; background:#e8e8e8;
       border-radius:3px; overflow:hidden;
     }
     .skill-bar-fill {
@@ -298,7 +294,6 @@
       background:linear-gradient(90deg,var(--nova-teal),#5EEAD4);
       width:0; transition:width 1s cubic-bezier(.4,0,.2,1);
     }
-    .skill-bar-fill.anim { /* 宽度由 JS 行内设置 */ }
 
     /* ============================================================
        关于我
@@ -338,9 +333,9 @@
     .form-group input,
     .form-group textarea {
       width:100%; padding:.75rem 1rem; border-radius:10px;
-      border:1px solid rgba(255,255,255,.1);
-      background:rgba(255,255,255,.05);
-      color:var(--starlight); font-family:var(--font-body);
+      border:1px solid #e0e0e0;
+      background:#fff;
+      color:#333; font-family:var(--font-body);
       font-size:.9375rem; outline:none;
       transition:border-color .2s, box-shadow .2s;
     }
@@ -489,7 +484,7 @@
   <!-- ============================================================
        项目作品
        ============================================================ -->
-  <section class="section section--to-dark" id="work">
+  <section class="section" id="work">
     <div class="section-inner">
       <div class="fade-up">
         <p class="section-label">Projects</p>
@@ -544,7 +539,7 @@
   <!-- ============================================================
        技能
        ============================================================ -->
-  <section class="section section--dark" id="skills">
+  <section class="section" id="skills">
     <div class="section-inner">
       <div class="fade-up">
         <p class="section-label">Skills</p>
@@ -582,7 +577,7 @@
   <!-- ============================================================
        关于我
        ============================================================ -->
-  <section class="section section--from-dark section--to-dark" id="about">
+  <section class="section" id="about">
     <div class="section-inner">
       <div class="fade-up">
         <p class="section-label">About</p>
@@ -621,7 +616,7 @@
   <!-- ============================================================
        联系方式
        ============================================================ -->
-  <section class="section section--dark" id="contact">
+  <section class="section section--contact" id="contact">
     <div class="section-inner">
       <div class="contact-wrap fade-up">
         <p class="section-label">Contact</p>
