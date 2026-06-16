@@ -165,10 +165,10 @@
 
     /* 滚动动画 */
     .fade-up {
-      opacity:0; transform:translateY(30px);
-      transition:opacity .6s ease, transform .6s ease;
+      opacity:0;
+      transition:opacity 0.8s cubic-bezier(0.22,1,0.36,1);
     }
-    .fade-up.visible { opacity:1; transform:translateY(0); }
+    .fade-up.visible { opacity:1; }
 
     /* ============================================================
        数据统计
@@ -199,8 +199,8 @@
       background:var(--white); border:1px solid rgba(0,0,0,.06);
       border-radius:16px; cursor:pointer;
       transition:box-shadow .3s;
-      transform-style:preserve-3d;
-      will-change:transform;
+      transform-style:preserve-3d; perspective:800px;
+      transform:perspective(800px) rotateX(calc(var(--ry,0)*1deg)) rotateY(calc(var(--rx,0)*1deg));
     }
     .project-card:hover {
       box-shadow:0 12px 40px rgba(0,0,0,.08);
@@ -479,10 +479,10 @@
 
     /* 增强淡入动画 */
     .fade-up {
-      opacity:0; transform:translateY(40px);
-      transition:opacity 0.8s cubic-bezier(0.22,1,0.36,1), transform 0.8s cubic-bezier(0.22,1,0.36,1);
+      opacity:0;
+      transition:opacity 0.8s cubic-bezier(0.22,1,0.36,1);
     }
-    .fade-up.visible { opacity:1; transform:translateY(0); }
+    .fade-up.visible { opacity:1; }
 
     /* 延迟淡入（错峰出现） */
     .fade-up.delay-1 { transition-delay:0.1s; }
@@ -1077,26 +1077,21 @@
       });
 
       /* ==========================================================
-         12. 3D 卡片倾斜效果（全卡片）
+         12. 3D 卡片倾斜效果
          ========================================================== */
       document.querySelectorAll('.project-card').forEach(function (card) {
         card.addEventListener('mousemove', function (e) {
-          var rect = card.getBoundingClientRect();
-          var x = e.clientX - rect.left;
-          var y = e.clientY - rect.top;
-          var centerX = rect.width / 2;
-          var centerY = rect.height / 2;
-          var rotateX = (y - centerY) / centerY * -10;
-          var rotateY = (x - centerX) / centerX * 10;
-          card.style.transition = 'none';
-          card.style.transform = 'perspective(800px) rotateX(' + rotateX + 'deg) rotateY(' + rotateY + 'deg) scale(1.02)';
-          card.style.setProperty('--mx', x + 'px');
-          card.style.setProperty('--my', y + 'px');
+          var r = card.getBoundingClientRect();
+          var x = (e.clientX - r.left) / r.width;
+          var y = (e.clientY - r.top) / r.height;
+          card.style.setProperty('--rx', ((x - 0.5) * 20).toFixed(1));
+          card.style.setProperty('--ry', ((0.5 - y) * 20).toFixed(1));
         });
         card.addEventListener('mouseleave', function () {
-          card.style.transition = 'transform 0.5s cubic-bezier(0.22,1,0.36,1)';
-          card.style.transform = 'perspective(800px) rotateX(0) rotateY(0) scale(1)';
-          card.style.boxShadow = '';
+          card.style.transition = 'transform 0.4s cubic-bezier(0.22,1,0.36,1)';
+          card.style.setProperty('--rx', '0');
+          card.style.setProperty('--ry', '0');
+          setTimeout(function() { card.style.transition = ''; }, 500);
         });
       });
 
