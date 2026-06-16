@@ -446,6 +446,119 @@
     @media (min-width:481px) and (max-width:768px) {
       .hero-text .text { font-size:2.8rem; }
     }
+
+    /* ============================================================
+       动画与交互增强
+       ============================================================ */
+    /* 滚动进度条 */
+    .scroll-bar {
+      position:fixed; top:0; left:0; height:3px;
+      background:linear-gradient(90deg, var(--nova-teal), #5EEAD4);
+      z-index:9999; width:0%;
+      transition:width 0.1s;
+      border-radius:0 2px 2px 0;
+    }
+
+    /* 光标跟随光晕 */
+    .cursor-glow {
+      position:fixed; pointer-events:none; z-index:9998;
+      width:300px; height:300px; border-radius:50%;
+      background:radial-gradient(circle, rgba(45,212,191,0.08) 0%, transparent 60%);
+      transform:translate(-50%,-50%);
+      transition:opacity 0.3s;
+      opacity:0;
+    }
+
+    /* 渐变标题文字 */
+    .section-title.gradient-text {
+      background:linear-gradient(135deg, var(--dark-text) 0%, var(--nova-teal) 100%);
+      -webkit-background-clip:text;
+      -webkit-text-fill-color:transparent;
+      background-clip:text;
+    }
+
+    /* 增强淡入动画 */
+    .fade-up {
+      opacity:0; transform:translateY(40px);
+      transition:opacity 0.8s cubic-bezier(0.22,1,0.36,1), transform 0.8s cubic-bezier(0.22,1,0.36,1);
+    }
+    .fade-up.visible { opacity:1; transform:translateY(0); }
+
+    /* 延迟淡入（错峰出现） */
+    .fade-up.delay-1 { transition-delay:0.1s; }
+    .fade-up.delay-2 { transition-delay:0.2s; }
+    .fade-up.delay-3 { transition-delay:0.3s; }
+    .fade-up.delay-4 { transition-delay:0.4s; }
+
+    /* 卡片 3D 倾斜容器 */
+    .tilt-card {
+      transform-style:preserve-3d;
+      transition:transform 0.3s cubic-bezier(0.22,1,0.36,1), box-shadow 0.3s;
+    }
+
+    /* 技能数字跳动 */
+    .skill-bar-header span:last-child {
+      font-variant-numeric:tabular-nums;
+      transition:color 0.3s;
+    }
+
+    /* 导航滚动进度 */
+    .nav-progress {
+      position:absolute; bottom:-1px; left:0; width:100%; height:1px;
+      background:#f0f0f0;
+    }
+    .nav-progress-inner {
+      height:100%; background:var(--nova-teal);
+      width:0%; transition:width 0.1s;
+    }
+
+    /* 三栏卡片交错出现 */
+    .projects-grid .project-card:nth-child(1) { transition-delay:0s; }
+    .projects-grid .project-card:nth-child(2) { transition-delay:0.15s; }
+    .projects-grid .project-card:nth-child(3) { transition-delay:0.3s; }
+
+    /* 悬停卡片光晕 */
+    .project-card::before {
+      content:''; position:absolute; top:0; left:0; right:0; bottom:0;
+      border-radius:16px; opacity:0;
+      background:radial-gradient(600px circle at var(--mx,50%) var(--my,50%), rgba(45,212,191,0.06), transparent 40%);
+      transition:opacity 0.3s; pointer-events:none; z-index:1;
+    }
+    .project-card:hover::before { opacity:1; }
+    .project-body { position:relative; z-index:2; }
+
+    /* 图片渐变浮现 */
+    .project-thumb { overflow:hidden; }
+    .project-thumb img { transition:transform 0.6s cubic-bezier(0.22,1,0.36,1); }
+    .project-card:hover .project-thumb img { transform:scale(1.08); }
+
+    /* 模态框弹入 */
+    .modal-overlay.open .modal {
+      animation:modalIn 0.35s cubic-bezier(0.22,1,0.36,1) forwards;
+    }
+    @keyframes modalIn {
+      from { opacity:0; transform:scale(0.9) translateY(20px); }
+      to { opacity:1; transform:scale(1) translateY(0); }
+    }
+
+    /* 技能进度条增强 */
+    .skill-bar-fill {
+      background:linear-gradient(90deg, var(--nova-teal), #5EEAD4, var(--nova-teal));
+      background-size:200% 100%;
+      animation:shimmer 2s ease-in-out infinite;
+    }
+    @keyframes shimmer {
+      0%,100% { background-position:0% 50%; }
+      50% { background-position:100% 50%; }
+    }
+
+    /* tag 反色过渡 */
+    .project-tag { transition:all 0.3s; }
+    .project-tag:hover {
+      background:var(--nova-teal) !important;
+      color:#fff !important;
+      transform:translateY(-1px);
+    }
   </style>
 </head>
 <body>
@@ -669,6 +782,8 @@
   <!-- ============================================================
        回到顶部按钮
        ============================================================ -->
+  <div class="scroll-bar" id="scrollBar"></div>
+  <div class="cursor-glow" id="cursorGlow"></div>
   <button class="back-top" id="backTop" aria-label="回到顶部">↑</button>
 
   <!-- ============================================================
@@ -940,6 +1055,104 @@
           l.addEventListener('click', function () { navLinksEl.classList.remove('open'); });
         });
       }
+
+      /* ==========================================================
+         10. 滚动进度条
+         ========================================================== */
+      var scrollBar = document.getElementById('scrollBar');
+      window.addEventListener('scroll', function () {
+        var h = document.documentElement.scrollHeight - window.innerHeight;
+        scrollBar.style.width = (window.scrollY / h * 100) + '%';
+      }, { passive: true });
+
+      /* ==========================================================
+         11. 光标跟随光晕
+         ========================================================== */
+      var cursorGlow = document.getElementById('cursorGlow');
+      document.addEventListener('mousemove', function (e) {
+        cursorGlow.style.left = e.clientX + 'px';
+        cursorGlow.style.top = e.clientY + 'px';
+        cursorGlow.style.opacity = '1';
+      });
+      document.addEventListener('mouseleave', function () {
+        cursorGlow.style.opacity = '0';
+      });
+
+      /* ==========================================================
+         12. 3D 卡片倾斜效果
+         ========================================================== */
+      document.querySelectorAll('.project-card').forEach(function (card) {
+        card.addEventListener('mousemove', function (e) {
+          var rect = card.getBoundingClientRect();
+          var x = e.clientX - rect.left;
+          var y = e.clientY - rect.top;
+          var centerX = rect.width / 2;
+          var centerY = rect.height / 2;
+          var rotateX = (y - centerY) / centerY * -8;
+          var rotateY = (x - centerX) / centerX * 8;
+          card.style.transform = 'perspective(1000px) rotateX(' + rotateX + 'deg) rotateY(' + rotateY + 'deg) translateY(-8px)';
+          // 实时更新光晕位置
+          card.style.setProperty('--mx', x + 'px');
+          card.style.setProperty('--my', y + 'px');
+        });
+        card.addEventListener('mouseleave', function () {
+          card.style.transform = 'perspective(1000px) rotateX(0) rotateY(0) translateY(0)';
+        });
+      });
+
+      /* ==========================================================
+         13. 错峰淡入（项目卡片逐张出现）
+         ========================================================== */
+      var projectCards = document.querySelectorAll('.project-card');
+      // 卡片已经在 IntersectionObserver 的 fade-up 中，
+      // 利用 CSS nth-child 延迟已经够用
+
+      /* ==========================================================
+         14. 渐变标题文字（关于区块）
+         ========================================================== */
+      document.querySelectorAll('.section-title').forEach(function (title) {
+        if (title.closest('#about')) {
+          title.classList.add('gradient-text');
+        }
+      });
+
+      /* ==========================================================
+         15. 技能百分比数字跳动
+         ========================================================== */
+      var skillNumbers = document.querySelectorAll('.skill-bar-header span:last-child');
+      if ('IntersectionObserver' in window && skillNumbers.length) {
+        var skillNumObs = new IntersectionObserver(function (entries) {
+          entries.forEach(function (entry) {
+            if (entry.isIntersecting) {
+              var bar = entry.target;
+              var target = parseInt(bar.textContent, 10);
+              if (isNaN(target)) { skillNumObs.unobserve(bar); return; }
+              var current = 0;
+              var step = Math.max(1, Math.floor(target / 30));
+              var timer = setInterval(function () {
+                current += step;
+                if (current >= target) { current = target; clearInterval(timer); }
+                bar.textContent = current + '%';
+              }, 25);
+              skillNumObs.unobserve(bar);
+            }
+          });
+        }, { threshold: 0.3 });
+        skillNumbers.forEach(function (el) { skillNumObs.observe(el); });
+      }
+
+      /* ==========================================================
+         16. 锚点平滑滚动
+         ========================================================== */
+      document.querySelectorAll('a[href^="#"]').forEach(function (a) {
+        a.addEventListener('click', function (e) {
+          var target = document.querySelector(this.getAttribute('href'));
+          if (target) {
+            e.preventDefault();
+            target.scrollIntoView({ behavior: 'smooth' });
+          }
+        });
+      });
 
     })();
   </script>
