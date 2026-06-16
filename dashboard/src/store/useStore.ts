@@ -42,6 +42,7 @@ export interface AppState {
 
   // 模考操作
   addExamRecord: (r: Omit<ExamRecord, 'id'>) => void;
+  deleteExamRecord: (id: string) => void;
 
   // 设置
   updateSettings: (patch: Partial<Settings>) => void;
@@ -202,6 +203,8 @@ export const useStore = create<AppState>()(
       // -------- 模考 --------
       addExamRecord: (r) =>
         set((s) => ({ examRecords: [...s.examRecords, { ...r, id: nanoid(10) }] })),
+      deleteExamRecord: (id) =>
+        set((s) => ({ examRecords: s.examRecords.filter((r) => r.id !== id) })),
 
       // -------- 设置 --------
       updateSettings: (patch) =>
