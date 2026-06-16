@@ -838,7 +838,7 @@
         // 首屏随鼠标轻微下倾
         var hr = hero.getBoundingClientRect();
         var yr = (e.clientY - hr.top) / hr.height;
-        hero.style.setProperty('--hero-ry', ((yr - 0.5) * -3).toFixed(1));
+        hero.style.setProperty('--hero-ry', ((yr - 0.5) * -8).toFixed(1));
       });
       hero.addEventListener('mouseleave', function () {
         spotlight.style.transition = 'clip-path 0.35s cubic-bezier(0.4, 0, 0.2, 1)';
