@@ -1,129 +1,86 @@
-/* =================================================================
-   考研工作台 · 核心数据类型
-   ================================================================= */
-
-// ========== 错误原因枚举 ==========
-export enum ErrorReason {
-  CONCEPT_UNCLEAR = '概念不清',
-  CARELESS = '粗心大意',
-  METHOD_WRONG = '方法不对',
-  TIME_INSUFFICIENT = '时间不够',
-  OTHER = '其他',
-}
-
-// ========== 题型枚举 ==========
-export type QuestionType = 'choice' | 'fill' | 'subjective';
-
-// ========== 科目配置 ==========
-export interface Chapter {
-  id: string;
-  name: string;
-  knowledgePoints: string[];
-}
-
 export interface Subject {
   id: string;
   name: string;
-  chapters: Chapter[];
+  code: string;
+  questionCount: number;
+  correctRate: number;
+  description: string;
+  createdAt: string;
 }
 
-// ========== 作答记录 ==========
-export interface Attempt {
-  attemptId: string;
-  date: string;          // ISO datetime
-  timeSpent: number;     // 秒
-  userAnswer: string;
-  correct: boolean;
-  confidence: 1 | 2 | 3 | 4 | 5;
-}
-
-// ========== 艾宾浩斯复习轮次 ==========
-export interface ReviewRound {
-  round: number;         // 1, 3, 7, 15
-  dueDate: string;       // ISO date
-  reviewed: boolean;
-  reviewedAt?: string;
-  result?: 'remember' | 'forgot';
-}
-
-export interface ReviewSchedule {
-  currentRound: number;
-  rounds: ReviewRound[];
-  nextReviewAt: string | null;
-}
-
-// ========== 错题（核心实体） ==========
-export interface Mistake {
+export interface KnowledgeNode {
   id: string;
   subjectId: string;
-  chapterId: string;
-  knowledgePoint: string;
-  errorReason: ErrorReason;
-  questionType: QuestionType;
+  parentId: string | null;
+  title: string;
+  level: number;
+  questionCount: number;
+  children?: KnowledgeNode[];
+}
 
-  question: string;
+export type QuestionDifficulty = 'easy' | 'medium' | 'hard';
+export type QuestionType = 'choice' | 'fill' | 'subjective';
+
+export interface Question {
+  id: string;
+  subjectId: string;
+  knowledgePointId: string;
+  difficulty: QuestionDifficulty;
+  type: QuestionType;
+  content: string;
   options: string[];
   correctAnswer: string;
   analysis: string;
-
   tags: string[];
-  importance: 1 | 2 | 3;
-
   createdAt: string;
-  updatedAt: string;
-
-  reviewSchedule: ReviewSchedule;
-  attempts: Attempt[];
 }
 
-// ========== 今日 Flag ==========
-export interface DailyFlag {
+export type WrongStatus = 'NEW' | 'REVIEWING' | 'MASTERED';
+
+export interface WrongQuestion {
   id: string;
-  content: string;
-  date: string;
+  questionId: string;
+  question: Question;
+  status: WrongStatus;
+  wrongCount: number;
+  lastWrongAt: string;
+  nextReviewAt: string | null;
+  reviewCount: number;
+  createdAt: string;
+}
+
+export interface ReviewTask {
+  id: string;
+  wrongQuestionId: string;
+  wrongQuestion: WrongQuestion;
+  dueDate: string;
   completed: boolean;
-  completedAt?: string;
-  order: number;
+  completedAt: string | null;
+  result: 'remembered' | 'forgotten' | null;
 }
 
-// ========== 模考题目 ==========
-export interface ExamQuestion {
-  index: number;
-  content: string;
-  options: string[];
-  selectedOption: string | null;
-  correctOption: string;
-  correct: boolean;
-  score: number;
-}
-
-// ========== 模考记录 ==========
-export interface ExamRecord {
+export interface StudyRecord {
   id: string;
-  moduleName: string;
   date: string;
-  timeLimit: number;
-  timeSpent: number;
-  questions: ExamQuestion[];
-  totalScore: number;
-  earnedScore: number;
+  subjectId: string;
+  subjectName: string;
+  questionsDone: number;
+  correctCount: number;
+  wrongCount: number;
+  duration: number; // minutes
 }
 
-// ========== 设置 ==========
-export interface Settings {
-  examDate: string;
-  dailyGoalHours: number;
-  targetSchool: string;
-  targetMajor: string;
-  whiteNoiseVolume: number;
+export interface DashboardStats {
+  totalQuestions: number;
+  totalWrong: number;
+  todayReview: number;
+  todayDone: number;
+  weekDone: number;
+  masteryRate: number;
 }
 
-// ========== 根数据 ==========
-export interface ExamDashboardData {
-  settings: Settings;
-  subjects: Subject[];
-  mistakes: Mistake[];
-  dailyFlags: DailyFlag[];
-  examRecords: ExamRecord[];
-  lastReviewCheck: string;
+export interface AnalyticsData {
+  dailyTrend: { date: string; done: number; correct: number }[];
+  wrongTrend: { date: string; count: number }[];
+  subjectAccuracy: { subject: string; accuracy: number }[];
 }
