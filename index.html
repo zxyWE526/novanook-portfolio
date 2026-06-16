@@ -179,7 +179,16 @@
       display:grid; grid-template-columns:repeat(3,1fr); gap:2rem;
       margin:3rem 0;
     }
-    .stat-item { text-align:center; }
+    .stat-item {
+      text-align:center; padding:1.5rem 1rem;
+      background:#fff; border-radius:14px;
+      border:1px solid #f0f0f0;
+      transition:transform 0.3s, box-shadow 0.3s;
+    }
+    .stat-item:hover {
+      transform:translateY(-4px);
+      box-shadow:0 8px 24px rgba(0,0,0,.05);
+    }
     .stat-number {
       font-family:var(--font-display);
       font-size:clamp(2rem,4vw,3rem); font-weight:700;
@@ -276,25 +285,6 @@
     .skills-grid {
       display:grid; grid-template-columns:repeat(auto-fill,minmax(320px,1fr));
       gap:2.5rem; margin-top:3rem;
-    }
-    .skill-group-title {
-      font-family:var(--font-display); font-size:.875rem;
-      font-weight:600; color:var(--dark-text); margin-bottom:1rem;
-      letter-spacing:.05em;
-    }
-    .skill-bar-wrap { margin-bottom:1rem; }
-    .skill-bar-header {
-      display:flex; justify-content:space-between;
-      font-size:.8125rem; color:var(--stardust); margin-bottom:.35rem;
-    }
-    .skill-bar-track {
-      width:100%; height:6px; background:#e8e8e8;
-      border-radius:3px; overflow:hidden;
-    }
-    .skill-bar-fill {
-      height:100%; border-radius:3px;
-      background:linear-gradient(90deg,var(--nova-teal),#5EEAD4);
-      width:0; transition:width 1s cubic-bezier(.4,0,.2,1);
     }
 
     /* ============================================================
@@ -541,16 +531,47 @@
       to { opacity:1; transform:scale(1) translateY(0); }
     }
 
-    /* 技能进度条增强 */
-    .skill-bar-fill {
-      background:linear-gradient(90deg, var(--nova-teal), #5EEAD4, var(--nova-teal));
-      background-size:200% 100%;
-      animation:shimmer 2s ease-in-out infinite;
+    /* 技能卡片 */
+    .skills-grid {
+      display:grid; grid-template-columns:repeat(auto-fill,minmax(300px,1fr));
+      gap:1.5rem; margin-top:3rem;
     }
-    @keyframes shimmer {
-      0%,100% { background-position:0% 50%; }
-      50% { background-position:100% 50%; }
+    .skill-card {
+      background:#fff; border:1px solid #f0f0f0;
+      border-radius:16px; padding:1.5rem 1.75rem;
+      transition:transform 0.3s, box-shadow 0.3s;
+      position:relative; overflow:hidden;
     }
+    .skill-card:hover {
+      transform:translateY(-4px);
+      box-shadow:0 12px 32px rgba(0,0,0,.06);
+    }
+    .skill-card::before {
+      content:''; position:absolute; top:0; left:0; right:0; height:4px;
+      border-radius:16px 16px 0 0;
+    }
+    .skill-card:nth-child(1)::before { background:linear-gradient(90deg,#2DD4BF,#5EEAD4); }
+    .skill-card:nth-child(2)::before { background:linear-gradient(90deg,#F59E0B,#FBBF24); }
+    .skill-card:nth-child(3)::before { background:linear-gradient(90deg,#6366F1,#818CF8); }
+    .skill-card-title {
+      font-family:var(--font-display); font-size:1rem; font-weight:600;
+      color:var(--dark-text); margin-bottom:1.25rem; display:flex; align-items:center; gap:8px;
+    }
+    .skill-items { display:flex; flex-wrap:wrap; gap:8px; }
+    .skill-item {
+      padding:6px 14px; border-radius:8px; font-size:.8125rem;
+      background:#f5f5f5; color:#555; font-weight:500;
+      transition:all 0.25s; cursor:default;
+      position:relative; overflow:hidden;
+    }
+    .skill-item::after {
+      content:''; position:absolute; bottom:0; left:0; height:2px;
+      width:0; background:var(--nova-teal); transition:width 0.3s;
+    }
+    .skill-item:hover {
+      background:rgba(45,212,191,.08); color:var(--nova-teal); transform:translateY(-2px);
+    }
+    .skill-item:hover::after { width:100%; }
 
     /* tag 反色过渡 */
     .project-tag { transition:all 0.3s; }
@@ -662,26 +683,35 @@
       </div>
 
       <div class="skills-grid">
-        <div class="skill-group">
-          <p class="skill-group-title">前端</p>
-          <div class="skill-bar-wrap"><div class="skill-bar-header"><span>React</span><span>85%</span></div><div class="skill-bar-track"><div class="skill-bar-fill" data-width="85"></div></div></div>
-          <div class="skill-bar-wrap"><div class="skill-bar-header"><span>TypeScript</span><span>80%</span></div><div class="skill-bar-track"><div class="skill-bar-fill" data-width="80"></div></div></div>
-          <div class="skill-bar-wrap"><div class="skill-bar-header"><span>HTML / CSS</span><span>90%</span></div><div class="skill-bar-track"><div class="skill-bar-fill" data-width="90"></div></div></div>
-          <div class="skill-bar-wrap"><div class="skill-bar-header"><span>Tailwind</span><span>75%</span></div><div class="skill-bar-track"><div class="skill-bar-fill" data-width="75"></div></div></div>
+        <div class="skill-card fade-up">
+          <div class="skill-card-title">前端</div>
+          <div class="skill-items">
+            <span class="skill-item">React</span>
+            <span class="skill-item">TypeScript</span>
+            <span class="skill-item">Next.js</span>
+            <span class="skill-item">Tailwind</span>
+            <span class="skill-item">HTML / CSS</span>
+          </div>
         </div>
-        <div class="skill-group">
-          <p class="skill-group-title">后端</p>
-          <div class="skill-bar-wrap"><div class="skill-bar-header"><span>Node.js</span><span>78%</span></div><div class="skill-bar-track"><div class="skill-bar-fill" data-width="78"></div></div></div>
-          <div class="skill-bar-wrap"><div class="skill-bar-header"><span>Python</span><span>75%</span></div><div class="skill-bar-track"><div class="skill-bar-fill" data-width="75"></div></div></div>
-          <div class="skill-bar-wrap"><div class="skill-bar-header"><span>Go</span><span>60%</span></div><div class="skill-bar-track"><div class="skill-bar-fill" data-width="60"></div></div></div>
-          <div class="skill-bar-wrap"><div class="skill-bar-header"><span>PostgreSQL</span><span>70%</span></div><div class="skill-bar-track"><div class="skill-bar-fill" data-width="70"></div></div></div>
+        <div class="skill-card fade-up">
+          <div class="skill-card-title">后端</div>
+          <div class="skill-items">
+            <span class="skill-item">Node.js</span>
+            <span class="skill-item">Python</span>
+            <span class="skill-item">Go</span>
+            <span class="skill-item">FastAPI</span>
+            <span class="skill-item">PostgreSQL</span>
+          </div>
         </div>
-        <div class="skill-group">
-          <p class="skill-group-title">DevOps & 工具</p>
-          <div class="skill-bar-wrap"><div class="skill-bar-header"><span>Docker</span><span>72%</span></div><div class="skill-bar-track"><div class="skill-bar-fill" data-width="72"></div></div></div>
-          <div class="skill-bar-wrap"><div class="skill-bar-header"><span>Git / CI-CD</span><span>82%</span></div><div class="skill-bar-track"><div class="skill-bar-fill" data-width="82"></div></div></div>
-          <div class="skill-bar-wrap"><div class="skill-bar-header"><span>Cloudflare</span><span>65%</span></div><div class="skill-bar-track"><div class="skill-bar-fill" data-width="65"></div></div></div>
-          <div class="skill-bar-wrap"><div class="skill-bar-header"><span>Linux</span><span>70%</span></div><div class="skill-bar-track"><div class="skill-bar-fill" data-width="70"></div></div></div>
+        <div class="skill-card fade-up">
+          <div class="skill-card-title">DevOps & 工具</div>
+          <div class="skill-items">
+            <span class="skill-item">Docker</span>
+            <span class="skill-item">GitHub Actions</span>
+            <span class="skill-item">Cloudflare</span>
+            <span class="skill-item">Linux</span>
+            <span class="skill-item">CI/CD</span>
+          </div>
         </div>
       </div>
     </div>
@@ -890,29 +920,7 @@
       }
 
       /* ==========================================================
-         4. 技能进度条动画
-         ========================================================== */
-      var barFills = document.querySelectorAll('.skill-bar-fill');
-      if ('IntersectionObserver' in window) {
-        var barObs = new IntersectionObserver(function (entries) {
-          entries.forEach(function (e) {
-            if (e.isIntersecting) {
-              var w = e.target.getAttribute('data-width');
-              if (w) e.target.style.width = w + '%';
-              barObs.unobserve(e.target);
-            }
-          });
-        }, { threshold: 0.3 });
-        barFills.forEach(function (el) { barObs.observe(el); });
-      } else {
-        barFills.forEach(function (el) {
-          var w = el.getAttribute('data-width');
-          if (w) el.style.width = w + '%';
-        });
-      }
-
-      /* ==========================================================
-         5. 统计数字动画
+         4. 统计数字动画
          ========================================================== */
       var statNumbers = document.querySelectorAll('.stat-number');
       var statsAnimated = false;
@@ -1105,14 +1113,7 @@
       });
 
       /* ==========================================================
-         13. 错峰淡入（项目卡片逐张出现）
-         ========================================================== */
-      var projectCards = document.querySelectorAll('.project-card');
-      // 卡片已经在 IntersectionObserver 的 fade-up 中，
-      // 利用 CSS nth-child 延迟已经够用
-
-      /* ==========================================================
-         14. 渐变标题文字（关于区块）
+         13. 渐变标题文字（关于区块）
          ========================================================== */
       document.querySelectorAll('.section-title').forEach(function (title) {
         if (title.closest('#about')) {
@@ -1121,29 +1122,12 @@
       });
 
       /* ==========================================================
-         15. 技能百分比数字跳动
+         15. 技能卡片错峰入场
          ========================================================== */
-      var skillNumbers = document.querySelectorAll('.skill-bar-header span:last-child');
-      if ('IntersectionObserver' in window && skillNumbers.length) {
-        var skillNumObs = new IntersectionObserver(function (entries) {
-          entries.forEach(function (entry) {
-            if (entry.isIntersecting) {
-              var bar = entry.target;
-              var target = parseInt(bar.textContent, 10);
-              if (isNaN(target)) { skillNumObs.unobserve(bar); return; }
-              var current = 0;
-              var step = Math.max(1, Math.floor(target / 30));
-              var timer = setInterval(function () {
-                current += step;
-                if (current >= target) { current = target; clearInterval(timer); }
-                bar.textContent = current + '%';
-              }, 25);
-              skillNumObs.unobserve(bar);
-            }
-          });
-        }, { threshold: 0.3 });
-        skillNumbers.forEach(function (el) { skillNumObs.observe(el); });
-      }
+      var skillCards = document.querySelectorAll('.skill-card');
+      skillCards.forEach(function(card, i) {
+        card.style.transitionDelay = (i * 0.12) + 's';
+      });
 
       /* ==========================================================
          16. 锚点平滑滚动
