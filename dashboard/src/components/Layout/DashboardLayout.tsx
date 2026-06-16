@@ -1,5 +1,5 @@
 /* =================================================================
-   主布局：侧边栏 + 内容区
+   主布局：深色侧边栏 + 柔和内容区
    ================================================================= */
 import { Layout } from 'antd';
 import { Outlet } from 'react-router-dom';
@@ -9,10 +9,16 @@ const { Content } = Layout;
 
 export default function DashboardLayout() {
   return (
-    <Layout style={{ minHeight: '100vh' }}>
+    <Layout style={{ minHeight: '100vh', background: '#f0f2f5' }}>
       <Sidebar />
-      <Layout style={{ marginLeft: 200 }}>
-        <Content style={{ padding: 32, background: '#f5f5f5', minHeight: '100vh' }}>
+      <Layout style={{ marginLeft: 220, background: 'transparent' }}>
+        <Content
+          style={{
+            padding: '32px 40px',
+            minHeight: '100vh',
+            maxWidth: 960,
+          }}
+        >
           <Outlet />
         </Content>
       </Layout>

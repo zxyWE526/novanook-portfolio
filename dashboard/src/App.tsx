@@ -7,7 +7,6 @@ import zhCN from 'antd/locale/zh_CN';
 import DashboardLayout from './components/Layout/DashboardLayout';
 import DashboardPage from './pages/DashboardPage';
 import MistakesPage from './pages/MistakesPage';
-import ExamPage from './pages/ExamPage';
 import SettingsPage from './pages/SettingsPage';
 
 export default function App() {
@@ -18,6 +17,7 @@ export default function App() {
         token: {
           colorPrimary: '#2DD4BF',
           fontFamily: "'Inter', 'PingFang SC', 'Microsoft YaHei', sans-serif",
+          borderRadius: 12,
         },
       }}
     >
@@ -26,7 +26,6 @@ export default function App() {
           <Route element={<DashboardLayout />}>
             <Route path="/dashboard" element={<DashboardPage />} />
             <Route path="/mistakes" element={<MistakesPage />} />
-            <Route path="/exam" element={<ExamPage />} />
             <Route path="/settings" element={<SettingsPage />} />
             <Route path="*" element={<Navigate to="/dashboard" replace />} />
           </Route>

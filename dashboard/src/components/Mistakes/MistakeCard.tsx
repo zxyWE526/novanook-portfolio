@@ -1,26 +1,32 @@
 /* =================================================================
-   错题卡片：显示题目 + 一键显隐答案 + 作答历史
+   错题卡片 — 重新设计的精致 UI
    ================================================================= */
 import { useState } from 'react';
 import { Card, Tag, Button, Space, Timeline, Typography, Tooltip } from 'antd';
 import {
-  EyeOutlined,
-  EyeInvisibleOutlined,
-  ClockCircleOutlined,
-  CheckCircleOutlined,
-  CloseCircleOutlined,
+  EyeOutlined, EyeInvisibleOutlined, ClockCircleOutlined,
+  CheckCircleOutlined, CloseCircleOutlined,
+  DeleteOutlined, StarFilled,
 } from '@ant-design/icons';
 import type { Mistake } from '../../types';
 import { ErrorReason } from '../../types';
 
-const { Text, Paragraph } = Typography;
+const { Text } = Typography;
 
-const ERROR_REASON_COLORS: Record<string, string> = {
+const REASON_COLORS: Record<string, string> = {
   [ErrorReason.CONCEPT_UNCLEAR]: 'volcano',
   [ErrorReason.CARELESS]: 'orange',
   [ErrorReason.METHOD_WRONG]: 'purple',
   [ErrorReason.TIME_INSUFFICIENT]: 'geekblue',
   [ErrorReason.OTHER]: 'default',
+};
+
+const REASON_EMOJIS: Record<string, string> = {
+  [ErrorReason.CONCEPT_UNCLEAR]: '📖',
+  [ErrorReason.CARELESS]: '😅',
+  [ErrorReason.METHOD_WRONG]: '🛠',
+  [ErrorReason.TIME_INSUFFICIENT]: '⏰',
+  [ErrorReason.OTHER]: '📌',
 };
 
 interface Props {
@@ -34,18 +40,34 @@ export default function MistakeCard({ mistake, onDelete }: Props) {
 
   return (
     <Card
-      size="small"
-      style={{ marginBottom: 16 }}
+      style={{
+        marginBottom: 16,
+        borderRadius: 14,
+        boxShadow: '0 2px 8px rgba(0,0,0,0.04)',
+        border: '1px solid #f0f0f0',
+        transition: 'box-shadow 0.2s',
+      }}
+      bodyStyle={{ padding: 20 }}
       actions={[
         <Tooltip title={showAnswer ? '隐藏答案' : '显示答案'} key="toggle">
           <Button
             type="text"
+            size="small"
             icon={showAnswer ? <EyeInvisibleOutlined /> : <EyeOutlined />}
             onClick={() => setShowAnswer(!showAnswer)}
-          />
+            style={{ color: showAnswer ? '#2DD4BF' : '#999' }}
+          >
+            {showAnswer ? '隐藏解析' : '查看解析'}
+          </Button>
         </Tooltip>,
         <Tooltip title="删除" key="delete">
-          <Button type="text" danger onClick={() => onDelete?.(mistake.id)}>
+          <Button
+            type="text"
+            size="small"
+            danger
+            icon={<DeleteOutlined />}
+            onClick={() => onDelete?.(mistake.id)}
+          >
             删除
           </Button>
         </Tooltip>,
@@ -53,70 +75,88 @@ export default function MistakeCard({ mistake, onDelete }: Props) {
     >
       {/* 标签行 */}
       <Space wrap style={{ marginBottom: 12 }}>
-        <Tag color="blue">{mistake.subjectId}</Tag>
-        <Tag>{mistake.chapterId}</Tag>
-        <Tag color="cyan">{mistake.knowledgePoint}</Tag>
-        <Tag color={ERROR_REASON_COLORS[mistake.errorReason]}>
-          {mistake.errorReason}
+        <Tag color="blue" style={{ borderRadius: 6, margin: 0 }}>{mistake.subjectId}</Tag>
+        <Tag style={{ borderRadius: 6, margin: 0, background: '#f0f0f0', border: 'none' }}>
+          {mistake.chapterId}
+        </Tag>
+        <Tag color="cyan" style={{ borderRadius: 6, margin: 0 }}>{mistake.knowledgePoint}</Tag>
+        <Tag color={REASON_COLORS[mistake.errorReason]} style={{ borderRadius: 6, margin: 0 }}>
+          {REASON_EMOJIS[mistake.errorReason]} {mistake.errorReason}
         </Tag>
         {mistake.tags.map((t) => (
-          <Tag key={t}>{t}</Tag>
+          <Tag key={t} style={{ borderRadius: 6, margin: 0 }}>{t}</Tag>
         ))}
-        <Tag color={mistake.importance === 3 ? 'red' : mistake.importance === 2 ? 'gold' : 'default'}>
-          {'⭐'.repeat(mistake.importance)}
-        </Tag>
+        {[1, 2, 3].map((i) => (
+          <StarFilled
+            key={i}
+            style={{
+              color: i <= mistake.importance ? '#F59E0B' : '#eee',
+              fontSize: 12,
+            }}
+          />
+        ))}
       </Space>
 
       {/* 题目 */}
-      <Paragraph style={{ whiteSpace: 'pre-wrap', marginBottom: 12 }}>
+      <div
+        style={{
+          fontSize: 14, lineHeight: 1.8, color: '#333',
+          marginBottom: 12, whiteSpace: 'pre-wrap',
+          padding: 12, background: '#fafafa', borderRadius: 10,
+        }}
+      >
         {mistake.question}
-      </Paragraph>
+      </div>
 
       {/* 选项 */}
       {mistake.options.length > 0 && (
-        <Space direction="vertical" style={{ marginBottom: 8 }}>
+        <Space direction="vertical" style={{ marginBottom: 12, marginLeft: 4 }}>
           {mistake.options.map((opt, i) => (
-            <Text key={i} type="secondary">{opt}</Text>
+            <Text key={i} type="secondary" style={{ fontSize: 13 }}>
+              {String.fromCharCode(65 + i)}. {opt}
+            </Text>
           ))}
         </Space>
       )}
 
-      {/* 答案区域（可切换显隐） */}
+      {/* 答案解析（可切换） */}
       {showAnswer && (
         <div
           style={{
-            background: '#f6ffed',
+            background: 'linear-gradient(135deg, #f6ffed, #f0fff4)',
             border: '1px solid #b7eb8f',
-            borderRadius: 6,
-            padding: '12px 16px',
+            borderRadius: 12,
+            padding: '16px 18px',
             marginTop: 8,
           }}
         >
-          <Text strong style={{ color: '#52c41a' }}>
-            ✅ 正确答案：{mistake.correctAnswer}
-          </Text>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 8 }}>
+            <CheckCircleOutlined style={{ color: '#52c41a', fontSize: 16 }} />
+            <Text strong style={{ color: '#52c41a', fontSize: 14 }}>
+              正确答案：{mistake.correctAnswer}
+            </Text>
+          </div>
 
           {lastAttempt && (
-            <div style={{ marginTop: 8 }}>
-              <Text type="secondary">
-                我的答案：{lastAttempt.userAnswer || '(未作答)'}
+            <div style={{ marginBottom: 8, fontSize: 13 }}>
+              <Text type="secondary">我的答案：</Text>
+              <Text style={{ color: lastAttempt.correct ? '#52c41a' : '#ff4d4f' }}>
+                {lastAttempt.userAnswer || '(未作答)'}
               </Text>
-              <span style={{ marginLeft: 8 }}>
-                {lastAttempt.correct ? (
-                  <Text type="success">✓ 正确</Text>
-                ) : (
-                  <Text type="danger">✗ 错误</Text>
-                )}
-              </span>
+              {lastAttempt.correct ? (
+                <span style={{ color: '#52c41a', marginLeft: 6 }}>✓</span>
+              ) : (
+                <span style={{ color: '#ff4d4f', marginLeft: 6 }}>✗</span>
+              )}
             </div>
           )}
 
           {mistake.analysis && (
-            <div style={{ marginTop: 8 }}>
-              <Text type="secondary">📖 解析：</Text>
-              <Paragraph style={{ marginTop: 4, whiteSpace: 'pre-wrap' }}>
+            <div style={{ marginTop: 4 }}>
+              <Text type="secondary" style={{ fontSize: 13 }}>📖 解析：</Text>
+              <div style={{ marginTop: 4, fontSize: 13, lineHeight: 1.7, color: '#555', whiteSpace: 'pre-wrap' }}>
                 {mistake.analysis}
-              </Paragraph>
+              </div>
             </div>
           )}
         </div>
@@ -124,42 +164,41 @@ export default function MistakeCard({ mistake, onDelete }: Props) {
 
       {/* 作答历史 */}
       {mistake.attempts.length > 0 && (
-        <div style={{ marginTop: 12 }}>
-          <Text type="secondary" style={{ fontSize: 12 }}>
-            作答历史（{mistake.attempts.length} 次）：
+        <div style={{ marginTop: 16 }}>
+          <Text type="secondary" style={{ fontSize: 12, display: 'flex', alignItems: 'center', gap: 4 }}>
+            <ClockCircleOutlined /> 作答历史（{mistake.attempts.length} 次）
           </Text>
           <Timeline
-            style={{ marginTop: 8 }}
+            style={{ marginTop: 8, marginBottom: 0 }}
             items={mistake.attempts.map((a) => ({
               color: a.correct ? 'green' : 'red',
               children: (
-                <>
+                <div style={{ display: 'flex', alignItems: 'center', gap: 8, fontSize: 13 }}>
                   <Text style={{ fontSize: 12 }}>
-                    {new Date(a.date).toLocaleDateString('zh-CN')} · 用时 {Math.floor(a.timeSpent / 60)}分
+                    {new Date(a.date).toLocaleDateString('zh-CN')}
                   </Text>
-                  {a.correct ? (
-                    <CheckCircleOutlined style={{ color: '#52c41a', marginLeft: 6 }} />
-                  ) : (
-                    <CloseCircleOutlined style={{ color: '#ff4d4f', marginLeft: 6 }} />
-                  )}
-                  <span style={{ marginLeft: 6 }}>
+                  <Text type="secondary" style={{ fontSize: 12 }}>
+                    {Math.floor(a.timeSpent / 60)}分
+                  </Text>
+                  {a.correct
+                    ? <CheckCircleOutlined style={{ color: '#52c41a' }} />
+                    : <CloseCircleOutlined style={{ color: '#ff4d4f' }} />
+                  }
+                  <span style={{ fontSize: 11 }}>
                     {'🟢'.repeat(a.confidence)}{'⚪'.repeat(5 - a.confidence)}
                   </span>
-                </>
+                </div>
               ),
             }))}
           />
         </div>
       )}
 
-      {/* 艾宾浩斯状态 */}
-      <div style={{ marginTop: 8, fontSize: 12, color: '#999' }}>
-        <ClockCircleOutlined style={{ marginRight: 4 }} />
-        录入于 {new Date(mistake.createdAt).toLocaleDateString('zh-CN')}
+      {/* 底部元信息 */}
+      <div style={{ marginTop: 12, fontSize: 12, color: '#ccc', display: 'flex', gap: 16 }}>
+        <span>📅 录入于 {new Date(mistake.createdAt).toLocaleDateString('zh-CN')}</span>
         {mistake.reviewSchedule.nextReviewAt && (
-          <span style={{ marginLeft: 12 }}>
-            下次复习：{new Date(mistake.reviewSchedule.nextReviewAt).toLocaleDateString('zh-CN')}
-          </span>
+          <span>🔄 下次复习：{new Date(mistake.reviewSchedule.nextReviewAt).toLocaleDateString('zh-CN')}</span>
         )}
       </div>
     </Card>
