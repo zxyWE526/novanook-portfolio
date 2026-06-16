@@ -144,26 +144,6 @@
       border-radius:2px; margin-bottom:1.5rem;
     }
 
-    /* ===== 联系区亮色表单覆盖 ===== */
-    .section--contact .form-group input,
-    .section--contact .form-group textarea {
-      border-color: #e0e0e0;
-      background: #fff;
-      color: #333;
-    }
-    .section--contact .form-group input:focus,
-    .section--contact .form-group textarea:focus {
-      border-color: var(--nova-teal);
-      box-shadow: 0 0 0 3px rgba(45,212,191,.15);
-    }
-    .section--contact .contact-social-link {
-      border-color: #e0e0e0;
-      color: #666;
-    }
-    .section--contact .contact-social-link:hover {
-      color: var(--nova-teal);
-      border-color: rgba(45,212,191,.3);
-    }
 
     /* 滚动动画 */
     .fade-up {
@@ -405,6 +385,129 @@
     .back-top:hover { transform:translateY(-3px); }
 
     /* ============================================================
+       视觉融合设计：斜切 + 超大字 + 光晕 + 玻璃卡片
+       ============================================================ */
+
+    /* -- 斜切分割 -- */
+    .clip-diag {
+      position:relative;
+      z-index:1;
+    }
+    .clip-diag::after {
+      content:''; position:absolute; z-index:-1;
+      left:0; right:0; height:80px;
+      background:inherit;
+    }
+    .clip-diag--down::after {
+      bottom:-40px;
+      transform:skewY(-1.5deg);
+    }
+    .clip-diag--up::after {
+      top:-40px;
+      transform:skewY(-1.5deg);
+    }
+    .clip-diag--up {
+      margin-top:-40px;
+      padding-top:calc(6rem + 80px);
+    }
+    .clip-diag--down {
+      margin-bottom:-40px;
+      padding-bottom:calc(6rem + 80px);
+    }
+
+    /* -- 超大水印 -- */
+    .wm-text {
+      position:relative;
+    }
+    .wm-text::before {
+      content:attr(data-wm);
+      position:absolute; top:50%; left:50%;
+      transform:translate(-50%,-50%);
+      font-size:clamp(6rem,18vw,14rem);
+      font-weight:800; white-space:nowrap;
+      color:currentColor; opacity:0.035;
+      pointer-events:none; z-index:0;
+      font-family:var(--font-display);
+      line-height:1;
+    }
+    .wm-text > * { position:relative; z-index:1; }
+
+    /* -- 几何光晕 -- */
+    .glow-spot {
+      position:relative; overflow:hidden;
+    }
+    .glow-spot::before {
+      content:''; position:absolute;
+      width:400px; height:400px; border-radius:50%;
+      background:radial-gradient(circle, rgba(45,212,191,0.08) 0%, transparent 60%);
+      pointer-events:none; z-index:0;
+    }
+    .glow-spot--tl::before { top:-120px; left:-120px; }
+    .glow-spot--br::before { bottom:-120px; right:-120px; }
+    .glow-spot--tr::before { top:-120px; right:-120px; }
+
+    /* -- 玻璃卡片（技能区深色底） -- */
+    .section-dark {
+      background:linear-gradient(135deg,#0B1120,#162044);
+    }
+    .section-dark .section-title { color:var(--starlight); }
+    .section-dark .section-desc { color:var(--stardust); }
+    .section-dark .section-label { color:#5EEAD4; }
+
+    .glass-card {
+      background:rgba(255,255,255,0.04);
+      backdrop-filter:blur(16px);
+      -webkit-backdrop-filter:blur(16px);
+      border:1px solid rgba(45,212,191,0.12);
+      border-radius:16px; padding:1.5rem 1.75rem;
+      transition:transform 0.3s, box-shadow 0.3s, border-color 0.3s;
+      position:relative; overflow:hidden;
+    }
+    .glass-card:hover {
+      transform:translateY(-6px);
+      box-shadow:0 12px 40px rgba(45,212,191,0.08);
+      border-color:rgba(45,212,191,0.3);
+    }
+    .glass-card .card-title {
+      font-family:var(--font-display); font-size:1rem; font-weight:600;
+      color:var(--starlight); margin-bottom:1.25rem; display:flex; align-items:center; gap:8px;
+    }
+    .glass-card .card-items { display:flex; flex-wrap:wrap; gap:8px; }
+    .glass-card .card-item {
+      padding:6px 14px; border-radius:8px; font-size:.8125rem;
+      background:rgba(255,255,255,0.06); color:var(--stardust);
+      font-weight:500; transition:all 0.25s; cursor:default;
+    }
+    .glass-card .card-item:hover {
+      background:rgba(45,212,191,0.12); color:var(--nova-teal);
+      transform:translateY(-2px);
+    }
+
+    /* -- 斜切卡片适应 -- */
+    .section-dark.clip-diag--up::after { background:linear-gradient(135deg,#0B1120,#162044); }
+    .section-dark.clip-diag--down::after { background:linear-gradient(135deg,#0B1120,#162044); }
+    .section-light.clip-diag--down::after { background:#fff; }
+    .section-light.clip-diag--up::after { background:#fff; }
+
+    /* 联系区玻璃表单 */
+    .glass-input {
+      background:rgba(255,255,255,0.04) !important;
+      border:1px solid rgba(45,212,191,0.12) !important;
+      color:var(--starlight) !important;
+    }
+    .glass-input:focus {
+      border-color:var(--nova-teal) !important;
+      box-shadow:0 0 0 3px rgba(45,212,191,0.1) !important;
+    }
+    .glass-btn {
+      background:linear-gradient(135deg, var(--nova-teal), #5EEAD4) !important;
+      border:none !important; color:#0B1120 !important;
+      font-weight:600 !important; height:44px !important;
+      border-radius:10px !important;
+    }
+    .glass-btn:hover { opacity:0.9 !important; transform:translateY(-1px); }
+
+    /* ============================================================
        响应式
        ============================================================ */
     @media (max-width:768px) {
@@ -536,43 +639,6 @@
       display:grid; grid-template-columns:repeat(auto-fill,minmax(300px,1fr));
       gap:1.5rem; margin-top:3rem;
     }
-    .skill-card {
-      background:#fff; border:1px solid #f0f0f0;
-      border-radius:16px; padding:1.5rem 1.75rem;
-      transition:transform 0.3s, box-shadow 0.3s;
-      position:relative; overflow:hidden;
-    }
-    .skill-card:hover {
-      transform:translateY(-4px);
-      box-shadow:0 12px 32px rgba(0,0,0,.06);
-    }
-    .skill-card::before {
-      content:''; position:absolute; top:0; left:0; right:0; height:4px;
-      border-radius:16px 16px 0 0;
-    }
-    .skill-card:nth-child(1)::before { background:linear-gradient(90deg,#2DD4BF,#5EEAD4); }
-    .skill-card:nth-child(2)::before { background:linear-gradient(90deg,#F59E0B,#FBBF24); }
-    .skill-card:nth-child(3)::before { background:linear-gradient(90deg,#6366F1,#818CF8); }
-    .skill-card-title {
-      font-family:var(--font-display); font-size:1rem; font-weight:600;
-      color:var(--dark-text); margin-bottom:1.25rem; display:flex; align-items:center; gap:8px;
-    }
-    .skill-items { display:flex; flex-wrap:wrap; gap:8px; }
-    .skill-item {
-      padding:6px 14px; border-radius:8px; font-size:.8125rem;
-      background:#f5f5f5; color:#555; font-weight:500;
-      transition:all 0.25s; cursor:default;
-      position:relative; overflow:hidden;
-    }
-    .skill-item::after {
-      content:''; position:absolute; bottom:0; left:0; height:2px;
-      width:0; background:var(--nova-teal); transition:width 0.3s;
-    }
-    .skill-item:hover {
-      background:rgba(45,212,191,.08); color:var(--nova-teal); transform:translateY(-2px);
-    }
-    .skill-item:hover::after { width:100%; }
-
     /* tag 反色过渡 */
     .project-tag { transition:all 0.3s; }
     .project-tag:hover {
@@ -618,7 +684,7 @@
   <!-- ============================================================
        项目作品
        ============================================================ -->
-  <section class="section" id="work">
+  <section class="section section-light wm-text glow-spot--tl clip-diag--down" id="work" data-wm="PROJECTS">
     <div class="section-inner">
       <div class="fade-up">
         <p class="section-label">Projects</p>
@@ -673,7 +739,7 @@
   <!-- ============================================================
        技能
        ============================================================ -->
-  <section class="section" id="skills">
+  <section class="section section-dark wm-text glow-spot--tr clip-diag--up clip-diag--down" id="skills" data-wm="SKILLS">
     <div class="section-inner">
       <div class="fade-up">
         <p class="section-label">Skills</p>
@@ -683,34 +749,34 @@
       </div>
 
       <div class="skills-grid">
-        <div class="skill-card fade-up">
-          <div class="skill-card-title">前端</div>
-          <div class="skill-items">
-            <span class="skill-item">React</span>
-            <span class="skill-item">TypeScript</span>
-            <span class="skill-item">Next.js</span>
-            <span class="skill-item">Tailwind</span>
-            <span class="skill-item">HTML / CSS</span>
+        <div class="glass-card fade-up">
+          <div class="card-title">前端</div>
+          <div class="card-items">
+            <span class="card-item">React</span>
+            <span class="card-item">TypeScript</span>
+            <span class="card-item">Next.js</span>
+            <span class="card-item">Tailwind</span>
+            <span class="card-item">HTML / CSS</span>
           </div>
         </div>
-        <div class="skill-card fade-up">
-          <div class="skill-card-title">后端</div>
-          <div class="skill-items">
-            <span class="skill-item">Node.js</span>
-            <span class="skill-item">Python</span>
-            <span class="skill-item">Go</span>
-            <span class="skill-item">FastAPI</span>
-            <span class="skill-item">PostgreSQL</span>
+        <div class="glass-card fade-up">
+          <div class="card-title">后端</div>
+          <div class="card-items">
+            <span class="card-item">Node.js</span>
+            <span class="card-item">Python</span>
+            <span class="card-item">Go</span>
+            <span class="card-item">FastAPI</span>
+            <span class="card-item">PostgreSQL</span>
           </div>
         </div>
-        <div class="skill-card fade-up">
-          <div class="skill-card-title">DevOps & 工具</div>
-          <div class="skill-items">
-            <span class="skill-item">Docker</span>
-            <span class="skill-item">GitHub Actions</span>
-            <span class="skill-item">Cloudflare</span>
-            <span class="skill-item">Linux</span>
-            <span class="skill-item">CI/CD</span>
+        <div class="glass-card fade-up">
+          <div class="card-title">DevOps & 工具</div>
+          <div class="card-items">
+            <span class="card-item">Docker</span>
+            <span class="card-item">GitHub Actions</span>
+            <span class="card-item">Cloudflare</span>
+            <span class="card-item">Linux</span>
+            <span class="card-item">CI/CD</span>
           </div>
         </div>
       </div>
@@ -720,7 +786,7 @@
   <!-- ============================================================
        关于我
        ============================================================ -->
-  <section class="section" id="about">
+  <section class="section section-light wm-text glow-spot--br clip-diag--up clip-diag--down" id="about" data-wm="ABOUT">
     <div class="section-inner">
       <div class="fade-up">
         <p class="section-label">About</p>
@@ -759,7 +825,7 @@
   <!-- ============================================================
        联系方式
        ============================================================ -->
-  <section class="section section--contact" id="contact">
+  <section class="section section-dark wm-text glow-spot clip-diag--up" id="contact" data-wm="CONTACT">
     <div class="section-inner">
       <div class="contact-wrap fade-up">
         <p class="section-label">Contact</p>
@@ -772,21 +838,21 @@
         <!-- 联系表单 -->
         <form class="contact-form" id="contactForm" novalidate>
           <div class="form-group">
-            <label for="formName">你的名字</label>
-            <input type="text" id="formName" placeholder="怎么称呼你？" required>
+            <label for="formName" style="color:#94A3B8">你的名字</label>
+            <input type="text" id="formName" class="glass-input" placeholder="怎么称呼你？" required>
             <div class="form-error">请输入你的名字</div>
           </div>
           <div class="form-group">
-            <label for="formEmail">邮箱地址</label>
-            <input type="email" id="formEmail" placeholder="hello@example.com" required>
+            <label for="formEmail" style="color:#94A3B8">邮箱地址</label>
+            <input type="email" id="formEmail" class="glass-input" placeholder="hello@example.com" required>
             <div class="form-error">请输入有效的邮箱地址</div>
           </div>
           <div class="form-group">
-            <label for="formMsg">留言内容</label>
-            <textarea id="formMsg" placeholder="想说什么？" required></textarea>
+            <label for="formMsg" style="color:#94A3B8">留言内容</label>
+            <textarea id="formMsg" class="glass-input" placeholder="想说什么？" required></textarea>
             <div class="form-error">请输入留言内容</div>
           </div>
-          <button type="submit" class="form-submit" id="formSubmit">发送消息 ✦</button>
+          <button type="submit" class="form-submit glass-btn" id="formSubmit">发送消息</button>
           <div class="form-success" id="formSuccess">
             <span class="form-success-icon">✓</span>
             <div class="form-success-text">消息已发送！</div>
@@ -795,8 +861,8 @@
         </form>
 
         <div class="contact-socials">
-          <a href="https://github.com/zxyWE526" target="_blank" rel="noopener" class="contact-social-link">GitHub</a>
-          <a href="mailto:hello@novanook.cloud" class="contact-social-link">邮箱</a>
+          <a href="https://github.com/zxyWE526" target="_blank" rel="noopener" class="contact-social-link" style="border-color:rgba(45,212,191,0.12);color:#94A3B8">GitHub</a>
+          <a href="mailto:hello@novanook.cloud" class="contact-social-link" style="border-color:rgba(45,212,191,0.12);color:#94A3B8">邮箱</a>
         </div>
       </div>
     </div>
@@ -1124,7 +1190,7 @@
       /* ==========================================================
          15. 技能卡片错峰入场
          ========================================================== */
-      var skillCards = document.querySelectorAll('.skill-card');
+      var skillCards = document.querySelectorAll('.glass-card');
       skillCards.forEach(function(card, i) {
         card.style.transitionDelay = (i * 0.12) + 's';
       });
