@@ -607,7 +607,8 @@
        英雄区
        ============================================================ -->
   <section class="hero">
-    <div class="hero-text" id="heroText">
+    <div id="hero3d" style="position:absolute;inset:0;z-index:1;pointer-events:none;"></div>
+    <div class="hero-text" id="heroText" style="position:relative;z-index:3;">
       <h1 class="text chinese">你好，我是 Lnyeon</h1>
       <div class="spotlight" id="spotlight">
         <h1 class="text english">Hello, I'm Lnyeon</h1>
@@ -1143,6 +1144,108 @@
       });
 
     })();
+  </script>
+
+  <!-- Three.js 3D 浮动环 -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+  <script>
+  (function() {
+    var scene = new THREE.Scene();
+    var camera = new THREE.PerspectiveCamera(50, 1, 1, 1000);
+    var renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+
+    var container = document.getElementById('hero3d');
+    if (!container) return;
+    container.appendChild(renderer.domElement);
+
+    function resize() {
+      var w = container.clientWidth;
+      var h = container.clientHeight;
+      renderer.setSize(w, h);
+      camera.aspect = w / h;
+      camera.updateProjectionMatrix();
+    }
+    resize();
+    window.addEventListener('resize', resize);
+
+    // 主环
+    var geo = new THREE.TorusKnotGeometry(1.2, 0.4, 100, 16);
+    var mat = new THREE.MeshPhysicalMaterial({
+      color: 0x2DD4BF,
+      metalness: 0.2,
+      roughness: 0.4,
+      clearcoat: 0.3,
+      transparent: true,
+      opacity: 0.6,
+      emissive: 0x2DD4BF,
+      emissiveIntensity: 0.08,
+    });
+    var mesh = new THREE.Mesh(geo, mat);
+    scene.add(mesh);
+
+    // 小环装饰
+    var geo2 = new THREE.TorusGeometry(0.8, 0.06, 30, 40);
+    var mat2 = new THREE.MeshPhysicalMaterial({
+      color: 0x5EEAD4,
+      metalness: 0.3,
+      roughness: 0.3,
+      transparent: true,
+      opacity: 0.3,
+    });
+    var ring = new THREE.Mesh(geo2, mat2);
+    ring.rotation.x = Math.PI / 2;
+    scene.add(ring);
+
+    // 粒子背景
+    var stars = new THREE.BufferGeometry();
+    var starCount = 200;
+    var pos = new Float32Array(starCount * 3);
+    for (var i = 0; i < starCount * 3; i++) pos[i] = (Math.random() - 0.5) * 30;
+    stars.setAttribute('position', new THREE.BufferAttribute(pos, 3));
+    var starMat = new THREE.PointsMaterial({ color: 0x2DD4BF, size: 0.03, transparent: true, opacity: 0.3 });
+    var starsMesh = new THREE.Points(stars, starMat);
+    scene.add(starsMesh);
+
+    // 灯光
+    scene.add(new THREE.AmbientLight(0x404060));
+    var light = new THREE.DirectionalLight(0x2DD4BF, 1);
+    light.position.set(1, 2, 3);
+    scene.add(light);
+    var light2 = new THREE.DirectionalLight(0xffffff, 0.5);
+    light2.position.set(-2, 1, -1);
+    scene.add(light2);
+
+    camera.position.z = 4.5;
+
+    var mouseX = 0, mouseY = 0;
+    var targetX = 0, targetY = 0;
+
+    document.addEventListener('mousemove', function(e) {
+      var rect = container.getBoundingClientRect();
+      mouseX = ((e.clientX - rect.left) / rect.width - 0.5) * 2;
+      mouseY = ((e.clientY - rect.top) / rect.height - 0.5) * -2;
+    });
+
+    function animate() {
+      requestAnimationFrame(animate);
+      targetX += (mouseX - targetX) * 0.05;
+      targetY += (mouseY - targetY) * 0.05;
+
+      mesh.rotation.x += 0.005;
+      mesh.rotation.y += 0.008;
+      mesh.rotation.x += targetY * 0.005;
+      mesh.rotation.y += targetX * 0.005;
+
+      ring.rotation.z += 0.006;
+      ring.rotation.x = Math.PI / 2 + targetY * 0.1;
+
+      starsMesh.rotation.y += 0.0005;
+
+      renderer.render(scene, camera);
+    }
+    animate();
+  })();
   </script>
 </body>
 </html>
