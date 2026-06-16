@@ -123,7 +123,7 @@
     /* ============================================================
        通用区块
        ============================================================ */
-    .section { padding:6rem 2rem; }
+    .section { padding:6rem 2rem; position:relative; }
     .section-inner { max-width:1100px; margin:0 auto; }
     .section-label {
       font-family:var(--font-display); font-size:.75rem; font-weight:600;
@@ -141,9 +141,31 @@
       width:2.5rem; height:3px; background:var(--nova-teal);
       border-radius:2px; margin-bottom:1.5rem;
     }
-    .section--dark { background:var(--deep-space); }
+
+    /* 深色区块 */
+    .section--dark {
+      background:var(--deep-space);
+      margin-top:-1px; /* 消除间隙 */
+    }
     .section--dark .section-title { color:var(--starlight); }
     .section--dark .section-desc { color:var(--stardust); }
+
+    /* 渐变过渡：白 → 深色之间 */
+    .section--to-dark::after {
+      content:''; position:absolute; bottom:0; left:0; right:0;
+      height:120px;
+      background:linear-gradient(to bottom, transparent, var(--deep-space));
+      pointer-events:none;
+    }
+
+    /* 渐变过渡：深色 → 白之间 */
+    .section--from-dark::before {
+      content:''; position:absolute; top:0; left:0; right:0;
+      height:120px;
+      background:linear-gradient(to bottom, var(--deep-space), transparent);
+      pointer-events:none; z-index:1;
+    }
+    .section--from-dark { margin-top:-120px; padding-top:calc(6rem + 120px); }
 
     /* 滚动动画 */
     .fade-up {
@@ -467,7 +489,7 @@
   <!-- ============================================================
        项目作品
        ============================================================ -->
-  <section class="section" id="work">
+  <section class="section section--to-dark" id="work">
     <div class="section-inner">
       <div class="fade-up">
         <p class="section-label">Projects</p>
@@ -560,7 +582,7 @@
   <!-- ============================================================
        关于我
        ============================================================ -->
-  <section class="section" id="about">
+  <section class="section section--from-dark section--to-dark" id="about">
     <div class="section-inner">
       <div class="fade-up">
         <p class="section-label">About</p>
