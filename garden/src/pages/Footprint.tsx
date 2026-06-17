@@ -150,7 +150,9 @@ export default function Footprint() {
 
   return (
     <div>
-      <div ref={ref} style={{ width: '100%', height: 520, borderRadius: 8, overflow: 'hidden' }} />
+      <div style={{ display: 'flex', justifyContent: 'center' }}>
+        <div ref={ref} style={{ width: '100%', maxWidth: 900, height: 540, borderRadius: 8, overflow: 'hidden' }} />
+      </div>
       <div style={{ marginTop: 6, fontSize: 11, color: '#cbd5e1', textAlign: 'center' }}>
         点击省份添加足迹 · 拖拽旋转 · 滚轮缩放
       </div>
