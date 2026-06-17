@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import * as echarts from 'echarts';
+import 'echarts-gl';
 import chinaGeo from '../assets/china.json';
 
 interface Entry {
