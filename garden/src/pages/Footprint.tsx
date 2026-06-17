@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import * as echarts from 'echarts';
+import chinaGeo from '../data/china.json';
 
 interface ProvinceFootprint {
   name: string;
@@ -31,29 +32,16 @@ export default function Footprint() {
     localStorage.setItem('life-footprint', JSON.stringify(d));
   };
 
-  // Load China map data
+  // Load China map from local data
   useEffect(() => {
-    const loadMap = async () => {
-      const urls = [
-        'https://geo.datav.aliyun.com/areas_v3/bound/100000_full.json',
-        'https://cdn.jsdelivr.net/gh/apache/echarts-website@master/examples/data/asset/geo/China.json',
-      ];
-      for (const url of urls) {
-        try {
-          const res = await fetch(url, { signal: AbortSignal.timeout(8000) });
-          if (!res.ok) continue;
-          const geo = await res.json();
-          if (geo?.features?.length >= 30) {
-            echarts.registerMap('china', geo);
-            setMapReady(true);
-            return;
-          }
-        } catch {}
+    try {
+      if (chinaGeo?.features?.length >= 30) {
+        echarts.registerMap('china', chinaGeo as any);
+        setMapReady(true);
       }
-      // Fallback: create minimal province outlines
-      console.warn('Map data unavailable');
-    };
-    loadMap();
+    } catch (e) {
+      console.error('Map load failed', e);
+    }
   }, []);
 
   // Render/update chart
