@@ -3,7 +3,7 @@ import Home from '../pages/Home';
 import Journal from '../pages/Journal';
 import Notes from '../pages/Notes';
 import Ideas from '../pages/Ideas';
-import Gallery from '../pages/Gallery';
+import Gallery from '../pages/Footprint';
 import Vault from '../pages/Vault';
 import Goals from '../pages/Goals';
 import Timeline from '../pages/Timeline';
@@ -36,7 +36,7 @@ const SECTIONS: SectionDef[] = [
   { id: 'life-journal', label: '日志', comp: Journal, color: '#ec4899', num: '02' },
   { id: 'life-notes', label: '笔记', comp: Notes, color: '#10b981', num: '03' },
   { id: 'life-ideas', label: '灵感', comp: Ideas, color: '#f59e0b', num: '04' },
-  { id: 'life-gallery', label: '相册', comp: Gallery, color: '#f472b6', num: '05' },
+  { id: 'life-gallery', label: '足迹', comp: Gallery, color: '#f472b6', num: '05' },
   { id: 'life-vault', label: '文件', comp: Vault, color: '#3b82f6', num: '06' },
   { id: 'life-goals', label: '目标', comp: Goals, color: '#8b5cf6', num: '07' },
   { id: 'life-timeline', label: '时间轴', comp: Timeline, color: '#f59e0b', num: '08' },
