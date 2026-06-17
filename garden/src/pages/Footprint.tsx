@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from 'react';
 import * as THREE from 'three';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 import { CSS2DRenderer, CSS2DObject } from 'three/addons/renderers/CSS2DRenderer.js';
+import chinaGeo from '../assets/china_dv.json';
 
 /* ================================================================
    类型 / 常量
@@ -13,7 +14,6 @@ interface LabelData {
   position: { x: number; y: number; z: number };
 }
 
-const GEO_URL = 'https://geo.datav.aliyun.com/areas_v3/bound/100000_full.json';
 const CT = [104, 33]; // 中国中心经纬度
 
 const PALETTE = [
@@ -42,12 +42,6 @@ function loadTex(): Record<string, string> {
   try { return JSON.parse(localStorage.getItem(LS_TEX) || '{}'); } catch { return {}; }
 }
 function saveTex(v: Record<string, string>) { localStorage.setItem(LS_TEX, JSON.stringify(v)); }
-
-/** 从阿里云 DataV 获取 GeoJSON */
-async function fetchGeo() {
-  const r = await fetch(GEO_URL, { cache: 'force-cache' });
-  return r.json();
-}
 
 /** 将 GeoJSON feature 挤出为 THREE.Mesh 列表 */
 function makeMeshes(feature: any, color: number, _idx: number) {
@@ -189,7 +183,7 @@ export default function Footprint() {
         ctrl.update();
 
         /* ---- 加载 GeoJSON ---- */
-        const geo = await fetchGeo();
+        const geo = chinaGeo;
         if (disposed) return;
 
         const provinceMap: Record<string, any[]> = {};
@@ -350,8 +344,6 @@ export default function Footprint() {
   useEffect(() => {
     const d = sceneRef.current;
     if (!d || !d.scene) return;
-    const { CSS2DObject } = d;
-    const { THREE } = d;
 
     // 清除旧 label
     for (const ob of d.labelObjs) {
