@@ -1,0 +1,39 @@
+/* Font imports - must precede all other rules */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap');
+
+@import "tailwindcss";
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+@theme {
+  --color-bg-dark: #0A0A0F;
+  --color-bg-card: #141418;
+  --color-bg-hover: #1C1C22;
+  --color-border: rgba(255,255,255,0.06);
+  --color-text-primary: #F0F0F2;
+  --color-text-secondary: #8E8E96;
+  --color-accent: #6C63FF;
+  --color-accent-light: #8B85FF;
+  --color-gradient-start: #6C63FF;
+  --color-gradient-end: #E26EE5;
+  --color-success: #34D399;
+  --color-warning: #FBBF24;
+}
+
+body {
+  margin: 0;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  background: #0A0A0F;
+  color: #F0F0F2;
+  -webkit-font-smoothing: antialiased;
+}
+
+* { box-sizing: border-box; }
+
+/* Custom scrollbar */
+::-webkit-scrollbar { width: 4px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: rgba(108,99,255,0.3); border-radius: 2px; }
+
+/* Smooth scrolling */
+html { scroll-behavior: smooth; }
