@@ -23,8 +23,8 @@
 body {
   margin: 0;
   font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-  background: #0A0A0F;
-  color: #F0F0F2;
+  background: var(--color-bg-dark, #0A0A0F);
+  color: var(--color-text-primary, #F0F0F2);
   -webkit-font-smoothing: antialiased;
 }
 
@@ -37,3 +37,17 @@ body {
 
 /* Smooth scrolling */
 html { scroll-behavior: smooth; }
+
+/* Light theme overrides */
+.light {
+  --color-bg-dark: #f8f8fa;
+  --color-bg-card: #ffffff;
+  --color-bg-hover: #f0f0f2;
+  --color-border: rgba(0,0,0,0.08);
+  --color-text-primary: #1a1a2e;
+  --color-text-secondary: #666666;
+  --color-accent: #6C63FF;
+  --color-accent-light: #8B85FF;
+  --color-success: #34D399;
+  --color-warning: #FBBF24;
+}
