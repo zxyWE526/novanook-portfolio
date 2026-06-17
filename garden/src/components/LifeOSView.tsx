@@ -12,28 +12,31 @@ import Guestbook from '../pages/Guestbook';
 import Dashboard from '../pages/Dashboard';
 import Settings from '../pages/Settings';
 
-const SECTIONS = [
-  { id: 'life-home', label: '首页', comp: Home, bg: '#f5f6fa' },
-  { id: 'life-journal', label: '日志', comp: Journal, bg: '#f0f2f8' },
-  { id: 'life-notes', label: '笔记', comp: Notes, bg: '#f5f6fa' },
-  { id: 'life-ideas', label: '灵感', comp: Ideas, bg: '#f0f2f8' },
-  { id: 'life-gallery', label: '相册', comp: Gallery, bg: '#f5f6fa' },
-  { id: 'life-vault', label: '文件', comp: Vault, bg: '#f0f2f8' },
-  { id: 'life-goals', label: '目标', comp: Goals, bg: '#f5f6fa' },
-  { id: 'life-timeline', label: '时间轴', comp: Timeline, bg: '#f0f2f8' },
-  { id: 'life-reading', label: '收藏', comp: Reading, bg: '#f5f6fa' },
-  { id: 'life-guestbook', label: '留言', comp: Guestbook, bg: '#f0f2f8' },
-  { id: 'life-dashboard', label: '数据', comp: Dashboard, bg: '#f5f6fa' },
-  { id: 'life-settings', label: '设置', comp: Settings, bg: '#f0f2f8' },
+interface SectionDef {
+  id: string; label: string; comp: React.ComponentType; accent: string; num: string;
+}
+
+const SECTIONS: SectionDef[] = [
+  { id: 'life-home', label: '首页', comp: Home, accent: '#6C63FF', num: '01' },
+  { id: 'life-journal', label: '日志', comp: Journal, accent: '#E26EE5', num: '02' },
+  { id: 'life-notes', label: '笔记', comp: Notes, accent: '#34D399', num: '03' },
+  { id: 'life-ideas', label: '灵感', comp: Ideas, accent: '#F59E0B', num: '04' },
+  { id: 'life-gallery', label: '相册', comp: Gallery, accent: '#F472B6', num: '05' },
+  { id: 'life-vault', label: '文件', comp: Vault, accent: '#60A5FA', num: '06' },
+  { id: 'life-goals', label: '目标', comp: Goals, accent: '#A78BFA', num: '07' },
+  { id: 'life-timeline', label: '时间轴', comp: Timeline, accent: '#FBBF24', num: '08' },
+  { id: 'life-reading', label: '收藏', comp: Reading, accent: '#34D399', num: '09' },
+  { id: 'life-guestbook', label: '留言', comp: Guestbook, accent: '#FB923C', num: '10' },
+  { id: 'life-dashboard', label: '数据', comp: Dashboard, accent: '#6C63FF', num: '11' },
+  { id: 'life-settings', label: '设置', comp: Settings, accent: '#8E8E96', num: '12' },
 ];
 
-const COLORS = ['#f5f6fa','#f0f2f8','#faf5ff','#f5fffa','#fff5f5','#f5f5ff'];
+const BG_LIGHT = '#f5f6fa';
+const BG_DIM = '#f0f1f6';
 
 export default function LifeOSView() {
-  const observerRef = useRef<IntersectionObserver | null>(null);
-
   useEffect(() => {
-    observerRef.current = new IntersectionObserver((entries) => {
+    const observer = new IntersectionObserver((entries) => {
       entries.forEach((entry) => {
         if (entry.isIntersecting) {
           const id = entry.target.getAttribute('id');
@@ -46,17 +49,15 @@ export default function LifeOSView() {
       });
     }, { threshold: 0.3, rootMargin: '-64px 0px 0px 0px' });
 
-    document.querySelectorAll('.life-screen').forEach((el) => {
-      observerRef.current?.observe(el);
-    });
-    return () => observerRef.current?.disconnect();
+    document.querySelectorAll('.life-screen').forEach((el) => observer.observe(el));
+    return () => observer.disconnect();
   }, []);
 
   return (
     <div className="life-root">
       {SECTIONS.map((sec, i) => {
         const Comp = sec.comp;
-        const bg = COLORS[i % COLORS.length];
+        const bg = i % 2 === 0 ? BG_LIGHT : BG_DIM;
         return (
           <section
             key={sec.id}
@@ -64,9 +65,19 @@ export default function LifeOSView() {
             className="life-screen"
             style={{ background: bg }}
           >
-            <div className="life-screen-inner">
-              <div className="life-counter">{String(i + 1).padStart(2, '0')}</div>
-              <div className="life-screen-content">
+            {/* 顶部渐变装饰条 */}
+            <div className="life-accent" style={{ background: sec.accent }} />
+
+            {/* 超大背景数字 */}
+            <div className="life-bg-num">{sec.num}</div>
+
+            {/* 内容区 */}
+            <div className="life-content-wrap">
+              <div className="life-content-header">
+                <span className="life-label" style={{ color: sec.accent }}>{sec.label}</span>
+                <div className="life-hr" style={{ background: sec.accent, opacity: 0.15 }} />
+              </div>
+              <div className="life-content">
                 <Comp />
               </div>
             </div>
@@ -82,48 +93,63 @@ export default function LifeOSView() {
         .life-screen {
           min-height: 100vh;
           scroll-snap-align: start;
+          position: relative;
           display: flex;
           align-items: center;
           justify-content: center;
-          padding: 80px 24px 40px;
-          position: relative;
-          transition: background 0.5s ease;
+          padding: 80px 32px 32px;
         }
-        .life-screen-inner {
+        .life-accent {
+          position: absolute; top: 0; left: 0; right: 0;
+          height: 4px; z-index: 1;
+        }
+        .life-bg-num {
+          position: absolute;
+          top: 50%; left: 50%;
+          transform: translate(-50%,-50%);
+          font-family: 'Space Grotesk', monospace;
+          font-size: clamp(200px, 40vw, 400px);
+          font-weight: 800;
+          color: rgba(0,0,0,0.025);
+          pointer-events: none;
+          user-select: none;
+          line-height: 1;
+        }
+        .life-content-wrap {
           width: 100%;
           max-width: 1000px;
-          margin: 0 auto;
           position: relative;
+          z-index: 1;
+          animation: fadeUp 0.5s ease both;
         }
-        .life-counter {
-          position: absolute;
-          top: -12px;
-          left: 0;
-          font-family: 'Space Grotesk', monospace;
-          font-size: 12px;
+        .life-content-header {
+          display: flex;
+          align-items: center;
+          gap: 16px;
+          margin-bottom: 20px;
+        }
+        .life-label {
+          font-family: 'Space Grotesk', sans-serif;
+          font-size: 13px;
           font-weight: 600;
-          color: rgba(0,0,0,0.08);
-          letter-spacing: 0.15em;
+          letter-spacing: 0.2em;
+          text-transform: uppercase;
+          flex-shrink: 0;
         }
-        .life-screen-content {
-          background: #fff;
-          border-radius: 18px;
-          box-shadow: 0 1px 6px rgba(0,0,0,0.04);
-          padding: 28px 32px;
-          min-height: 60vh;
-          animation: screenIn 0.4s ease both;
-          transition: box-shadow 0.3s, transform 0.3s;
+        .life-hr {
+          flex: 1;
+          height: 1px;
         }
-        .life-screen-content:hover {
-          box-shadow: 0 8px 30px rgba(0,0,0,0.06);
+        .life-content {
+          width: 100%;
         }
-        @keyframes screenIn {
-          from { opacity: 0; transform: translateY(30px) scale(0.98); }
-          to { opacity: 1; transform: translateY(0) scale(1); }
+        @keyframes fadeUp {
+          from { opacity: 0; transform: translateY(20px); }
+          to { opacity: 1; transform: translateY(0); }
         }
         @media (max-width: 640px) {
-          .life-screen { padding: 72px 12px 24px; }
-          .life-screen-content { padding: 16px; border-radius: 12px; }
+          .life-screen { padding: 72px 16px 16px; }
+          .life-content-header { margin-bottom: 12px; }
         }
       `}</style>
     </div>
