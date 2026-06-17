@@ -20,20 +20,25 @@ https://example.com/photo2.jpg`,rows:2,className:`w-full bg-bg-dark border borde
         .life-root {
           scroll-snap-type: y mandatory;
           overflow-y: scroll;
-          height: 100vh;
+          min-height: 100dvh;
         }
         .life-screen {
-          min-height: 100vh;
+          min-height: 100dvh;
           scroll-snap-align: start;
           position: relative;
           display: flex;
           align-items: center;
           justify-content: center;
-          padding: 80px 32px 32px;
+          padding: 88px 40px 40px;
+          transition: background 0.4s ease;
         }
         .life-accent {
           position: absolute; top: 0; left: 0; right: 0;
           height: 4px; z-index: 1;
+          transition: height 0.3s ease;
+        }
+        .life-screen:hover .life-accent {
+          height: 6px;
         }
         .life-bg-num {
           position: absolute;
@@ -52,19 +57,19 @@ https://example.com/photo2.jpg`,rows:2,className:`w-full bg-bg-dark border borde
           max-width: 1000px;
           position: relative;
           z-index: 1;
-          animation: fadeUp 0.5s ease both;
+          animation: fadeUp 0.6s cubic-bezier(0.16,1,0.3,1) both;
         }
         .life-content-header {
           display: flex;
           align-items: center;
-          gap: 16px;
-          margin-bottom: 20px;
+          gap: 12px;
+          margin-bottom: 24px;
         }
         .life-label {
           font-family: 'Space Grotesk', sans-serif;
-          font-size: 13px;
+          font-size: 11px;
           font-weight: 600;
-          letter-spacing: 0.2em;
+          letter-spacing: 0.22em;
           text-transform: uppercase;
           flex-shrink: 0;
         }
@@ -76,11 +81,12 @@ https://example.com/photo2.jpg`,rows:2,className:`w-full bg-bg-dark border borde
           width: 100%;
         }
         @keyframes fadeUp {
-          from { opacity: 0; transform: translateY(20px); }
+          from { opacity: 0; transform: translateY(24px); }
           to { opacity: 1; transform: translateY(0); }
         }
         @media (max-width: 640px) {
-          .life-screen { padding: 72px 16px 16px; }
-          .life-content-header { margin-bottom: 12px; }
+          .life-screen { padding: 72px 16px 24px; }
+          .life-content-header { margin-bottom: 16px; gap: 8px; }
+          .life-label { font-size: 10px; }
         }
       `})]})}function Md(){return(0,H.jsx)(jd,{})}var $=document.getElementById(`garden`)||document.getElementById(`root`);$&&(0,x.createRoot)($).render((0,H.jsx)(b.StrictMode,{children:(0,H.jsx)(Md,{})}));
