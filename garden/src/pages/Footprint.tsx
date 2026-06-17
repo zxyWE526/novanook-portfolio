@@ -14,7 +14,7 @@ interface LabelData {
   position: { x: number; y: number; z: number };
 }
 
-const CT = [104, 33]; // 中国中心经纬度
+const CT = [104, 33];
 
 const PALETTE = [
   0x6366f1, 0x7c3aed, 0xa855f7, 0xd946ef, 0xec4899,
@@ -29,22 +29,20 @@ const PALETTE = [
 const LS_LABELS = 'fp_three_labels';
 const LS_TEX = 'fp_three_textures';
 
-/* ================================================================
-   工具函数
-   ================================================================ */
-
 function loadLabels(): LabelData[] {
   try { return JSON.parse(localStorage.getItem(LS_LABELS) || '[]'); } catch { return []; }
 }
 function saveLabels(v: LabelData[]) { localStorage.setItem(LS_LABELS, JSON.stringify(v)); }
-
 function loadTex(): Record<string, string> {
   try { return JSON.parse(localStorage.getItem(LS_TEX) || '{}'); } catch { return {}; }
 }
 function saveTex(v: Record<string, string>) { localStorage.setItem(LS_TEX, JSON.stringify(v)); }
 
-/** 将 GeoJSON feature 挤出为 THREE.Mesh 列表 */
-function makeMeshes(feature: any, color: number, _idx: number) {
+/* ================================================================
+   Helper
+   ================================================================ */
+
+function makeMeshes(feature: any, color: number) {
   const meshes: any[] = [];
   const name = feature.properties?.name || '未知';
   const geo = feature.geometry;
@@ -91,7 +89,6 @@ function makeMeshes(feature: any, color: number, _idx: number) {
     const mesh = new THREE.Mesh(geom, mat);
     mesh.userData = { province: name, isProvince: true, baseColor: color, baseY: 0 };
 
-    // 白色描边
     const edge = new THREE.EdgesGeometry(geom);
     const line = new THREE.LineSegments(
       edge,
@@ -105,73 +102,66 @@ function makeMeshes(feature: any, color: number, _idx: number) {
 }
 
 /* ================================================================
-   组件
+   Component
    ================================================================ */
 
 export default function Footprint() {
   const containerRef = useRef<HTMLDivElement>(null);
   const fileRef = useRef<HTMLInputElement>(null);
-  const sceneRef = useRef<any>(null); // 存 Three 场景对象, 供事件用
-  const pendingProvinceRef = useRef<string | null>(null); // 左键选中省份
+  const sceneRef = useRef<any>(null);
+  const pendingProvinceRef = useRef<string | null>(null);
 
   const [labels, setLabels] = useState<LabelData[]>(loadLabels);
   const [textures, setTextures] = useState<Record<string, string>>(loadTex);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
-  /* ---------- 初始化 Three.js 场景 ---------- */
+  /* ---------- Init Three.js ---------- */
   useEffect(() => {
     const ctn = containerRef.current;
     if (!ctn) return;
 
     let disposed = false;
-    const data: any = { scene: null, camera: null, renderer: null, labelRenderer: null, controls: null, meshes: [], provinceMap: {} as Record<string, any[]>, labelObjs: [] as any[] };
+    const data: any = {
+      scene: null, camera: null, renderer: null, labelRenderer: null,
+      controls: null, meshes: [], provinceMap: {}, labelObjs: [],
+    };
 
     (async () => {
       try {
         if (disposed) return;
 
-        /* ---- 场景 / 相机 / 渲染器 ---- */
-	        const scene = new THREE.Scene();
-	        scene.background = new THREE.Color(0x0b1120);
+        const scene = new THREE.Scene();
+        scene.background = new THREE.Color(0x0b1120);
 
-	        const camera = new THREE.PerspectiveCamera(45, ctn.clientWidth / ctn.clientHeight, 0.1, 200);
+        const camera = new THREE.PerspectiveCamera(
+          45, ctn.clientWidth / ctn.clientHeight, 0.1, 200,
+        );
         camera.position.set(10, 14, 18);
         camera.lookAt(0, 0, 0);
 
         const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: false });
         renderer.setSize(ctn.clientWidth, ctn.clientHeight);
         renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-        renderer.shadowMap.enabled = true;
-        renderer.shadowMap.type = THREE.PCFSoftShadowMap;
-        renderer.toneMapping = THREE.ACESFilmicToneMapping;
-        renderer.toneMappingExposure = 1.2;
         ctn.appendChild(renderer.domElement);
 
         const lr = new CSS2DRenderer();
         lr.setSize(ctn.clientWidth, ctn.clientHeight);
         lr.domElement.style.position = 'absolute';
         lr.domElement.style.top = '0';
-        lr.domElement.style.pointerEvents = 'none'; // 标签自己设 pointer-events:auto
+        lr.domElement.style.pointerEvents = 'none';
         ctn.appendChild(lr.domElement);
 
-        /* ---- 灯光 ---- */
-        const amb = new THREE.AmbientLight(0x404066, 0.6);
-        scene.add(amb);
-
+        /* lights */
+        scene.add(new THREE.AmbientLight(0x404066, 0.6));
         const dir = new THREE.DirectionalLight(0xffeedd, 1.8);
         dir.position.set(15, 25, 10);
-        dir.castShadow = true;
         scene.add(dir);
-
         const fill = new THREE.DirectionalLight(0x8888ff, 0.5);
         fill.position.set(-10, 5, -15);
         scene.add(fill);
 
-        /* ---- 地面微弱雾效增加景深 ---- */
-        scene.fog = new THREE.FogExp2(0x0b1120, 0.012);
-
-        /* ---- 控制器 ---- */
+        /* controls */
         const ctrl = new OrbitControls(camera, renderer.domElement);
         ctrl.target.set(0, 0, 0);
         ctrl.enableDamping = true;
@@ -182,24 +172,17 @@ export default function Footprint() {
         ctrl.autoRotate = false;
         ctrl.update();
 
-        /* ---- 加载 GeoJSON ---- */
-        const geo = chinaGeo;
-        if (disposed) return;
-
-        const provinceMap: Record<string, any[]> = {};
+        /* parse geo */
         let colorIdx = 0;
-
-        for (const feat of geo.features) {
+        for (const feat of (chinaGeo as any).features) {
           const name = feat.properties?.name;
           if (!name) continue;
-          const meshes = makeMeshes(feat, PALETTE[colorIdx % PALETTE.length], colorIdx);
+          const meshes = makeMeshes(feat, PALETTE[colorIdx % PALETTE.length]);
           colorIdx++;
-          if (meshes.length) {
-            provinceMap[name] = meshes;
-            for (const m of meshes) {
-              scene.add(m);
-              data.meshes.push(m);
-            }
+          for (const m of meshes) {
+            scene.add(m);
+            data.meshes.push(m);
+            (data.provinceMap[name] ??= []).push(m);
           }
         }
 
@@ -208,27 +191,25 @@ export default function Footprint() {
         data.renderer = renderer;
         data.labelRenderer = lr;
         data.controls = ctrl;
-        data.provinceMap = provinceMap;
         sceneRef.current = data;
-
         setLoading(false);
 
-        /* ---- Raycaster ---- */
+        /* raycaster */
         const raycaster = new THREE.Raycaster();
         const pointer = new THREE.Vector2();
 
-        function getIntersects(e: MouseEvent) {
-          const rect = renderer.domElement.getBoundingClientRect();
-          pointer.x = ((e.clientX - rect.left) / rect.width) * 2 - 1;
-          pointer.y = -((e.clientY - rect.top) / rect.height) * 2 + 1;
+        function getHits(e: MouseEvent) {
+          const r = renderer.domElement.getBoundingClientRect();
+          pointer.x = ((e.clientX - r.left) / r.width) * 2 - 1;
+          pointer.y = -((e.clientY - r.top) / r.height) * 2 + 1;
           raycaster.setFromCamera(pointer, camera);
           return raycaster.intersectObjects(data.meshes);
         }
 
         function resetProvince() {
-          const prev = pendingProvinceRef.current;
-          if (prev && provinceMap[prev]) {
-            for (const m of provinceMap[prev]) {
+          const p = pendingProvinceRef.current;
+          if (p && data.provinceMap[p]) {
+            for (const m of data.provinceMap[p]) {
               m.position.y = 0;
               m.material.color.setHex(m.userData.baseColor);
               m.material.map = null;
@@ -238,18 +219,13 @@ export default function Footprint() {
           pendingProvinceRef.current = null;
         }
 
-        /* ---- 左键：省份 → 上传图片 ---- */
         renderer.domElement.addEventListener('click', (e: MouseEvent) => {
           if (e.button !== 0) return;
-          const hits = getIntersects(e);
-          const provHit = hits.find((h: any) => h.object?.userData?.isProvince);
-
-          if (provHit) {
-            const name = provHit.object.userData.province;
-            // 如果点击同一个省份, 直接开文件选择器
-            if (pendingProvinceRef.current !== name) {
-              resetProvince();
-            }
+          const hits = getHits(e);
+          const hit = hits.find((h: any) => h.object?.userData?.isProvince);
+          if (hit) {
+            const name = hit.object.userData.province;
+            if (pendingProvinceRef.current !== name) resetProvince();
             pendingProvinceRef.current = name;
             fileRef.current?.click();
           } else {
@@ -257,13 +233,11 @@ export default function Footprint() {
           }
         });
 
-        /* ---- 右键：添加文字标签 ---- */
         renderer.domElement.addEventListener('contextmenu', (e: MouseEvent) => {
           e.preventDefault();
-          const hits = getIntersects(e);
+          const hits = getHits(e);
           if (!hits.length) return;
           const pt = hits[0].point;
-
           const label: LabelData = {
             id: `l${Date.now()}`,
             text: '新地标',
@@ -276,7 +250,6 @@ export default function Footprint() {
           });
         });
 
-        /* ---- 动画循环 ---- */
         function animate() {
           if (disposed) return;
           requestAnimationFrame(animate);
@@ -286,7 +259,6 @@ export default function Footprint() {
         }
         animate();
 
-        /* ---- Resize ---- */
         function onResize() {
           if (!ctn) return;
           const w = ctn.clientWidth;
@@ -297,10 +269,9 @@ export default function Footprint() {
           lr.setSize(w, h);
         }
         window.addEventListener('resize', onResize);
-        data._resize = onResize;
       } catch (e: any) {
         if (!disposed) {
-          console.error(e);
+          console.error('Footprint init error:', e);
           setError(e.message || '加载失败');
           setLoading(false);
         }
@@ -309,29 +280,26 @@ export default function Footprint() {
 
     return () => {
       disposed = true;
-      const d = data;
       sceneRef.current = null;
-      if (d?.controls) d.controls.dispose();
-      if (d?.renderer) {
-        d.renderer.dispose();
-        d.renderer.domElement.remove();
+      if (data?.controls) data.controls.dispose();
+      if (data?.renderer) {
+        data.renderer.dispose();
+        data.renderer.domElement.remove();
       }
-      if (d?.labelRenderer) {
-        d.labelRenderer.domElement.remove();
-      }
+      if (data?.labelRenderer) data.labelRenderer.domElement.remove();
     };
   }, []);
 
-  /* ---------- 同步已保存的纹理（页面加载后重新贴图） ---------- */
+  /* ---------- Restore textures ---------- */
   useEffect(() => {
-    if (loading || !sceneRef.current) return;
-    const { provinceMap, THREE } = sceneRef.current;
-    const loader = new THREE.TextureLoader();
+    if (loading) return;
+    const d = sceneRef.current;
+    if (!d?.provinceMap) return;
     for (const [name, dataUrl] of Object.entries(textures)) {
-      if (!provinceMap[name]) continue;
+      if (!d.provinceMap[name]) continue;
+      const loader = new THREE.TextureLoader();
       const tex = loader.load(dataUrl);
-      tex.needsUpdate = true;
-      for (const m of provinceMap[name]) {
+      for (const m of d.provinceMap[name]) {
         m.material.map = tex;
         m.material.color.setHex(0xffffff);
         m.material.needsUpdate = true;
@@ -340,15 +308,11 @@ export default function Footprint() {
     }
   }, [loading, textures]);
 
-  /* ---------- 同步 label DOM ---------- */
+  /* ---------- Sync labels ---------- */
   useEffect(() => {
     const d = sceneRef.current;
-    if (!d || !d.scene) return;
-
-    // 清除旧 label
-    for (const ob of d.labelObjs) {
-      d.scene.remove(ob);
-    }
+    if (!d?.scene) return;
+    for (const ob of d.labelObjs) d.scene.remove(ob);
     d.labelObjs = [];
 
     for (const lab of labels) {
@@ -356,12 +320,11 @@ export default function Footprint() {
       div.style.cssText = `
         background: rgba(0,0,0,0.55);
         backdrop-filter: blur(6px);
-        -webkit-backdrop-filter: blur(6px);
         color: #fff;
         padding: 5px 12px 5px 10px;
         border-radius: 8px;
         font-size: 13px;
-        font-family: 'Inter', sans-serif;
+        font-family: Inter, sans-serif;
         white-space: nowrap;
         pointer-events: auto;
         cursor: pointer;
@@ -372,14 +335,10 @@ export default function Footprint() {
         box-shadow: 0 4px 16px rgba(0,0,0,0.3);
         user-select: none;
       `;
-      // 小圆点
       const dot = document.createElement('span');
       dot.style.cssText = `
-        display: inline-block;
-        width: 7px; height: 7px;
-        border-radius: 50%;
-        background: #f59e0b;
-        box-shadow: 0 0 6px rgba(245,158,11,0.5);
+        display: inline-block; width: 7px; height: 7px;
+        border-radius: 50%; background: #f59e0b;
         flex-shrink: 0;
       `;
       const txt = document.createElement('span');
@@ -387,14 +346,13 @@ export default function Footprint() {
       div.appendChild(dot);
       div.appendChild(txt);
 
-      // 双击编辑
       div.addEventListener('dblclick', (e) => {
         e.stopPropagation();
         const next = prompt('编辑地标名称：', lab.text);
-        if (next && next.trim()) {
+        if (next?.trim()) {
           setLabels((prev) => {
             const updated = prev.map((l) =>
-              l.id === lab.id ? { ...l, text: next.trim() } : l
+              l.id === lab.id ? { ...l, text: next!.trim() } : l,
             );
             saveLabels(updated);
             return updated;
@@ -409,12 +367,10 @@ export default function Footprint() {
     }
   }, [labels]);
 
-  /* ---------- 文件选择 ---------- */
+  /* ---------- File handler ---------- */
   const handleFile = (e: React.ChangeEvent<HTMLInputElement>) => {
     const files = e.target.files;
     if (!files?.length) return;
-    const f = files[0];
-
     const reader = new FileReader();
     reader.onload = () => {
       const dataUrl = reader.result as string;
@@ -427,12 +383,10 @@ export default function Footprint() {
         return next;
       });
 
-      // 即时贴图
       const d = sceneRef.current;
       if (d?.provinceMap[prov]) {
-        const loader = new d.THREE.TextureLoader();
+        const loader = new THREE.TextureLoader();
         const tex = loader.load(dataUrl);
-        tex.needsUpdate = true;
         for (const m of d.provinceMap[prov]) {
           m.material.map = tex;
           m.material.color.setHex(0xffffff);
@@ -462,70 +416,47 @@ export default function Footprint() {
           background: '#0b1120',
         }}
       >
-        {/* 指令提示 */}
         <div
           style={{
-            position: 'absolute',
-            top: 14,
-            left: 14,
-            zIndex: 10,
+            position: 'absolute', top: 14, left: 14, zIndex: 10,
             background: 'rgba(0,0,0,0.45)',
             backdropFilter: 'blur(8px)',
-            WebkitBackdropFilter: 'blur(8px)',
-            padding: '8px 14px',
-            borderRadius: 8,
-            fontSize: 12,
-            color: 'rgba(255,255,255,0.8)',
-            fontFamily: "'Inter', sans-serif",
-            letterSpacing: '0.02em',
+            padding: '8px 14px', borderRadius: 8,
+            fontSize: 12, color: 'rgba(255,255,255,0.8)',
+            fontFamily: 'Inter, sans-serif',
             border: '1px solid rgba(255,255,255,0.06)',
             pointerEvents: 'none',
           }}
         >
-          🖱️ 左键省份：上传图片 &nbsp;|&nbsp; 右键地面：添加文字 &nbsp;|&nbsp; 双击文字：编辑
+          🖱️ 左键省份：上传图片 &nbsp;|&nbsp; 右键地面：添加文字
         </div>
 
-        {/* 加载状态 */}
         {loading && (
           <div
             style={{
-              position: 'absolute',
-              inset: 0,
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              color: 'rgba(255,255,255,0.5)',
-              fontSize: 14,
-              fontFamily: "'Inter', sans-serif",
-              background: '#0b1120',
-              zIndex: 9,
+              position: 'absolute', inset: 0, zIndex: 9,
+              display: 'flex', alignItems: 'center', justifyContent: 'center',
+              color: 'rgba(255,255,255,0.5)', fontSize: 14,
+              fontFamily: 'Inter, sans-serif', background: '#0b1120',
             }}
           >
-            加载地图数据…
+            加载地图…
           </div>
         )}
 
-        {/* 错误 */}
         {error && (
           <div
             style={{
-              position: 'absolute',
-              inset: 0,
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              color: '#f87171',
-              fontSize: 13,
-              fontFamily: "'Inter', sans-serif",
-              background: '#0b1120',
-              zIndex: 9,
+              position: 'absolute', inset: 0, zIndex: 9,
+              display: 'flex', alignItems: 'center', justifyContent: 'center',
+              color: '#f87171', fontSize: 13,
+              fontFamily: 'Inter, sans-serif', background: '#0b1120',
             }}
           >
             ❌ {error}
           </div>
         )}
 
-        {/* 隐藏的文件输入 */}
         <input
           ref={fileRef}
           type="file"
@@ -535,17 +466,13 @@ export default function Footprint() {
         />
       </div>
 
-      {/* 状态脚注 */}
       <div
         style={{
-          marginTop: 8,
-          fontSize: 11,
-          color: '#64748b',
-          textAlign: 'center',
-          fontFamily: "'Inter', sans-serif",
+          marginTop: 8, fontSize: 11, color: '#64748b',
+          textAlign: 'center', fontFamily: 'Inter, sans-serif',
         }}
       >
-        拖拽旋转 · 滚轮缩放 · 已标记 {Object.keys(textures).length} 省 · {labels.length} 处地标
+        拖拽旋转 · 滚轮缩放 · {Object.keys(textures).length} 省 · {labels.length} 处地标
       </div>
     </div>
   );
