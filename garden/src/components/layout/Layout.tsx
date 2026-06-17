@@ -4,18 +4,18 @@ import Sidebar from './Sidebar';
 import { useStore } from '../../store/useStore';
 
 const pageTitles: Record<string, string> = {
-  '/home': 'Home',
-  '/journal': 'Journal',
-  '/notes': 'Notes',
-  '/gallery': 'Gallery',
-  '/vault': 'Vault',
-  '/ideas': 'Ideas',
-  '/goals': 'Goals',
-  '/timeline': 'Timeline',
-  '/reading': 'Reading',
-  '/guestbook': 'Guestbook',
-  '/dashboard': 'Dashboard',
-  '/settings': 'Settings',
+  '/home': '首页',
+  '/journal': '日志',
+  '/notes': '笔记',
+  '/gallery': '相册',
+  '/vault': '文件库',
+  '/ideas': '灵感',
+  '/goals': '目标',
+  '/timeline': '时间轴',
+  '/reading': '收藏',
+  '/guestbook': '留言',
+  '/dashboard': '数据',
+  '/settings': '设置',
 };
 
 const pageVariants = {
@@ -27,7 +27,7 @@ const pageVariants = {
 export default function Layout() {
   const location = useLocation();
   const { theme, setTheme } = useStore();
-  const title = pageTitles[location.pathname] || 'Digital Garden';
+  const title = pageTitles[location.pathname] || '数字花园';
 
   return (
     <div className="flex min-h-screen bg-bg-dark">
@@ -48,7 +48,7 @@ export default function Layout() {
           <button
             onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
             className="p-2 rounded-lg text-text-secondary hover:text-text-primary hover:bg-bg-hover transition-all duration-200"
-            aria-label="Toggle theme"
+            aria-label="切换主题"
           >
             {theme === 'dark' ? (
               <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">

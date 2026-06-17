@@ -3,19 +3,19 @@ import { motion } from 'framer-motion';
 import { useStore } from '../store/useStore';
 
 const statuses = [
-  'Building my digital garden',
-  'Learning something new',
-  'Exploring ideas',
-  'Writing notes',
-  'Capturing moments',
+  '建设我的数字花园',
+  '学习新知识',
+  '探索想法',
+  '记录笔记',
+  '捕捉瞬间',
 ];
 
 const activities = [
-  { label: 'Updated project notes', time: '2h ago', type: 'note' },
-  { label: 'Added new journal entry', time: '5h ago', type: 'journal' },
-  { label: 'Completed weekly goals', time: '1d ago', type: 'goal' },
-  { label: 'Uploaded gallery photos', time: '2d ago', type: 'photo' },
-  { label: 'Started reading Dune', time: '3d ago', type: 'reading' },
+  { label: '更新了项目笔记', time: '2小时前', type: 'note' },
+  { label: '添加了新日记', time: '5小时前', type: 'journal' },
+  { label: '完成了本周目标', time: '1天前', type: 'goal' },
+  { label: '上传了相册照片', time: '2天前', type: 'photo' },
+  { label: '开始阅读《沙丘》', time: '3天前', type: 'reading' },
 ];
 
 function AnimatedCounter({ target, suffix = '' }: { target: number; suffix?: string }) {
@@ -65,11 +65,11 @@ export default function Home() {
   }, []);
 
   const statItems = [
-    { label: 'Journal Entries', value: stats.totalJournals, suffix: '', icon: 'pen' },
-    { label: 'Notes', value: stats.totalNotes, suffix: '', icon: 'book' },
-    { label: 'Photos', value: stats.totalPhotos, suffix: '', icon: 'image' },
-    { label: 'Ideas', value: stats.totalIdeas, suffix: '', icon: 'bulb' },
-    { label: 'Goals', value: stats.totalGoals, suffix: '', icon: 'target' },
+    { label: '日记', value: stats.totalJournals, suffix: '', icon: 'pen' },
+    { label: '笔记', value: stats.totalNotes, suffix: '', icon: 'book' },
+    { label: '照片', value: stats.totalPhotos, suffix: '', icon: 'image' },
+    { label: '灵感', value: stats.totalIdeas, suffix: '', icon: 'bulb' },
+    { label: '目标', value: stats.totalGoals, suffix: '', icon: 'target' },
   ];
 
   return (
@@ -83,7 +83,7 @@ export default function Home() {
       >
         <h1 className="text-5xl font-bold font-['Space_Grotesk'] tracking-tight">
           <span className="bg-gradient-to-r from-[#6C63FF] to-[#E26EE5] bg-clip-text text-transparent">
-            Hi, I'm Lnyeon
+            你好，我是 Lnyeon
           </span>
         </h1>
         <motion.p
@@ -136,7 +136,7 @@ export default function Home() {
         className="bg-bg-card border border-border rounded-xl p-6"
       >
         <h3 className="text-sm font-semibold text-text-primary uppercase tracking-wider mb-4">
-          Recent Activity
+          最近动态
         </h3>
         <div className="space-y-3">
           {activities.map((activity, idx) => (

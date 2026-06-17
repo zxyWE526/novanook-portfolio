@@ -2,18 +2,18 @@ import { NavLink } from 'react-router-dom';
 import { motion } from 'framer-motion';
 
 const navItems = [
-  { to: '/home', label: 'Home', icon: 'compass' },
-  { to: '/journal', label: 'Journal', icon: 'pen' },
-  { to: '/notes', label: 'Notes', icon: 'book' },
-  { to: '/gallery', label: 'Gallery', icon: 'image' },
-  { to: '/vault', label: 'Vault', icon: 'folder' },
-  { to: '/ideas', label: 'Ideas', icon: 'bulb' },
-  { to: '/goals', label: 'Goals', icon: 'target' },
-  { to: '/timeline', label: 'Timeline', icon: 'clock' },
-  { to: '/reading', label: 'Reading', icon: 'bookmark' },
-  { to: '/guestbook', label: 'Guestbook', icon: 'chat' },
-  { to: '/dashboard', label: 'Dashboard', icon: 'activity' },
-  { to: '/settings', label: 'Settings', icon: 'settings' },
+  { to: '/home', label: '首页', icon: 'compass' },
+  { to: '/journal', label: '日志', icon: 'pen' },
+  { to: '/notes', label: '笔记', icon: 'book' },
+  { to: '/gallery', label: '相册', icon: 'image' },
+  { to: '/vault', label: '文件库', icon: 'folder' },
+  { to: '/ideas', label: '灵感', icon: 'bulb' },
+  { to: '/goals', label: '目标', icon: 'target' },
+  { to: '/timeline', label: '时间轴', icon: 'clock' },
+  { to: '/reading', label: '收藏', icon: 'bookmark' },
+  { to: '/guestbook', label: '留言', icon: 'chat' },
+  { to: '/dashboard', label: '数据', icon: 'activity' },
+  { to: '/settings', label: '设置', icon: 'settings' },
 ];
 
 const icons: Record<string, JSX.Element> = {

@@ -62,14 +62,10 @@ interface AppState {
 export const useStore = create<AppState>()(
   persist(
     (set, get) => ({
-      theme: 'dark',
+      theme: 'light',
       setTheme: (t) => {
         if (typeof document !== 'undefined') {
-          if (t === 'light') {
-            document.documentElement.classList.add('light');
-          } else {
-            document.documentElement.classList.remove('light');
-          }
+          document.documentElement.classList.toggle('dark', t === 'dark');
         }
         set({ theme: t });
       },

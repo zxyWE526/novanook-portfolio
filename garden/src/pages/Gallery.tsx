@@ -2,17 +2,17 @@ import { useState, useMemo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useStore } from '../store/useStore';
 
-const CATEGORIES = ['All', 'Travel', 'Life', 'Food', 'Art', 'Other'] as const;
+const CATEGORIES = ['全部', '旅行', '生活', '美食', '艺术', '其他'] as const;
 
 export default function Gallery() {
   const { photos, addPhoto, deletePhoto } = useStore();
-  const [activeCategory, setActiveCategory] = useState<string>('All');
+  const [activeCategory, setActiveCategory] = useState<string>('全部');
   const [showModal, setShowModal] = useState(false);
   const [lightboxIndex, setLightboxIndex] = useState<number | null>(null);
 
   const filtered = useMemo(
     () =>
-      activeCategory === 'All'
+      activeCategory === '全部'
         ? photos
         : photos.filter((p) => p.category === activeCategory),
     [photos, activeCategory]
@@ -58,7 +58,7 @@ export default function Gallery() {
                 : 'bg-bg-card text-text-secondary hover:text-text-primary border border-border'
             }`}
           >
-            {cat === 'All' ? '全部' : cat}
+            {cat}
           </button>
         ))}
       </motion.div>
@@ -219,7 +219,7 @@ function AddPhotoModal({
               onChange={(e) => setCategory(e.target.value)}
               className="w-full bg-bg-dark border border-border rounded-lg px-3 py-2.5 text-text-primary text-sm focus:outline-none focus:border-accent transition-colors"
             >
-              {CATEGORIES.filter((c) => c !== 'All').map((c) => (
+              {CATEGORIES.filter((c) => c !== '全部').map((c) => (
                 <option key={c} value={c}>
                   {c}
                 </option>
