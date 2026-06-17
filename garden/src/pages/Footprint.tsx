@@ -1,4 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
+import * as THREE from 'three';
+import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+import { CSS2DRenderer, CSS2DObject } from 'three/addons/renderers/CSS2DRenderer.js';
 
 /* ================================================================
    类型 / 常量
@@ -40,18 +43,6 @@ function loadTex(): Record<string, string> {
 }
 function saveTex(v: Record<string, string>) { localStorage.setItem(LS_TEX, JSON.stringify(v)); }
 
-/** 从 CDN 动态加载 three 模块 */
-async function loadThree() {
-  const THREE = await import('https://unpkg.com/three@0.160.0/build/three.module.js');
-  const { OrbitControls } = await import(
-    'https://unpkg.com/three@0.160.0/examples/jsm/controls/OrbitControls.js'
-  );
-  const { CSS2DRenderer, CSS2DObject } = await import(
-    'https://unpkg.com/three@0.160.0/examples/jsm/renderers/CSS2DRenderer.js'
-  );
-  return { THREE, OrbitControls, CSS2DRenderer, CSS2DObject };
-}
-
 /** 从阿里云 DataV 获取 GeoJSON */
 async function fetchGeo() {
   const r = await fetch(GEO_URL, { cache: 'force-cache' });
@@ -59,8 +50,7 @@ async function fetchGeo() {
 }
 
 /** 将 GeoJSON feature 挤出为 THREE.Mesh 列表 */
-function makeMeshes(feature: any, mod: any, color: number, _idx: number) {
-  const { THREE } = mod;
+function makeMeshes(feature: any, color: number, _idx: number) {
   const meshes: any[] = [];
   const name = feature.properties?.name || '未知';
   const geo = feature.geometry;
@@ -145,15 +135,13 @@ export default function Footprint() {
 
     (async () => {
       try {
-        const mod = await loadThree();
-        const { THREE, OrbitControls, CSS2DRenderer, CSS2DObject } = mod;
         if (disposed) return;
 
         /* ---- 场景 / 相机 / 渲染器 ---- */
-        const scene = new THREE.Scene();
-        scene.background = new THREE.Color(0x0b1120);
+	        const scene = new THREE.Scene();
+	        scene.background = new THREE.Color(0x0b1120);
 
-        const camera = new THREE.PerspectiveCamera(45, ctn.clientWidth / ctn.clientHeight, 0.1, 200);
+	        const camera = new THREE.PerspectiveCamera(45, ctn.clientWidth / ctn.clientHeight, 0.1, 200);
         camera.position.set(10, 14, 18);
         camera.lookAt(0, 0, 0);
 
@@ -210,7 +198,7 @@ export default function Footprint() {
         for (const feat of geo.features) {
           const name = feat.properties?.name;
           if (!name) continue;
-          const meshes = makeMeshes(feat, mod, PALETTE[colorIdx % PALETTE.length], colorIdx);
+          const meshes = makeMeshes(feat, PALETTE[colorIdx % PALETTE.length], colorIdx);
           colorIdx++;
           if (meshes.length) {
             provinceMap[name] = meshes;
@@ -227,8 +215,6 @@ export default function Footprint() {
         data.labelRenderer = lr;
         data.controls = ctrl;
         data.provinceMap = provinceMap;
-        data.CSS2DObject = CSS2DObject;
-        data.THREE = THREE;
         sceneRef.current = data;
 
         setLoading(false);
@@ -308,6 +294,7 @@ export default function Footprint() {
 
         /* ---- Resize ---- */
         function onResize() {
+          if (!ctn) return;
           const w = ctn.clientWidth;
           const h = ctn.clientHeight;
           camera.aspect = w / h;
