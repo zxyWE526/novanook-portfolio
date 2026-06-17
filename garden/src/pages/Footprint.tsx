@@ -87,9 +87,9 @@ export default function Footprint() {
         },
         postEffect: { enable: true, SSAO: { enable: true, radius: 8, intensity: 2 } },
         viewControl: {
-          projection: 'perspective', distance: 80, alpha: 40, beta: 0,
-          center: [104, 35, 0],
-          autoRotate: true, autoRotateSpeed: 5, autoRotateAfterStill: 3,
+          projection: 'perspective', distance: 75, alpha: 40, beta: 0,
+          center: [104, 33, 0],
+          autoRotate: false,
         },
         label: { show: true, color: '#334155', fontSize: 10 },
         itemStyle: { areaColor: '#e2e8f0', borderColor: '#94a3b8', borderWidth: 0.5 },
