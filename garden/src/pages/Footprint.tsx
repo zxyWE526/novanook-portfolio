@@ -1,10 +1,11 @@
 import { useEffect, useRef, useState } from 'react';
 import * as echarts from 'echarts';
+import 'echarts-gl';
 import chinaGeo from '../data/china.json';
 
 interface ProvinceFootprint {
   name: string;
-  entries: { id: string; city: string; text: string; images: string; date: string }[];
+  entries: { id: string; text: string; date: string }[];
 }
 
 const PROVINCES = [
@@ -16,15 +17,11 @@ const PROVINCES = [
 
 export default function Footprint() {
   const chartRef = useRef<HTMLDivElement>(null);
-  const [chart, setChart] = useState<echarts.ECharts | null>(null);
   const [data, setData] = useState<ProvinceFootprint[]>(() => {
-    try { return JSON.parse(localStorage.getItem('life-footprint') || '[]'); }
-    catch { return []; }
+    try { return JSON.parse(localStorage.getItem('life-footprint') || '[]'); } catch { return []; }
   });
   const [modal, setModal] = useState<{ province: string } | null>(null);
-  const [formCity, setFormCity] = useState('');
   const [formText, setFormText] = useState('');
-  const [formImages, setFormImages] = useState('');
   const [mapReady, setMapReady] = useState(false);
 
   const saveData = (d: ProvinceFootprint[]) => {
@@ -32,29 +29,25 @@ export default function Footprint() {
     localStorage.setItem('life-footprint', JSON.stringify(d));
   };
 
-  // Load China map from local data
   useEffect(() => {
     try {
       if (chinaGeo?.features?.length >= 30) {
         echarts.registerMap('china', chinaGeo as any);
         setMapReady(true);
       }
-    } catch (e) {
-      console.error('Map load failed', e);
-    }
+    } catch (e) { console.error(e); }
   }, []);
 
-  // Render/update chart
   useEffect(() => {
     if (!mapReady || !chartRef.current) return;
-    if (chart) chart.dispose();
 
-    const c = echarts.init(chartRef.current, undefined, { renderer: 'canvas' });
-    setChart(c);
+    // Dispose previous instance
+    const existing = echarts.getInstanceByDom(chartRef.current);
+    if (existing) existing.dispose();
 
+    const c = echarts.init(chartRef.current);
     const countMap: Record<string, number> = {};
     data.forEach((p) => { countMap[p.name] = p.entries.length; });
-
     const mapData = PROVINCES.map((name) => ({ name, value: countMap[name] || 0 }));
     const maxVal = Math.max(1, ...mapData.map((d) => d.value));
 
@@ -62,58 +55,87 @@ export default function Footprint() {
       tooltip: {
         trigger: 'item',
         formatter: (p: any) => {
-          const n = p.name;
+          const n = p.name || p.value;
           const prov = data.find((d) => d.name === n);
           const cnt = prov?.entries.length || 0;
-          let html = `<strong style="font-size:14px">${n}</strong><br/>足迹: ${cnt} 处`;
+          let html = `<strong style="font-size:16px">${n}</strong><br/>足迹: ${cnt} 处`;
           if (prov) {
             prov.entries.forEach((e) => {
-              html += `<br/><span style="color:#94a3b8;font-size:12px">${e.city}</span>`;
-              if (e.text) html += ` - ${e.text.slice(0, 15)}`;
+              html += `<br/><span style="color:#94a3b8;font-size:12px">${e.text?.slice(0, 20) || ''}</span>`;
             });
           }
           return html;
         },
       },
       visualMap: {
-        min: 0, max: maxVal,
-        left: 20, bottom: 20,
+        min: 0, max: Math.max(5, maxVal),
+        left: 20, bottom: 40,
         text: ['多', '少'],
-        inRange: { color: ['#f1f5f9', '#e0e7ff', '#a5b4fc', '#6366f1', '#4f46e5', '#3730a3'] },
+        inRange: { color: ['#e0e7ff', '#a5b4fc', '#6366f1', '#4f46e5', '#312e81'] },
         calculable: true,
-        itemWidth: 12, itemHeight: 80,
+        itemWidth: 14, itemHeight: 100,
+        textStyle: { color: '#64748b', fontSize: 11 },
       },
       series: [{
-        type: 'map',
+        type: 'map3D',
         map: 'china',
         roam: true,
         selectedMode: false,
-        zoom: 1.2,
-        center: [104, 35],
-        label: { show: true, fontSize: 9, color: '#334155' },
+        shading: 'realistic',
+        boxHeight: 1.5,
+        regionHeight: 1.5,
+        groundPlane: { show: false },
+        light: {
+          main: { intensity: 1.2, shadow: true, shadowQuality: 'low' },
+          ambient: { intensity: 0.4 },
+          ambientCubemap: {
+            texture: 'data-uri',
+            exposure: 1,
+            diffuseIntensity: 0.5,
+          },
+        },
+        viewControl: {
+          projection: 'perspective',
+          distance: 110,
+          alpha: 40,
+          beta: 0,
+          center: [104, 35, 0],
+          minAlpha: 10,
+          maxAlpha: 80,
+          autoRotate: false,
+          autoRotateSpeed: 5,
+        },
+        label: {
+          show: true,
+          color: '#334155',
+          fontSize: 10,
+          fontWeight: 500,
+        },
         itemStyle: {
-          areaColor: '#f1f5f9',
-          borderColor: '#cbd5e1',
+          areaColor: '#e2e8f0',
+          borderColor: '#94a3b8',
           borderWidth: 0.5,
-          shadowBlur: 4,
-          shadowColor: 'rgba(0,0,0,0.03)',
+          opacity: 0.9,
         },
         emphasis: {
           label: { color: '#fff', fontSize: 12, fontWeight: 600 },
-          itemStyle: {
-            areaColor: '#6366f1',
-            shadowBlur: 30,
-            shadowColor: 'rgba(99,102,241,0.4)',
-          },
+          itemStyle: { areaColor: '#6366f1', opacity: 1 },
         },
-        data: mapData,
+        data: mapData.map((d) => ({
+          name: d.name,
+          value: d.value,
+          itemStyle: d.value > 0 ? {
+            areaColor: d.value >= 5 ? '#312e81' : d.value >= 3 ? '#4f46e5' : d.value >= 1 ? '#6366f1' : '#e2e8f0',
+          } : undefined,
+        })),
       }],
     });
 
     c.on('click', (p: any) => {
-      if (p.name) {
-        setFormCity(''); setFormText(''); setFormImages('');
-        setModal({ province: p.name });
+      const name = p.name || p.value;
+      if (name) {
+        setFormText('');
+        setModal({ province: name });
       }
     });
 
@@ -123,8 +145,8 @@ export default function Footprint() {
   }, [mapReady, data]);
 
   const handleSave = () => {
-    if (!formCity.trim() || !modal) return;
-    const entry = { id: `fp-${Date.now()}`, city: formCity.trim(), text: formText.trim(), images: formImages.trim(), date: new Date().toISOString() };
+    if (!formText.trim() || !modal) return;
+    const entry = { id: `fp-${Date.now()}`, text: formText.trim(), date: new Date().toISOString() };
     const exists = data.find((p) => p.name === modal.province);
     let next: ProvinceFootprint[];
     if (exists) {
@@ -136,26 +158,21 @@ export default function Footprint() {
     setModal(null);
   };
 
-  const handleDelete = (province: string, entryId: string) => {
-    const next = data.map((p) =>
-      p.name === province ? { ...p, entries: p.entries.filter((e) => e.id !== entryId) } : p
-    ).filter((p) => p.entries.length > 0);
-    saveData(next);
-  };
-
   return (
-    <div style={{ position: 'relative', width: '100%', minHeight: '60vh' }}>
-      {!mapReady && (
+    <div style={{ position: 'relative', width: '100%' }}>
+      {!mapReady ? (
         <div style={{ textAlign: 'center', padding: '80px 0', color: '#94a3b8', fontSize: 13 }}>
-          加载中国地图...
+          加载中...
         </div>
+      ) : (
+        <>
+          <div ref={chartRef} style={{ width: '100%', height: 'calc(100vh - 200px)', minHeight: 500, borderRadius: 8 }} />
+          <div style={{ marginTop: 8, fontSize: 11, color: '#cbd5e1', textAlign: 'center' }}>
+            点击省份添加足迹 | 鼠标拖拽旋转 | 滚轮缩放
+          </div>
+        </>
       )}
-      <div ref={chartRef} style={{ width: '100%', height: 560, borderRadius: 8 }} />
-      <div style={{ marginTop: 6, fontSize: 11, color: '#cbd5e1', textAlign: 'center' }}>
-        点击省份添加足迹 | 滚轮缩放 | 拖拽平移
-      </div>
 
-      {/* Modal */}
       {modal && (
         <div
           style={{
@@ -168,32 +185,39 @@ export default function Footprint() {
         >
           <div style={{
             background: '#fff', borderRadius: 16, padding: 28,
-            width: '100%', maxWidth: 400,
+            width: '100%', maxWidth: 380,
           }}>
-            <div style={{ fontSize: 16, fontWeight: 600, color: '#1e293b', marginBottom: 16 }}>
+            <div style={{ fontSize: 18, fontWeight: 700, color: '#1e293b', marginBottom: 4 }}>
               {modal.province}
             </div>
-            <input
-              value={formCity} onChange={(e) => setFormCity(e.target.value)}
-              placeholder="城市 / 地点"
-              style={inputStyle}
+            <div style={{ fontSize: 12, color: '#94a3b8', marginBottom: 16 }}>
+              记录在这片土地上的故事
+            </div>
+            <textarea
+              value={formText}
+              onChange={(e) => setFormText(e.target.value)}
+              placeholder="写点什么..."
+              rows={3}
+              style={{
+                width: '100%', padding: '10px 14px', borderRadius: 10,
+                border: '1px solid #e2e8f0', fontSize: 13, outline: 'none',
+                fontFamily: 'inherit', resize: 'vertical', boxSizing: 'border-box',
+              }}
               autoFocus
             />
-            <textarea
-              value={formText} onChange={(e) => setFormText(e.target.value)}
-              placeholder="文字记录"
-              rows={2}
-              style={{ ...inputStyle, resize: 'vertical', marginTop: 8 }}
-            />
-            <textarea
-              value={formImages} onChange={(e) => setFormImages(e.target.value)}
-              placeholder="图片 URL (可选)"
-              rows={1}
-              style={{ ...inputStyle, resize: 'vertical', marginTop: 8 }}
-            />
             <div style={{ display: 'flex', gap: 8, marginTop: 16, justifyContent: 'flex-end' }}>
-              <button onClick={() => setModal(null)} style={btnSecStyle}>取消</button>
-              <button onClick={handleSave} style={btnPriStyle}>保存</button>
+              <button onClick={() => setModal(null)}
+                style={{
+                  padding: '8px 20px', borderRadius: 8, border: '1px solid #e2e8f0',
+                  background: '#fff', color: '#64748b', cursor: 'pointer', fontSize: 13,
+                  fontFamily: 'inherit',
+                }}>取消</button>
+              <button onClick={handleSave}
+                style={{
+                  padding: '8px 20px', borderRadius: 8, border: 'none',
+                  background: '#6366f1', color: '#fff', cursor: 'pointer', fontSize: 13,
+                  fontFamily: 'inherit', fontWeight: 600,
+                }}>保存</button>
             </div>
           </div>
         </div>
@@ -201,21 +225,3 @@ export default function Footprint() {
     </div>
   );
 }
-
-const inputStyle: React.CSSProperties = {
-  width: '100%', padding: '8px 12px', borderRadius: 8,
-  border: '1px solid #e2e8f0', fontSize: 13, outline: 'none',
-  fontFamily: 'inherit', boxSizing: 'border-box', display: 'block',
-};
-
-const btnSecStyle: React.CSSProperties = {
-  padding: '8px 20px', borderRadius: 8, border: '1px solid #e2e8f0',
-  background: '#fff', color: '#64748b', cursor: 'pointer', fontSize: 13,
-  fontFamily: 'inherit',
-};
-
-const btnPriStyle: React.CSSProperties = {
-  padding: '8px 20px', borderRadius: 8, border: 'none',
-  background: '#6366f1', color: '#fff', cursor: 'pointer', fontSize: 13,
-  fontFamily: 'inherit', fontWeight: 500,
-};
