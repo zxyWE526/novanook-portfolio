@@ -1,4 +1,4 @@
-import { useEffect, useRef, useCallback } from 'react';
+import { useEffect, useRef } from 'react';
 import Home from '../pages/Home';
 import Journal from '../pages/Journal';
 import Notes from '../pages/Notes';
@@ -13,26 +13,27 @@ import Dashboard from '../pages/Dashboard';
 import Settings from '../pages/Settings';
 
 const SECTIONS = [
-  { id: 'life-home', label: '首页', icon: '◈', comp: Home },
-  { id: 'life-journal', label: '日志', icon: '◇', comp: Journal },
-  { id: 'life-notes', label: '笔记', icon: '□', comp: Notes },
-  { id: 'life-ideas', label: '灵感', icon: '○', comp: Ideas },
-  { id: 'life-gallery', label: '相册', icon: '◎', comp: Gallery },
-  { id: 'life-vault', label: '文件', icon: '▽', comp: Vault },
-  { id: 'life-goals', label: '目标', icon: '△', comp: Goals },
-  { id: 'life-timeline', label: '时间轴', icon: '◈', comp: Timeline },
-  { id: 'life-reading', label: '收藏', icon: '☆', comp: Reading },
-  { id: 'life-guestbook', label: '留言', icon: '◇', comp: Guestbook },
-  { id: 'life-dashboard', label: '数据', icon: '◈', comp: Dashboard },
-  { id: 'life-settings', label: '设置', icon: '◎', comp: Settings },
+  { id: 'life-home', label: '首页', comp: Home, bg: '#f5f6fa' },
+  { id: 'life-journal', label: '日志', comp: Journal, bg: '#f0f2f8' },
+  { id: 'life-notes', label: '笔记', comp: Notes, bg: '#f5f6fa' },
+  { id: 'life-ideas', label: '灵感', comp: Ideas, bg: '#f0f2f8' },
+  { id: 'life-gallery', label: '相册', comp: Gallery, bg: '#f5f6fa' },
+  { id: 'life-vault', label: '文件', comp: Vault, bg: '#f0f2f8' },
+  { id: 'life-goals', label: '目标', comp: Goals, bg: '#f5f6fa' },
+  { id: 'life-timeline', label: '时间轴', comp: Timeline, bg: '#f0f2f8' },
+  { id: 'life-reading', label: '收藏', comp: Reading, bg: '#f5f6fa' },
+  { id: 'life-guestbook', label: '留言', comp: Guestbook, bg: '#f0f2f8' },
+  { id: 'life-dashboard', label: '数据', comp: Dashboard, bg: '#f5f6fa' },
+  { id: 'life-settings', label: '设置', comp: Settings, bg: '#f0f2f8' },
 ];
 
-export default function LifeOSView() {
-  const sectionRefs = useRef<(HTMLElement | null)[]>([]);
+const COLORS = ['#f5f6fa','#f0f2f8','#faf5ff','#f5fffa','#fff5f5','#f5f5ff'];
 
-  // 滚动到当前 section 时高亮导航
+export default function LifeOSView() {
+  const observerRef = useRef<IntersectionObserver | null>(null);
+
   useEffect(() => {
-    const observer = new IntersectionObserver((entries) => {
+    observerRef.current = new IntersectionObserver((entries) => {
       entries.forEach((entry) => {
         if (entry.isIntersecting) {
           const id = entry.target.getAttribute('id');
@@ -43,68 +44,86 @@ export default function LifeOSView() {
           }
         }
       });
-    }, { threshold: 0.2, rootMargin: '-64px 0px 0px 0px' });
+    }, { threshold: 0.3, rootMargin: '-64px 0px 0px 0px' });
 
-    sectionRefs.current.forEach((el) => {
-      if (el) observer.observe(el);
+    document.querySelectorAll('.life-screen').forEach((el) => {
+      observerRef.current?.observe(el);
     });
-    return () => observer.disconnect();
+    return () => observerRef.current?.disconnect();
   }, []);
 
   return (
-    <div style={{ paddingTop: 0 }}>
+    <div className="life-root">
       {SECTIONS.map((sec, i) => {
         const Comp = sec.comp;
+        const bg = COLORS[i % COLORS.length];
         return (
           <section
             key={sec.id}
             id={sec.id}
-            ref={(el) => { sectionRefs.current[i] = el; }}
-            className="life-section"
+            className="life-screen"
+            style={{ background: bg }}
           >
-            <div className="life-card">
-              <Comp />
+            <div className="life-screen-inner">
+              <div className="life-counter">{String(i + 1).padStart(2, '0')}</div>
+              <div className="life-screen-content">
+                <Comp />
+              </div>
             </div>
           </section>
         );
       })}
       <style>{`
-        .life-section {
-          scroll-margin-top: 72px;
-          padding: 16px 0;
-          opacity:0;
-          animation: fadeUp 0.5s ease forwards;
-          animation-delay: ${SECTIONS.length * 0.05}s;
+        .life-root {
+          scroll-snap-type: y mandatory;
+          overflow-y: scroll;
+          height: 100vh;
         }
-        .life-section:nth-child(1) { animation-delay: 0.05s; }
-        .life-section:nth-child(2) { animation-delay: 0.1s; }
-        .life-section:nth-child(3) { animation-delay: 0.15s; }
-        .life-section:nth-child(4) { animation-delay: 0.2s; }
-        .life-section:nth-child(5) { animation-delay: 0.25s; }
-        .life-section:nth-child(6) { animation-delay: 0.3s; }
-        .life-section:nth-child(7) { animation-delay: 0.35s; }
-        .life-section:nth-child(8) { animation-delay: 0.4s; }
-        .life-section:nth-child(9) { animation-delay: 0.45s; }
-        .life-section:nth-child(10) { animation-delay: 0.5s; }
-        .life-section:nth-child(11) { animation-delay: 0.55s; }
-        .life-section:nth-child(12) { animation-delay: 0.6s; }
-        @keyframes fadeUp {
-          from { opacity:0; transform:translateY(20px); }
-          to { opacity:1; transform:translateY(0); }
+        .life-screen {
+          min-height: 100vh;
+          scroll-snap-align: start;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          padding: 80px 24px 40px;
+          position: relative;
+          transition: background 0.5s ease;
         }
-        .life-card {
+        .life-screen-inner {
+          width: 100%;
+          max-width: 1000px;
+          margin: 0 auto;
+          position: relative;
+        }
+        .life-counter {
+          position: absolute;
+          top: -12px;
+          left: 0;
+          font-family: 'Space Grotesk', monospace;
+          font-size: 12px;
+          font-weight: 600;
+          color: rgba(0,0,0,0.08);
+          letter-spacing: 0.15em;
+        }
+        .life-screen-content {
           background: #fff;
-          border-radius: 14px;
-          box-shadow: 0 1px 4px rgba(0,0,0,0.06);
-          padding: 24px;
+          border-radius: 18px;
+          box-shadow: 0 1px 6px rgba(0,0,0,0.04);
+          padding: 28px 32px;
+          min-height: 60vh;
+          animation: screenIn 0.4s ease both;
           transition: box-shadow 0.3s, transform 0.3s;
         }
-        .life-card:hover {
-          box-shadow: 0 4px 16px rgba(0,0,0,0.08);
+        .life-screen-content:hover {
+          box-shadow: 0 8px 30px rgba(0,0,0,0.06);
+        }
+        @keyframes screenIn {
+          from { opacity: 0; transform: translateY(30px) scale(0.98); }
+          to { opacity: 1; transform: translateY(0) scale(1); }
         }
         @media (max-width: 640px) {
-          .life-card { padding: 16px; border-radius: 10px; }
-          .life-section { padding: 10px 0; }
+          .life-screen { padding: 72px 12px 24px; }
+          .life-screen-content { padding: 16px; border-radius: 12px; }
         }
       `}</style>
     </div>
