@@ -8,11 +8,5 @@ export default defineConfig({
   build: {
     outDir: '../app',
     emptyOutDir: true,
-    rollupOptions: {
-      external: ['three', /^three\/addons\//],
-    },
-  },
-  optimizeDeps: {
-    exclude: ['three'],
   },
 })
