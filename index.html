@@ -59,7 +59,8 @@
       font-size:1.2rem; font-weight:700; text-decoration:none;
       color:var(--dark-text);
     }
-    .nav-links { display:flex; gap:2rem; }
+    .nav-links { display:flex; gap:1rem; overflow-x:auto; scrollbar-width:none; -webkit-overflow-scrolling:touch; }
+    .nav-links::-webkit-scrollbar { display:none; }
     .nav-link {
       font-size:.875rem; font-weight:500;
       color:var(--stardust); text-decoration:none;
@@ -599,7 +600,19 @@
         <span></span><span></span><span></span>
       </button>
       <div class="nav-links" id="navLinks">
-    </div>
+        <a href="#life-home" class="nav-link">首页</a>
+        <a href="#life-journal" class="nav-link">日志</a>
+        <a href="#life-notes" class="nav-link">笔记</a>
+        <a href="#life-ideas" class="nav-link">灵感</a>
+        <a href="#life-gallery" class="nav-link">相册</a>
+        <a href="#life-vault" class="nav-link">文件</a>
+        <a href="#life-goals" class="nav-link">目标</a>
+        <a href="#life-timeline" class="nav-link">时间轴</a>
+        <a href="#life-reading" class="nav-link">收藏</a>
+        <a href="#life-guestbook" class="nav-link">留言</a>
+        <a href="#life-dashboard" class="nav-link">数据</a>
+        <a href="#life-settings" class="nav-link">设置</a>
+      </div>
   </nav>
 
   <!-- ============================================================
@@ -614,7 +627,7 @@
     </div>
   </section>
 
-  <!-- 数字花园 -->
+  <!-- Life OS -->
   <div id="garden"></div>
   <link rel="stylesheet" crossorigin href="/app/assets/index-Qz1MwJaa.css">
 
@@ -676,6 +689,6 @@
       }, { passive: true });
     })();
   </script>
-  <script type="module" crossorigin src="/app/assets/index-BrHTI9wZ.js"></script>
+  <script type="module" crossorigin src="/app/assets/index-DmjUYGAA.js"></script>
 </body>
 </html>
