@@ -603,7 +603,6 @@
         <a href="#skills" class="nav-link" data-section="skills">技能</a>
         <a href="#about" class="nav-link" data-section="about">关于</a>
         <a href="#contact" class="nav-link" data-section="contact">联系</a>
-        <a href="/app/" class="nav-link" target="_blank">考研工作台</a>
       </div>
     </div>
   </nav>
@@ -620,10 +619,54 @@
     </div>
   </section>
 
-  <!-- ============================================================
-       项目作品
-       ============================================================ -->
-  <section class="section" id="work">
+  <!-- ===== 页脚 ===== -->
+  <footer class="footer">
+    <p>&copy; 2026 <a href="#">Lnyeon</a>.</p>
+  </footer>
+
+  <script>
+    (function () {
+      'use strict';
+      var hero = document.querySelector('.hero');
+      var heroText = document.getElementById('heroText');
+      var spotlight = document.getElementById('spotlight');
+      var RADIUS = 200;
+
+      function getLocalPos(e) {
+        var r = heroText.getBoundingClientRect();
+        return { x: e.clientX - r.left, y: e.clientY - r.top };
+      }
+      function moveSpotlight(x, y, r) {
+        spotlight.style.clipPath = 'circle(' + r + 'px at ' + x + 'px ' + y + 'px)';
+      }
+
+      hero.addEventListener('mouseenter', function (e) {
+        var p = getLocalPos(e);
+        spotlight.style.transition = 'none';
+        moveSpotlight(p.x, p.y, 0);
+        void spotlight.offsetHeight;
+        spotlight.style.transition = 'clip-path 0.3s cubic-bezier(0.34, 1.56, 0.64, 1)';
+        moveSpotlight(p.x, p.y, RADIUS);
+      });
+      hero.addEventListener('mousemove', function (e) {
+        var p = getLocalPos(e);
+        spotlight.style.transition = 'none';
+        moveSpotlight(p.x, p.y, RADIUS);
+        var hr = hero.getBoundingClientRect();
+        var yr = (e.clientY - hr.top) / hr.height;
+        hero.style.setProperty('--hero-ry', ((yr - 0.5) * -8).toFixed(1));
+      });
+      hero.addEventListener('mouseleave', function () {
+        spotlight.style.transition = 'clip-path 0.35s cubic-bezier(0.4, 0, 0.2, 1)';
+        spotlight.style.clipPath = 'circle(0px at 0px 0px)';
+        hero.style.transition = 'transform 0.6s cubic-bezier(0.22,1,0.36,1)';
+        hero.style.setProperty('--hero-ry', '0');
+        setTimeout(function() { hero.style.transition = ''; }, 700);
+      });
+    })();
+  </script>
+</body>
+</html>
     <div class="section-inner">
       <div class="fade-up">
         <p class="section-label">Projects</p>
