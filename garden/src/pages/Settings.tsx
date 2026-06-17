@@ -24,7 +24,7 @@ export default function Settings() {
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
     a.href = url;
-    a.download = `digital-garden-export-${new Date().toISOString().slice(0, 10)}.json`;
+    a.download = `life-os-export-${new Date().toISOString().slice(0, 10)}.json`;
     a.click();
     URL.revokeObjectURL(url);
   };
@@ -154,7 +154,7 @@ export default function Settings() {
         <div className="space-y-3">
           <div className="flex justify-between py-2 border-b border-border">
             <span className="text-sm text-text-secondary">应用名称</span>
-            <span className="text-sm text-text-primary">Digital Garden</span>
+            <span className="text-sm text-text-primary">Life OS</span>
           </div>
           <div className="flex justify-between py-2 border-b border-border">
             <span className="text-sm text-text-secondary">版本</span>

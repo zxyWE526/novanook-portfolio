@@ -27,7 +27,7 @@ const pageVariants = {
 export default function Layout() {
   const location = useLocation();
   const { theme, setTheme } = useStore();
-  const title = pageTitles[location.pathname] || '数字花园';
+  const title = pageTitles[location.pathname] || 'Life OS';
 
   return (
     <div className="flex min-h-screen bg-bg-dark">

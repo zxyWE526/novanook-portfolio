@@ -113,7 +113,7 @@ export default function Sidebar() {
       <div className="px-6 py-6 border-b border-[rgba(255,255,255,0.06)]">
         <h1 className="text-lg font-semibold tracking-tight text-text-primary">
           <span className="bg-gradient-to-r from-[#6C63FF] to-[#E26EE5] bg-clip-text text-transparent">
-            Digital Garden
+            Life OS
           </span>
         </h1>
         <p className="text-xs text-text-secondary mt-1">Life OS</p>

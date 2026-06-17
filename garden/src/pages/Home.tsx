@@ -3,7 +3,7 @@ import { motion } from 'framer-motion';
 import { useStore } from '../store/useStore';
 
 const statuses = [
-  '建设我的数字花园',
+  '打造我的 Life OS',
   '学习新知识',
   '探索想法',
   '记录笔记',
