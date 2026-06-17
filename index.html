@@ -689,6 +689,23 @@
       }, { passive: true });
     })();
   </script>
+  <script>
+    // Debug: capture JS errors
+    window.onerror = function(msg, url, line) {
+      var el = document.getElementById('js-error');
+      if (el) el.textContent = 'JS Error: ' + msg + ' at ' + url + ':' + line;
+    };
+  </script>
+  <div id="js-error" style="position:fixed;bottom:0;left:0;right:0;z-index:99999;
+    background:#ef4444;color:#fff;padding:8px 12px;font-size:13px;font-family:monospace;
+    display:none;"></div>
   <script type="module" crossorigin src="/app/assets/index-DSUGd5Xd.js"></script>
+  <script>
+    // Show error div if there was a JS error
+    window.addEventListener('error', function() {
+      var el = document.getElementById('js-error');
+      if (el) el.style.display = 'block';
+    });
+  </script>
 </body>
 </html>
