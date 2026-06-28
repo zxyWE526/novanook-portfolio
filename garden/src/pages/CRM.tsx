@@ -60,7 +60,7 @@ const QUESTIONS: QItem[] = [
   { id: 43, type: 'multi', q: 'CRM系统的核心功能模块包括', options: ['销售自动化(SFA)', '营销自动化(MA)', '客户服务与支持(CSS)', '人工智能(BI)', '财务管理(FM)'], answer: 'ABCD' },
 ];
 
-const TIME_LIMIT = 240; // 4分钟
+const TIME_LIMIT = 120; // 2分钟
 const LABEL = 'ABCDEFGH';
 
 /* ================================================================
