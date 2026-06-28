@@ -11,6 +11,7 @@ import Reading from '../pages/Reading';
 import Guestbook from '../pages/Guestbook';
 import Dashboard from '../pages/Dashboard';
 import Settings from '../pages/Settings';
+import CRM from '../pages/CRM';
 
 interface SectionDef {
   id: string; label: string; comp: React.ComponentType; color: string; num: string;
@@ -29,6 +30,7 @@ const COLORS = [
   { base: '#f97316', soft: 'rgba(249,115,22,0.06)', border: 'rgba(249,115,22,0.12)' },
   { base: '#6366f1', soft: 'rgba(99,102,241,0.06)', border: 'rgba(99,102,241,0.12)' },
   { base: '#6b7280', soft: 'rgba(107,114,128,0.06)', border: 'rgba(107,114,128,0.12)' },
+  { base: '#f59e0b', soft: 'rgba(245,158,11,0.06)', border: 'rgba(245,158,11,0.12)' },
 ];
 
 const SECTIONS: SectionDef[] = [
@@ -44,6 +46,7 @@ const SECTIONS: SectionDef[] = [
   { id: 'life-guestbook', label: '留言', comp: Guestbook, color: '#f97316', num: '10' },
   { id: 'life-dashboard', label: '数据', comp: Dashboard, color: '#6366f1', num: '11' },
   { id: 'life-settings', label: '设置', comp: Settings, color: '#6b7280', num: '12' },
+  { id: 'life-crm', label: 'CRM', comp: CRM, color: '#f59e0b', num: '13' },
 ];
 
 export default function LifeOSView() {
