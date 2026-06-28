@@ -238,7 +238,7 @@ const QS: QItem[] = [
   { id: 203, type: 'fill',  chapter: '第7章', q: '在电子商务网站的SEO中，为了提高搜索排名，网站管理员应该针对目标用户群体进行分析，以确定最适合网站的______。', answer: '关键词' },
 ];
 
-const TIME_LIMIT = 600; // 10分钟
+const TIME_LIMIT = 1200; // 20分钟
 const LABEL = 'ABCDEFGH';
 
 /* ================================================================
@@ -364,7 +364,7 @@ export default function WebQuiz() {
       </div>
 
       {/* Questions */}
-      {QS.filter((q) => q.chapter === activeChapter).map((q, qi) => {
+      {QS.filter((q) => q.chapter === activeChapter).map((q) => {
         const idx = QS.indexOf(q);
         const w = wrong(q);
         const c = submitted && !w && ua(q) !== '';
@@ -448,7 +448,7 @@ export default function WebQuiz() {
                   placeholder="填写答案…"
                   disabled={submitted}
                   style={{
-                    width: '100%', padding: '8px 12px', borderRadius: 6, border: `1.5px solid ${w ? '#fca5a5' : sel => sel ? '#6366f1' : '#e2e8f0'}`, fontSize: 13, fontFamily: 'inherit', outline: 'none', boxSizing: 'border-box',
+                    width: '100%', padding: '8px 12px', borderRadius: 6, border: `1.5px solid ${w ? '#fca5a5' : fills[q.id] ? '#6366f1' : '#e2e8f0'}`, fontSize: 13, fontFamily: 'inherit', outline: 'none', boxSizing: 'border-box',
                   }}
                 />
               </div>
