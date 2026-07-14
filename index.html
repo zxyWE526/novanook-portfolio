@@ -43,34 +43,53 @@
     .countdown-foot span{color:#F59E0B;font-weight:500}
     /* Subjects */
     .subjects-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:1.2rem;max-width:960px;margin:0 auto}
-    .sub-card{background:rgba(255,255,255,0.03);backdrop-filter:blur(8px);border:1px solid rgba(255,255,255,0.06);border-radius:20px;padding:2rem 1rem;text-align:center;transition:transform 0.4s cubic-bezier(.34,1.56,.64,1),border-color 0.3s,box-shadow 0.4s;cursor:default}
-    .sub-card:hover{transform:translateY(-8px) scale(1.02);border-color:rgba(245,158,11,0.3);box-shadow:0 20px 60px rgba(245,158,11,0.06)}
-    .sub-icon{font-size:2.2rem;margin-bottom:0.6rem}
-    .sub-name{font-family:var(--font-display);font-size:1.1rem;font-weight:600;margin-bottom:0.15rem;color:#F8FAFC}
-    .sub-code{font-size:0.75rem;color:#F59E0B;margin-bottom:0.6rem;letter-spacing:.04em}
-    .sub-meta{display:flex;justify-content:center;gap:0.5rem;margin-bottom:0.5rem;flex-wrap:wrap}
-    .sub-meta span{font-size:0.8rem;background:rgba(255,255,255,0.05);padding:0.15rem 0.6rem;border-radius:100px;color:#94A3B8;border:1px solid rgba(255,255,255,0.04)}
-    .sub-tips{font-size:0.75rem;color:#64748B;line-height:1.5}
-    /* Timeline */
-    .tl{position:relative;max-width:720px;margin:0 auto;padding:2.5rem 0}
-    .tl-line{position:absolute;left:32px;top:0;bottom:0;width:2px;background:rgba(255,255,255,0.06)}
-    .tl-fill{position:absolute;left:0;top:0;width:100%;height:0%;background:linear-gradient(180deg,#F59E0B,#D97706);border-radius:2px;transition:height 0.15s}
-    .tl-item{position:relative;display:flex;gap:1.5rem;padding:1.8rem 0 1.8rem 3rem;text-align:left}
-    .tl-dot{position:absolute;left:24px;top:2rem;width:14px;height:14px;border-radius:50%;background:#0B1120;border:2.5px solid #F59E0B;box-shadow:0 0 20px rgba(245,158,11,0.15);z-index:2}
-    .tl-body h3{font-family:var(--font-display);font-size:1.2rem;font-weight:600;color:#F8FAFC}
-    .tl-date{font-size:0.8rem;color:#F59E0B;margin:0.15rem 0 0.3rem}
-    .tl-body p{font-size:0.88rem;color:#64748B;max-width:380px;line-height:1.5}
+    .sub-card{background:rgba(255,255,255,0.03);backdrop-filter:blur(8px);border:1px solid rgba(255,255,255,0.06);border-radius:20px;padding:1.8rem 1rem;text-align:center;transition:transform 0.4s cubic-bezier(.34,1.56,.64,1),border-color 0.3s,box-shadow 0.4s;cursor:default;position:relative;overflow:hidden}
+    .sub-card:hover{transform:translateY(-8px) scale(1.02);box-shadow:0 20px 60px rgba(0,0,0,0.2)}
+    .sub-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;border-radius:20px 20px 0 0}
+    .sub-card:nth-child(1)::before{background:linear-gradient(90deg,#EF4444,#F97316)}
+    .sub-card:nth-child(2)::before{background:linear-gradient(90deg,#3B82F6,#2DD4BF)}
+    .sub-card:nth-child(3)::before{background:linear-gradient(90deg,#10B981,#34D399)}
+    .sub-card:nth-child(4)::before{background:linear-gradient(90deg,#8B5CF6,#A78BFA)}
+    .sub-icon{font-size:2rem;margin-bottom:0.5rem}
+    .sub-name{font-family:var(--font-display);font-size:1.05rem;font-weight:600;color:#F8FAFC}
+    .sub-code{font-size:0.72rem;color:#F59E0B;margin:0.2rem 0 0.5rem}
+    .sub-meta{display:flex;justify-content:center;gap:0.4rem;flex-wrap:wrap}
+    .sub-meta span{font-size:0.75rem;background:rgba(255,255,255,0.05);padding:0.12rem 0.5rem;border-radius:100px;color:#94A3B8;border:1px solid rgba(255,255,255,0.04)}
+    .sub-408{text-align:left;padding:0.5rem 0.2rem 0;margin-top:0.5rem;border-top:1px solid rgba(255,255,255,0.05)}
+    .sub-408-item{display:flex;align-items:center;font-size:0.7rem;padding:0.18rem 0;color:#94A3B8;gap:0.3rem}
+    .sub-408-item .bar{flex:1;height:2px;background:rgba(255,255,255,0.05);border-radius:2px;margin:0 0.3rem;overflow:hidden}
+    .sub-408-item .bar-fill{height:100%;border-radius:2px}
+    .sub-408-item .pts{color:#F59E0B;font-weight:600;min-width:1.8em;text-align:right}
+    /* Plan - Phase Cards */
+    .tl{display:grid;grid-template-columns:repeat(3,1fr);gap:1.2rem;max-width:960px;margin:0 auto}
+    .tl-card{background:rgba(255,255,255,0.03);backdrop-filter:blur(8px);border:1px solid rgba(255,255,255,0.06);border-radius:20px;padding:1.8rem 1.2rem;text-align:left;transition:transform 0.4s cubic-bezier(.34,1.56,.64,1),border-color 0.3s;position:relative;overflow:hidden}
+    .tl-card:hover{transform:translateY(-6px)}
+    .tl-card:nth-child(1){border-color:rgba(59,130,246,0.12)}.tl-card:nth-child(1):hover{border-color:rgba(59,130,246,0.3)}
+    .tl-card:nth-child(2){border-color:rgba(245,158,11,0.12)}.tl-card:nth-child(2):hover{border-color:rgba(245,158,11,0.3)}
+    .tl-card:nth-child(3){border-color:rgba(239,68,68,0.12)}.tl-card:nth-child(3):hover{border-color:rgba(239,68,68,0.3)}
+    .tl-phase-num{font-family:var(--font-display);font-size:3rem;font-weight:700;opacity:0.05;position:absolute;top:0.2rem;right:0.8rem;line-height:1;color:#fff;pointer-events:none}
+    .tl-card h3{font-family:var(--font-display);font-size:1.1rem;font-weight:600;color:#F8FAFC;margin-bottom:0.25rem}
+    .tl-date{font-size:0.78rem;color:#F59E0B;margin-bottom:0.6rem}
+    .tl-task{font-size:0.8rem;color:#64748B;line-height:1.7;padding:0}
+    .tl-task li{list-style:none;position:relative;padding-left:0.7rem}
+    .tl-task li::before{content:'›';position:absolute;left:0;color:#F59E0B;font-weight:700}
+    .tl-highlight{font-size:0.78rem;color:#A78BFA;margin-top:0.5rem;padding:0.3rem 0.5rem;background:rgba(139,92,246,0.06);border-radius:8px;border:1px solid rgba(139,92,246,0.08)}
     /* Quote */
     .q-wrap{max-width:650px;margin:0 auto;padding:1rem}
     .q-text{font-family:var(--font-display);font-size:clamp(1.3rem,3.5vw,2rem);font-weight:500;line-height:1.6;color:#F8FAFC;margin-bottom:0.8rem;min-height:3.2em}
     .q-author{color:#F59E0B;font-size:0.95rem}
-    /* Resources */
-    .res-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1.2rem;max-width:900px;margin:0 auto}
-    .res-card{background:rgba(255,255,255,0.03);backdrop-filter:blur(8px);border:1px solid rgba(255,255,255,0.06);border-radius:20px;padding:1.8rem 1.2rem;text-align:left;transition:transform 0.4s cubic-bezier(.34,1.56,.64,1),border-color 0.3s}
-    .res-card:hover{transform:translateY(-6px) scale(1.01);border-color:rgba(45,212,191,0.25)}
-    .res-icon{font-size:1.8rem;margin-bottom:0.6rem}
-    .res-card h3{font-family:var(--font-display);font-size:1rem;font-weight:600;color:#F8FAFC;margin-bottom:0.3rem}
-    .res-card p{font-size:0.82rem;color:#64748B;line-height:1.5}
+    /* Resources - 408 Focused */
+    .res-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1rem;max-width:960px;margin:0 auto}
+    .res-card{background:rgba(255,255,255,0.03);backdrop-filter:blur(8px);border:1px solid rgba(255,255,255,0.06);border-radius:20px;padding:1.5rem 1.2rem;text-align:left;transition:transform 0.4s cubic-bezier(.34,1.56,.64,1),border-color 0.3s}
+    .res-card:hover{transform:translateY(-6px);border-color:rgba(139,92,246,0.25)!important}
+    .res-card:nth-child(1){border-color:rgba(16,185,129,0.12)}.res-card:nth-child(2){border-color:rgba(59,130,246,0.12)}.res-card:nth-child(3){border-color:rgba(245,158,11,0.12)}.res-card:nth-child(4){border-color:rgba(139,92,246,0.12)}.res-card:nth-child(5){border-color:rgba(239,68,68,0.12)}.res-card:nth-child(6){border-color:rgba(45,212,191,0.12)}
+    .res-icon{font-size:1.5rem;margin-bottom:0.4rem}
+    .res-card h3{font-family:var(--font-display);font-size:1rem;font-weight:600;color:#F8FAFC;margin-bottom:0.2rem}
+    .res-card p{font-size:0.78rem;color:#64748B;line-height:1.5;margin-bottom:0.3rem}
+    .res-tag{display:inline-block;font-size:0.6rem;padding:0.08rem 0.4rem;border-radius:100px;background:rgba(139,92,246,0.08);color:#A78BFA;border:1px solid rgba(139,92,246,0.08);margin-right:0.15rem;margin-top:0.15rem}
+    .res-tag.g{background:rgba(16,185,129,0.08);color:#34D399;border-color:rgba(16,185,129,0.08)}
+    .res-tag.b{background:rgba(59,130,246,0.08);color:#60A5FA;border-color:rgba(59,130,246,0.08)}
+    .res-tag.a{background:rgba(245,158,11,0.08);color:#FBBF24;border-color:rgba(245,158,11,0.08)}
     /* Footer */
     .exam-footer{background:#070B14;text-align:center;padding:2.5rem;border-top:1px solid rgba(255,255,255,0.03)}
     .exam-footer p{color:#475569;font-size:0.82rem}
@@ -83,8 +102,8 @@
     .nav-item{font-size:0.82rem;text-decoration:none;color:#111827;opacity:0.5;transition:opacity 0.25s;font-weight:500;letter-spacing:.02em;white-space:nowrap}
     .nav-item:hover{opacity:1}
     /* Responsive */
-    @media(max-width:768px){.subjects-grid,.res-grid{grid-template-columns:repeat(2,1fr)}.cd-block{min-width:60px}.nav-links{gap:0.8rem}.nav-item{font-size:0.72rem}}
-    @media(max-width:480px){.subjects-grid{grid-template-columns:1fr;max-width:320px;margin:0 auto}.res-grid{grid-template-columns:1fr;max-width:360px;margin:0 auto}.cd-block{min-width:50px}.cd-num{font-size:clamp(1.8rem,14vw,3rem)}.tl-item{padding-left:2.2rem}.tl-line{left:22px}.tl-dot{left:14px}}
+    @media(max-width:768px){.subjects-grid{grid-template-columns:repeat(2,1fr)}.tl{grid-template-columns:1fr;max-width:400px;margin:0 auto}.res-grid{grid-template-columns:repeat(2,1fr)}.cd-block{min-width:60px}.nav-links{gap:0.8rem}.nav-item{font-size:0.72rem}}
+    @media(max-width:480px){.subjects-grid{grid-template-columns:1fr;max-width:320px;margin:0 auto}.res-grid{grid-template-columns:1fr;max-width:360px;margin:0 auto}.tl{max-width:360px}.cd-block{min-width:50px}.cd-num{font-size:clamp(1.8rem,14vw,3rem)}}
   </style>
 </head>
 <body>
@@ -123,35 +142,37 @@
   <section class="exam-section" id="subjects">
     <div class="exam-container">
       <h2 class="section-title">考试科目</h2>
-      <p class="section-subtitle">全国硕士研究生招生统一考试</p>
+      <p class="section-subtitle">全国硕士研究生招生统一考试 · 408计算机</p>
       <div class="subjects-grid">
         <div class="sub-card">
           <div class="sub-icon">📖</div>
           <div class="sub-name">思想政治理论</div>
           <div class="sub-code">(101)</div>
           <div class="sub-meta"><span>100分</span><span>3小时</span></div>
-          <div class="sub-tips">马原·毛中特·史纲·思修·时政</div>
         </div>
         <div class="sub-card">
           <div class="sub-icon">🌍</div>
           <div class="sub-name">英语</div>
           <div class="sub-code">(201)</div>
           <div class="sub-meta"><span>100分</span><span>3小时</span></div>
-          <div class="sub-tips">完形·阅读·翻译·写作</div>
         </div>
         <div class="sub-card">
           <div class="sub-icon">🔢</div>
           <div class="sub-name">数学</div>
           <div class="sub-code">(301)</div>
           <div class="sub-meta"><span>150分</span><span>3小时</span></div>
-          <div class="sub-tips">高数·线代·概率论</div>
         </div>
         <div class="sub-card">
-          <div class="sub-icon">🎯</div>
-          <div class="sub-name">专业课</div>
-          <div class="sub-code">(自命题)</div>
+          <div class="sub-icon">💻</div>
+          <div class="sub-name">408计算机</div>
+          <div class="sub-code">学科专业基础</div>
           <div class="sub-meta"><span>150分</span><span>3小时</span></div>
-          <div class="sub-tips">视目标院校而定 · 总分500</div>
+          <div class="sub-408">
+            <div class="sub-408-item"><span>数据结构</span><div class="bar"><div class="bar-fill" style="width:45%;background:#34D399"></div></div><span class="pts">45分</span></div>
+            <div class="sub-408-item"><span>组成原理</span><div class="bar"><div class="bar-fill" style="width:45%;background:#60A5FA"></div></div><span class="pts">45分</span></div>
+            <div class="sub-408-item"><span>操作系统</span><div class="bar"><div class="bar-fill" style="width:35%;background:#FBBF24"></div></div><span class="pts">35分</span></div>
+            <div class="sub-408-item"><span>计算机网络</span><div class="bar"><div class="bar-fill" style="width:25%;background:#F87171"></div></div><span class="pts">25分</span></div>
+          </div>
         </div>
       </div>
     </div>
@@ -161,12 +182,41 @@
   <section class="exam-section" id="plan">
     <div class="exam-container">
       <h2 class="section-title">复习阶段</h2>
-      <p class="section-subtitle">三阶递进，稳步提升</p>
+      <p class="section-subtitle">三阶递进 · 408计算机专属规划</p>
       <div class="tl">
-        <div class="tl-line"><div class="tl-fill" id="tlFill"></div></div>
-        <div class="tl-item"><div class="tl-dot"></div><div class="tl-body"><h3>基础阶段</h3><div class="tl-date">3月 — 6月</div><p>通读教材，搭建知识体系，打好基本功</p></div></div>
-        <div class="tl-item"><div class="tl-dot"></div><div class="tl-body"><h3>强化阶段</h3><div class="tl-date">7月 — 9月</div><p>专题突破，大量刷题，攻克重难点</p></div></div>
-        <div class="tl-item"><div class="tl-dot"></div><div class="tl-body"><h3>冲刺阶段</h3><div class="tl-date">10月 — 12月</div><p>真题模拟，查漏补缺，调整状态</p></div></div>
+        <div class="tl-card">
+          <div class="tl-phase-num">01</div>
+          <h3>🌱 基础阶段</h3>
+          <div class="tl-date">3月 — 6月</div>
+          <ul class="tl-task">
+            <li>数学：高数一轮，教材+基础题</li>
+            <li>408：数据结构 + 组成原理 王道一轮</li>
+            <li>英语：单词打卡 + 长难句</li>
+          </ul>
+          <div class="tl-highlight">🎯 目标：搭建知识框架</div>
+        </div>
+        <div class="tl-card">
+          <div class="tl-phase-num">02</div>
+          <h3>🔥 强化阶段</h3>
+          <div class="tl-date">7月 — 9月</div>
+          <ul class="tl-task">
+            <li>数学：线代+概率二轮，660/880刷题</li>
+            <li>408：操作系统 + 网络 二轮强化</li>
+            <li>政治：开始听课 + 1000题</li>
+          </ul>
+          <div class="tl-highlight">🎯 目标：攻克重难点</div>
+        </div>
+        <div class="tl-card">
+          <div class="tl-phase-num">03</div>
+          <h3>⚡ 冲刺阶段</h3>
+          <div class="tl-date">10月 — 12月</div>
+          <ul class="tl-task">
+            <li>408历年真题 + 数学真题 限时模拟</li>
+            <li>政治：肖四肖八 + 大题背诵</li>
+            <li>英语：作文模板 + 全真模考</li>
+          </ul>
+          <div class="tl-highlight">🎯 目标：查漏补缺，调整状态</div>
+        </div>
       </div>
     </div>
   </section>
@@ -185,38 +235,44 @@
   <!-- 📋 备考资源 -->
   <section class="exam-section" id="resources">
     <div class="exam-container">
-      <h2 class="section-title">备考资源</h2>
-      <p class="section-subtitle">精选资源，助你一臂之力</p>
+      <h2 class="section-title">408备考资源</h2>
+      <p class="section-subtitle">计算机考研精选资料 · 408专属</p>
       <div class="res-grid">
         <div class="res-card">
-          <div class="res-icon">📄</div>
-          <h3>历年真题</h3>
-          <p>近10年考研真题及详细解析，熟悉命题规律与题型分布</p>
+          <div class="res-icon">📘</div>
+          <h3>数据结构</h3>
+          <p>王道考研系列 + 天勤高分笔记</p>
+          <div><span class="res-tag g">王道</span><span class="res-tag b">天勤</span></div>
         </div>
         <div class="res-card">
-          <div class="res-icon">📚</div>
-          <h3>核心教材</h3>
-          <p>各科推荐教材与辅导书清单，科学搭配提高复习效率</p>
+          <div class="res-icon">💻</div>
+          <h3>计算机组成原理</h3>
+          <p>王道考研 + 袁春风 教材/习题</p>
+          <div><span class="res-tag g">王道</span><span class="res-tag b">袁春风</span></div>
         </div>
         <div class="res-card">
-          <div class="res-icon">🗓️</div>
-          <h3>时间节点</h3>
-          <p>考研重要时间线：报名确认、打印准考证、初试复试</p>
+          <div class="res-icon">⚙️</div>
+          <h3>操作系统</h3>
+          <p>王道考研 + 汤子瀛 教材精读</p>
+          <div><span class="res-tag g">王道</span><span class="res-tag a">汤子瀛</span></div>
+        </div>
+        <div class="res-card">
+          <div class="res-icon">🌐</div>
+          <h3>计算机网络</h3>
+          <p>王道考研 + 谢希仁 教材/配套题</p>
+          <div><span class="res-tag g">王道</span><span class="res-tag a">谢希仁</span></div>
         </div>
         <div class="res-card">
           <div class="res-icon">📝</div>
-          <h3>复习方法</h3>
-          <p>高效学习法：艾宾浩斯遗忘曲线、费曼学习法、思维导图</p>
+          <h3>408历年真题</h3>
+          <p>近15年408真题 + 王道真题解析</p>
+          <div><span class="res-tag">真题</span><span class="res-tag b">王道</span></div>
         </div>
         <div class="res-card">
-          <div class="res-icon">📊</div>
-          <h3>分数线</h3>
-          <p>历年国家线及院校线参考，合理定位目标分数</p>
-        </div>
-        <div class="res-card">
-          <div class="res-icon">🎯</div>
-          <h3>备考策略</h3>
-          <p>各科复习策略与时间分配建议，少走弯路高效备考</p>
+          <div class="res-icon">🧮</div>
+          <h3>刷题平台</h3>
+          <p>LeetCode · 牛客网 · 王道论坛</p>
+          <div><span class="res-tag b">LeetCode</span><span class="res-tag g">牛客</span><span class="res-tag a">王道</span></div>
         </div>
       </div>
     </div>
@@ -276,28 +332,17 @@
         scrollTrigger:{trigger:'#subjects',start:'top 72%',toggleActions:'play none none reverse'}
       });
 
-      // 3. Timeline items stagger
-      gsap.from('.tl-item', {
+      // 3. Timeline phase cards stagger
+      gsap.from('.tl-card', {
         opacity:0,
-        x:-30,
-        stagger:0.2,
+        y:30,
+        stagger:0.15,
         duration:0.8,
         ease:'power3.out',
         scrollTrigger:{trigger:'#plan',start:'top 72%',toggleActions:'play none none reverse'}
       });
 
-      // 4. Timeline fill progress
-      ScrollTrigger.create({
-        trigger:'#plan',
-        start:'top center',
-        end:'bottom center',
-        onUpdate:function(self){
-          var f = document.getElementById('tlFill');
-          if(f) f.style.height = Math.min(self.progress * 100, 100) + '%';
-        }
-      });
-
-      // 5. Resource cards stagger
+      // 4. Resource cards stagger
       gsap.from('.res-card', {
         opacity:0,
         y:40,
