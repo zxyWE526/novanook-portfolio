@@ -26,66 +26,69 @@
     .cursor-glow{position:fixed;pointer-events:none;z-index:9998;width:300px;height:300px;border-radius:50%;background:radial-gradient(circle,rgba(45,212,191,0.08) 0%,transparent 60%);transform:translate(-50%,-50%);transition:opacity .3s;opacity:0}
     @media(max-width:480px){.hero-text .text{font-size:1.6rem;padding:.4em .6em}}
 
-    /* ===== 考研备考 Section Styles ===== */
-    .exam-section{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:6rem 1.5rem;position:relative;overflow:hidden}
-    .exam-container{width:100%;max-width:1100px;margin:0 auto;text-align:center}
-    .section-title{font-family:var(--font-display);font-size:clamp(1.8rem,4vw,2.8rem);font-weight:600;margin-bottom:0.5rem;display:flex;align-items:center;justify-content:center;gap:0.5rem}
-    .section-subtitle{color:var(--exam-muted);font-size:1.05rem;margin-bottom:3.5rem}
-    .section-icon{font-size:1.2em}
+    /* ===== 考研备考 - 全新设计 ===== */
+    .exam-section{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:5rem 1.5rem;position:relative;overflow:hidden}
+    .exam-section::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 50% 0%,rgba(245,158,11,0.04) 0%,transparent 50%),radial-gradient(ellipse at 80% 100%,rgba(45,212,191,0.03) 0%,transparent 50%);pointer-events:none}
+    .exam-container{width:100%;max-width:1100px;margin:0 auto;text-align:center;position:relative;z-index:1}
+    .section-title{font-family:var(--font-display);font-size:clamp(1.8rem,4vw,2.6rem);font-weight:600;margin-bottom:0.6rem;background:linear-gradient(135deg,#F8FAFC,#F59E0B);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+    .section-subtitle{color:#64748B;font-size:1rem;margin-bottom:3rem;letter-spacing:.02em}
     /* Countdown */
-    .countdown-grid{display:flex;align-items:center;justify-content:center;gap:1rem;flex-wrap:wrap}
-    .cd-item{display:flex;flex-direction:column;align-items:center;min-width:90px}
-    .cd-number{font-family:var(--font-display);font-size:clamp(3rem,10vw,6rem);font-weight:700;line-height:1;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:16px;padding:0.3em 0.4em;min-width:1.8em;text-align:center;color:var(--exam-gold);text-shadow:0 0 40px rgba(245,158,11,0.15)}
-    .cd-label{font-size:0.9rem;color:var(--exam-muted);margin-top:0.6rem;text-transform:uppercase;letter-spacing:0.08em}
-    .cd-sep{font-family:var(--font-display);font-size:clamp(2rem,6vw,4rem);font-weight:300;color:var(--exam-muted);padding-bottom:1.5rem}
-    .countdown-date{color:var(--exam-muted);font-size:0.95rem;margin-top:2rem}
+    .countdown-wrap{display:flex;align-items:center;justify-content:center;gap:0.5rem;flex-wrap:wrap;perspective:1000px}
+    .cd-block{display:flex;flex-direction:column;align-items:center;min-width:80px}
+    .cd-num{font-family:var(--font-display);font-size:clamp(2.8rem,9vw,5.5rem);font-weight:700;line-height:1;background:rgba(255,255,255,0.03);backdrop-filter:blur(8px);border:1px solid rgba(255,255,255,0.06);border-radius:16px;padding:0.25em 0.35em;min-width:1.6em;text-align:center;color:#F59E0B;text-shadow:0 0 30px rgba(245,158,11,0.12);position:relative;overflow:hidden}
+    .cd-num::after{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,rgba(255,255,255,0.1),transparent)}
+    .cd-lbl{font-size:0.8rem;color:#64748B;margin-top:0.5rem;letter-spacing:.06em}
+    .cd-dot{font-family:var(--font-display);font-size:clamp(2rem,5vw,3.5rem);font-weight:300;color:#475569;padding-bottom:1.2rem}
+    .countdown-foot{color:#64748B;font-size:0.9rem;margin-top:1.8rem}
+    .countdown-foot span{color:#F59E0B;font-weight:500}
     /* Subjects */
-    .subjects-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:1.5rem;max-width:960px;margin:0 auto}
-    .subject-card{background:var(--exam-card);border:1px solid rgba(255,255,255,0.06);border-radius:16px;padding:2rem 1.2rem;text-align:center;cursor:default;transition:transform 0.3s,border-color 0.3s,box-shadow 0.3s}
-    .subject-card:hover{transform:translateY(-6px);border-color:var(--exam-gold);box-shadow:0 12px 40px rgba(245,158,11,0.08)}
-    .subject-icon{font-size:2.5rem;margin-bottom:0.8rem}
-    .subject-name{font-family:var(--font-display);font-size:1.15rem;font-weight:600;margin-bottom:0.2rem}
-    .subject-code{font-size:0.8rem;color:var(--exam-gold);margin-bottom:0.8rem}
-    .subject-info{display:flex;justify-content:center;gap:0.8rem;margin-bottom:0.6rem;flex-wrap:wrap}
-    .subject-info span{font-size:0.85rem;background:rgba(255,255,255,0.05);padding:0.2rem 0.7rem;border-radius:20px;color:var(--exam-text)}
-    .subject-tips{font-size:0.78rem;color:var(--exam-muted);line-height:1.5}
+    .subjects-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:1.2rem;max-width:960px;margin:0 auto}
+    .sub-card{background:rgba(255,255,255,0.03);backdrop-filter:blur(8px);border:1px solid rgba(255,255,255,0.06);border-radius:20px;padding:2rem 1rem;text-align:center;transition:transform 0.4s cubic-bezier(.34,1.56,.64,1),border-color 0.3s,box-shadow 0.4s;cursor:default}
+    .sub-card:hover{transform:translateY(-8px) scale(1.02);border-color:rgba(245,158,11,0.3);box-shadow:0 20px 60px rgba(245,158,11,0.06)}
+    .sub-icon{font-size:2.2rem;margin-bottom:0.6rem}
+    .sub-name{font-family:var(--font-display);font-size:1.1rem;font-weight:600;margin-bottom:0.15rem;color:#F8FAFC}
+    .sub-code{font-size:0.75rem;color:#F59E0B;margin-bottom:0.6rem;letter-spacing:.04em}
+    .sub-meta{display:flex;justify-content:center;gap:0.5rem;margin-bottom:0.5rem;flex-wrap:wrap}
+    .sub-meta span{font-size:0.8rem;background:rgba(255,255,255,0.05);padding:0.15rem 0.6rem;border-radius:100px;color:#94A3B8;border:1px solid rgba(255,255,255,0.04)}
+    .sub-tips{font-size:0.75rem;color:#64748B;line-height:1.5}
     /* Timeline */
-    .timeline{position:relative;max-width:700px;margin:0 auto;padding:2rem 0}
-    .timeline-bar{position:absolute;left:50%;top:0;bottom:0;width:3px;background:rgba(255,255,255,0.08);transform:translateX(-50%)}
-    .timeline-bar-inner{position:absolute;left:0;top:0;width:100%;height:0%;background:linear-gradient(180deg,var(--exam-gold),#D97706);border-radius:2px;transition:height 0.1s}
-    .phase{position:relative;display:flex;flex-direction:column;align-items:center;text-align:center;padding:2rem 1rem;margin-bottom:1rem}
-    .phase-dot{width:16px;height:16px;border-radius:50%;background:var(--exam-gold);border:3px solid var(--exam-bg);position:absolute;left:50%;transform:translateX(-50%);z-index:2;top:0;box-shadow:0 0 20px rgba(245,158,11,0.2)}
-    .phase h3{font-family:var(--font-display);font-size:1.3rem;font-weight:600;margin:1rem 0 0.2rem}
-    .phase-date{color:var(--exam-gold);font-size:0.85rem;margin-bottom:0.5rem}
-    .phase p{color:var(--exam-muted);font-size:0.9rem;max-width:280px}
-    .phase-1,.phase-3{position:relative}
-    @media(min-width:768px){.phase{flex-direction:row;text-align:left;gap:2rem;padding:2rem 4rem;margin-bottom:0}.phase-dot{left:auto;right:50%;margin-right:-8px;top:50%;transform:translateY(-50%)}.phase h3{margin-top:0}}
+    .tl{position:relative;max-width:720px;margin:0 auto;padding:2.5rem 0}
+    .tl-line{position:absolute;left:32px;top:0;bottom:0;width:2px;background:rgba(255,255,255,0.06)}
+    .tl-fill{position:absolute;left:0;top:0;width:100%;height:0%;background:linear-gradient(180deg,#F59E0B,#D97706);border-radius:2px;transition:height 0.15s}
+    .tl-item{position:relative;display:flex;gap:1.5rem;padding:1.8rem 0 1.8rem 3rem;text-align:left}
+    .tl-dot{position:absolute;left:24px;top:2rem;width:14px;height:14px;border-radius:50%;background:#0B1120;border:2.5px solid #F59E0B;box-shadow:0 0 20px rgba(245,158,11,0.15);z-index:2}
+    .tl-body h3{font-family:var(--font-display);font-size:1.2rem;font-weight:600;color:#F8FAFC}
+    .tl-date{font-size:0.8rem;color:#F59E0B;margin:0.15rem 0 0.3rem}
+    .tl-body p{font-size:0.88rem;color:#64748B;max-width:380px;line-height:1.5}
     /* Quote */
-    .quote-wrapper{max-width:700px;margin:0 auto;padding:2rem}
-    .quote-text{font-family:var(--font-display);font-size:clamp(1.4rem,4vw,2.2rem);font-weight:500;line-height:1.5;color:var(--exam-text);margin-bottom:1rem;min-height:3em}
-    .quote-author{color:var(--exam-gold);font-size:1rem}
-    /* Quiz Cards */
-    .quiz-cards{display:grid;grid-template-columns:repeat(2,1fr);gap:1.5rem;max-width:600px;margin:0 auto}
-    .quiz-card{background:var(--exam-card);border:1px solid rgba(255,255,255,0.06);border-radius:16px;padding:2rem;text-align:center;text-decoration:none;color:var(--exam-text);transition:transform 0.3s,border-color 0.3s,box-shadow 0.3s;display:block}
-    .quiz-card:hover{transform:translateY(-6px);border-color:var(--nova-teal);box-shadow:0 12px 40px rgba(45,212,191,0.08)}
-    .quiz-card h3{font-family:var(--font-display);font-size:1.2rem;font-weight:600;margin-bottom:0.5rem}
-    .quiz-card p{color:var(--exam-muted);font-size:0.85rem}
+    .q-wrap{max-width:650px;margin:0 auto;padding:1rem}
+    .q-text{font-family:var(--font-display);font-size:clamp(1.3rem,3.5vw,2rem);font-weight:500;line-height:1.6;color:#F8FAFC;margin-bottom:0.8rem;min-height:3.2em}
+    .q-author{color:#F59E0B;font-size:0.95rem}
+    /* Resources */
+    .res-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1.2rem;max-width:900px;margin:0 auto}
+    .res-card{background:rgba(255,255,255,0.03);backdrop-filter:blur(8px);border:1px solid rgba(255,255,255,0.06);border-radius:20px;padding:1.8rem 1.2rem;text-align:left;transition:transform 0.4s cubic-bezier(.34,1.56,.64,1),border-color 0.3s}
+    .res-card:hover{transform:translateY(-6px) scale(1.01);border-color:rgba(45,212,191,0.25)}
+    .res-icon{font-size:1.8rem;margin-bottom:0.6rem}
+    .res-card h3{font-family:var(--font-display);font-size:1rem;font-weight:600;color:#F8FAFC;margin-bottom:0.3rem}
+    .res-card p{font-size:0.82rem;color:#64748B;line-height:1.5}
     /* Footer */
-    .exam-footer{background:#070B14;text-align:center;padding:2rem;color:var(--exam-muted);font-size:0.85rem;border-top:1px solid rgba(255,255,255,0.04)}
-    /* Hero → Exam transition */
-    .hero-divider{height:3px;background:linear-gradient(90deg,transparent,var(--exam-gold),var(--nova-teal),transparent);border:none;margin:0}
-    /* Nav updates */
-    .nav{background:rgba(255,255,255,0.75);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border-bottom:1px solid rgba(0,0,0,0.05)}
-    .nav-links{display:flex;gap:1.2rem;align-items:center}
-    .nav-item{font-size:0.85rem;text-decoration:none;color:var(--dark-text);opacity:0.55;transition:opacity 0.2s;font-weight:500;white-space:nowrap}
+    .exam-footer{background:#070B14;text-align:center;padding:2.5rem;border-top:1px solid rgba(255,255,255,0.03)}
+    .exam-footer p{color:#475569;font-size:0.82rem}
+    .exam-footer span{color:rgba(245,158,11,0.5)}
+    /* Hero divider */
+    .hero-divider{height:2px;background:linear-gradient(90deg,transparent,rgba(245,158,11,0.3),rgba(45,212,191,0.3),transparent);border:none;margin:0}
+    /* Nav refinement */
+    .nav{background:rgba(255,255,255,0.7);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border-bottom:1px solid rgba(0,0,0,0.04)}
+    .nav-links{display:flex;gap:1.5rem;align-items:center}
+    .nav-item{font-size:0.82rem;text-decoration:none;color:#111827;opacity:0.5;transition:opacity 0.25s;font-weight:500;letter-spacing:.02em;white-space:nowrap}
     .nav-item:hover{opacity:1}
     /* Responsive */
-    @media(max-width:768px){.subjects-grid{grid-template-columns:repeat(2,1fr);gap:1rem}.quiz-cards{grid-template-columns:1fr;max-width:360px}.countdown-grid{gap:0.3rem}.cd-item{min-width:65px}.nav-links{gap:0.7rem}.nav-item{font-size:0.75rem}}
-    @media(max-width:480px){.subjects-grid{grid-template-columns:1fr;max-width:320px}.cd-item{min-width:55px}.cd-number{font-size:clamp(2rem,15vw,3.5rem);padding:0.2em 0.3em}.section-subtitle{font-size:0.9rem;margin-bottom:2rem}}
+    @media(max-width:768px){.subjects-grid,.res-grid{grid-template-columns:repeat(2,1fr)}.cd-block{min-width:60px}.nav-links{gap:0.8rem}.nav-item{font-size:0.72rem}}
+    @media(max-width:480px){.subjects-grid{grid-template-columns:1fr;max-width:320px;margin:0 auto}.res-grid{grid-template-columns:1fr;max-width:360px;margin:0 auto}.cd-block{min-width:50px}.cd-num{font-size:clamp(1.8rem,14vw,3rem)}.tl-item{padding-left:2.2rem}.tl-line{left:22px}.tl-dot{left:14px}}
   </style>
 </head>
 <body>
-  <nav class="nav"><div class="nav-inner"><a href="#" class="nav-logo">Lnyeon</a><div class="nav-links"><a href="#countdown" class="nav-item">倒计时</a><a href="#subjects" class="nav-item">科目</a><a href="#plan" class="nav-item">计划</a><a href="#quiz" class="nav-item">测验</a></div></div></nav>
+  <nav class="nav"><div class="nav-inner"><a href="#" class="nav-logo">Lnyeon</a><div class="nav-links"><a href="#countdown" class="nav-item">倒计时</a><a href="#subjects" class="nav-item">科目</a><a href="#plan" class="nav-item">计划</a><a href="#resources" class="nav-item">资源</a></div></div></nav>
   <section class="hero">
     <div class="hero-text" id="heroText">
       <h1 class="text chinese">你好，我是 Lnyeon</h1>
@@ -95,111 +98,133 @@
     </div>
   </section>
 
-  <!-- ===== 考研备考 Sections ===== -->
+  <!-- ===== 考研备考 - 全新设计 ===== -->
   <hr class="hero-divider">
 
-  <!-- 🎯 Section 1: Countdown -->
+  <!-- 🎯 倒计时 -->
   <section class="exam-section" id="countdown">
     <div class="exam-container">
-      <h2 class="section-title"><span class="section-icon">🎯</span> 考研倒计时</h2>
+      <h2 class="section-title">考研倒计时</h2>
       <p class="section-subtitle">距离 2026 年全国硕士研究生招生考试</p>
-      <div class="countdown-grid">
-        <div class="cd-item"><div class="cd-number" id="cd-days">00</div><div class="cd-label">天</div></div>
-        <div class="cd-sep">:</div>
-        <div class="cd-item"><div class="cd-number" id="cd-hours">00</div><div class="cd-label">时</div></div>
-        <div class="cd-sep">:</div>
-        <div class="cd-item"><div class="cd-number" id="cd-minutes">00</div><div class="cd-label">分</div></div>
-        <div class="cd-sep">:</div>
-        <div class="cd-item"><div class="cd-number" id="cd-seconds">00</div><div class="cd-label">秒</div></div>
+      <div class="countdown-wrap">
+        <div class="cd-block"><div class="cd-num" id="cd-days">00</div><div class="cd-lbl">天</div></div>
+        <div class="cd-dot">:</div>
+        <div class="cd-block"><div class="cd-num" id="cd-hours">00</div><div class="cd-lbl">时</div></div>
+        <div class="cd-dot">:</div>
+        <div class="cd-block"><div class="cd-num" id="cd-minutes">00</div><div class="cd-lbl">分</div></div>
+        <div class="cd-dot">:</div>
+        <div class="cd-block"><div class="cd-num" id="cd-seconds">00</div><div class="cd-lbl">秒</div></div>
       </div>
-      <p class="countdown-date">2026年12月19日 · 考研必胜</p>
+      <p class="countdown-foot">2026年12月19日 · <span>考研必胜</span></p>
     </div>
   </section>
 
-  <!-- 📚 Section 2: Exam Subjects -->
+  <!-- 📚 科目 -->
   <section class="exam-section" id="subjects">
     <div class="exam-container">
-      <h2 class="section-title"><span class="section-icon">📚</span> 考试科目</h2>
-      <p class="section-subtitle">全国硕士研究生招生统一考试科目</p>
+      <h2 class="section-title">考试科目</h2>
+      <p class="section-subtitle">全国硕士研究生招生统一考试</p>
       <div class="subjects-grid">
-        <div class="subject-card">
-          <div class="subject-icon">📖</div>
-          <h3 class="subject-name">思想政治理论</h3>
-          <div class="subject-code">(101)</div>
-          <div class="subject-info"><span>100分</span><span>3小时</span></div>
-          <p class="subject-tips">马原·毛中特·史纲·思修·时政</p>
+        <div class="sub-card">
+          <div class="sub-icon">📖</div>
+          <div class="sub-name">思想政治理论</div>
+          <div class="sub-code">(101)</div>
+          <div class="sub-meta"><span>100分</span><span>3小时</span></div>
+          <div class="sub-tips">马原·毛中特·史纲·思修·时政</div>
         </div>
-        <div class="subject-card">
-          <div class="subject-icon">🌍</div>
-          <h3 class="subject-name">英语</h3>
-          <div class="subject-code">(201)</div>
-          <div class="subject-info"><span>100分</span><span>3小时</span></div>
-          <p class="subject-tips">完形·阅读·翻译·写作</p>
+        <div class="sub-card">
+          <div class="sub-icon">🌍</div>
+          <div class="sub-name">英语</div>
+          <div class="sub-code">(201)</div>
+          <div class="sub-meta"><span>100分</span><span>3小时</span></div>
+          <div class="sub-tips">完形·阅读·翻译·写作</div>
         </div>
-        <div class="subject-card">
-          <div class="subject-icon">🔢</div>
-          <h3 class="subject-name">数学</h3>
-          <div class="subject-code">(301)</div>
-          <div class="subject-info"><span>150分</span><span>3小时</span></div>
-          <p class="subject-tips">高数·线代·概率论</p>
+        <div class="sub-card">
+          <div class="sub-icon">🔢</div>
+          <div class="sub-name">数学</div>
+          <div class="sub-code">(301)</div>
+          <div class="sub-meta"><span>150分</span><span>3小时</span></div>
+          <div class="sub-tips">高数·线代·概率论</div>
         </div>
-        <div class="subject-card">
-          <div class="subject-icon">🎯</div>
-          <h3 class="subject-name">专业课</h3>
-          <div class="subject-code">(自命题)</div>
-          <div class="subject-info"><span>150分</span><span>3小时</span></div>
-          <p class="subject-tips">视目标院校而定</p>
+        <div class="sub-card">
+          <div class="sub-icon">🎯</div>
+          <div class="sub-name">专业课</div>
+          <div class="sub-code">(自命题)</div>
+          <div class="sub-meta"><span>150分</span><span>3小时</span></div>
+          <div class="sub-tips">视目标院校而定 · 总分500</div>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- 📅 Section 3: Study Plan Timeline -->
+  <!-- 📅 阶段计划 -->
   <section class="exam-section" id="plan">
     <div class="exam-container">
-      <h2 class="section-title"><span class="section-icon">📅</span> 复习阶段计划</h2>
-      <p class="section-subtitle">科学规划，循序渐进</p>
-      <div class="timeline">
-        <div class="timeline-bar"><div class="timeline-bar-inner" id="timelineProgress"></div></div>
-        <div class="phase phase-1"><div class="phase-dot"></div><div><h3>基础阶段</h3><p class="phase-date">3月 — 6月</p><p>全面复习教材，建立知识框架</p></div></div>
-        <div class="phase phase-2"><div class="phase-dot"></div><div><h3>强化阶段</h3><p class="phase-date">7月 — 9月</p><p>专题突破，大量刷题训练</p></div></div>
-        <div class="phase phase-3"><div class="phase-dot"></div><div><h3>冲刺阶段</h3><p class="phase-date">10月 — 12月</p><p>真题模拟，查漏补缺</p></div></div>
+      <h2 class="section-title">复习阶段</h2>
+      <p class="section-subtitle">三阶递进，稳步提升</p>
+      <div class="tl">
+        <div class="tl-line"><div class="tl-fill" id="tlFill"></div></div>
+        <div class="tl-item"><div class="tl-dot"></div><div class="tl-body"><h3>基础阶段</h3><div class="tl-date">3月 — 6月</div><p>通读教材，搭建知识体系，打好基本功</p></div></div>
+        <div class="tl-item"><div class="tl-dot"></div><div class="tl-body"><h3>强化阶段</h3><div class="tl-date">7月 — 9月</div><p>专题突破，大量刷题，攻克重难点</p></div></div>
+        <div class="tl-item"><div class="tl-dot"></div><div class="tl-body"><h3>冲刺阶段</h3><div class="tl-date">10月 — 12月</div><p>真题模拟，查漏补缺，调整状态</p></div></div>
       </div>
     </div>
   </section>
 
-  <!-- 💪 Section 4: Daily Quote -->
+  <!-- 💪 每日一句 -->
   <section class="exam-section" id="quote">
     <div class="exam-container">
-      <h2 class="section-title"><span class="section-icon">💪</span> 每日一句</h2>
-      <div class="quote-wrapper">
-        <p class="quote-text" id="quoteText">"坚持就是胜利"</p>
-        <p class="quote-author" id="quoteAuthor">— 考研人</p>
+      <h2 class="section-title">每日一句</h2>
+      <div class="q-wrap">
+        <p class="q-text" id="qText">"坚持就是胜利"</p>
+        <p class="q-author" id="qAuthor">— 考研人</p>
       </div>
     </div>
   </section>
 
-  <!-- 📝 Section 5: Quiz Portal -->
-  <section class="exam-section" id="quiz">
+  <!-- 📋 备考资源 -->
+  <section class="exam-section" id="resources">
     <div class="exam-container">
-      <h2 class="section-title"><span class="section-icon">📝</span> 真题练习</h2>
-      <p class="section-subtitle">检验学习成果，查漏补缺</p>
-      <div class="quiz-cards">
-        <a href="/app/" class="quiz-card">
-          <h3>CRM 测试</h3>
-          <p>43 道选择题 · 限时 2 分钟</p>
-        </a>
-        <a href="/app/" class="quiz-card">
-          <h3>网站建设测试</h3>
-          <p>203 道题 · 限时 20 分钟</p>
-        </a>
+      <h2 class="section-title">备考资源</h2>
+      <p class="section-subtitle">精选资源，助你一臂之力</p>
+      <div class="res-grid">
+        <div class="res-card">
+          <div class="res-icon">📄</div>
+          <h3>历年真题</h3>
+          <p>近10年考研真题及详细解析，熟悉命题规律与题型分布</p>
+        </div>
+        <div class="res-card">
+          <div class="res-icon">📚</div>
+          <h3>核心教材</h3>
+          <p>各科推荐教材与辅导书清单，科学搭配提高复习效率</p>
+        </div>
+        <div class="res-card">
+          <div class="res-icon">🗓️</div>
+          <h3>时间节点</h3>
+          <p>考研重要时间线：报名确认、打印准考证、初试复试</p>
+        </div>
+        <div class="res-card">
+          <div class="res-icon">📝</div>
+          <h3>复习方法</h3>
+          <p>高效学习法：艾宾浩斯遗忘曲线、费曼学习法、思维导图</p>
+        </div>
+        <div class="res-card">
+          <div class="res-icon">📊</div>
+          <h3>分数线</h3>
+          <p>历年国家线及院校线参考，合理定位目标分数</p>
+        </div>
+        <div class="res-card">
+          <div class="res-icon">🎯</div>
+          <h3>备考策略</h3>
+          <p>各科复习策略与时间分配建议，少走弯路高效备考</p>
+        </div>
       </div>
     </div>
   </section>
 
   <!-- Footer -->
   <footer class="exam-footer">
-    <p>© 2026 Lnyeon · 考研必胜 · 坚持到底</p>
+    <p>© 2026 Lnyeon · <span>考研必胜</span> · 坚持到底</p>
   </footer>
 
   <div class="scroll-bar" id="scrollBar"></div>
@@ -231,7 +256,7 @@
       /* ── GSAP Animations ── */
 
       // 1. Countdown entrance
-      gsap.from('.cd-item', {
+      gsap.from('.cd-block', {
         opacity:0,
         y:40,
         scale:0.8,
@@ -242,7 +267,7 @@
       });
 
       // 2. Subject cards stagger
-      gsap.from('.subject-card', {
+      gsap.from('.sub-card', {
         opacity:0,
         y:50,
         stagger:0.15,
@@ -251,8 +276,8 @@
         scrollTrigger:{trigger:'#subjects',start:'top 72%',toggleActions:'play none none reverse'}
       });
 
-      // 3. Timeline phases
-      gsap.from('.phase', {
+      // 3. Timeline items stagger
+      gsap.from('.tl-item', {
         opacity:0,
         x:-30,
         stagger:0.2,
@@ -261,29 +286,29 @@
         scrollTrigger:{trigger:'#plan',start:'top 72%',toggleActions:'play none none reverse'}
       });
 
-      // 4. Timeline progress bar
+      // 4. Timeline fill progress
       ScrollTrigger.create({
         trigger:'#plan',
         start:'top center',
         end:'bottom center',
         onUpdate:function(self){
-          var p = document.getElementById('timelineProgress');
-          if(p) p.style.height = Math.min(self.progress * 100, 100) + '%';
+          var f = document.getElementById('tlFill');
+          if(f) f.style.height = Math.min(self.progress * 100, 100) + '%';
         }
       });
 
-      // 5. Quiz cards
-      gsap.from('.quiz-card', {
+      // 5. Resource cards stagger
+      gsap.from('.res-card', {
         opacity:0,
         y:40,
-        stagger:0.2,
+        stagger:0.1,
         duration:0.8,
         ease:'power3.out',
-        scrollTrigger:{trigger:'#quiz',start:'top 72%',toggleActions:'play none none reverse'}
+        scrollTrigger:{trigger:'#resources',start:'top 72%',toggleActions:'play none none reverse'}
       });
 
       // 6. Quote section heading
-      gsap.from('.quote-wrapper', {
+      gsap.from('.q-wrap', {
         opacity:0,
         y:30,
         duration:1,
@@ -324,8 +349,8 @@
         {text:'乾坤未定，你我皆是黑马',author:'考研人'}
       ];
       var qIdx = 0;
-      var qText = document.getElementById('quoteText');
-      var qAuth = document.getElementById('quoteAuthor');
+      var qText = document.getElementById('qText');
+      var qAuth = document.getElementById('qAuthor');
       function showQuote(i){
         if(!qText || !qAuth) return;
         var q = QUOTES[i % QUOTES.length];
