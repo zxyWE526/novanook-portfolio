@@ -8,7 +8,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet" />
   <style>
-    :root{--deep-space:#0B1120;--starlight:#F8FAFC;--nova-teal:#2DD4BF;--amber:#F59E0B;--slate:#1E293B;--stardust:#94A3B8;--white:#ffffff;--dark-text:#111827;--font-display:'Space Grotesk','PingFang SC','Microsoft YaHei',sans-serif;--font-body:'Inter','PingFang SC','Microsoft YaHei',sans-serif}
+    :root{--deep-space:#0B1120;--starlight:#F8FAFC;--nova-teal:#2DD4BF;--amber:#F59E0B;--slate:#1E293B;--stardust:#94A3B8;--white:#ffffff;--dark-text:#111827;--font-display:'Space Grotesk','PingFang SC','Microsoft YaHei',sans-serif;--font-body:'Inter','PingFang SC','Microsoft YaHei',sans-serif;--exam-bg:#0B1120;--exam-card:#111827;--exam-gold:#F59E0B;--exam-text:#F8FAFC;--exam-muted:#64748B}
     *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
     html{scroll-behavior:smooth}
     body{font-family:var(--font-body);color:var(--dark-text);background:var(--white)}
@@ -25,10 +25,67 @@
     .scroll-bar{position:fixed;top:0;left:0;height:3px;background:linear-gradient(90deg,var(--nova-teal),#5EEAD4);z-index:9999;width:0%;transition:width .1s}
     .cursor-glow{position:fixed;pointer-events:none;z-index:9998;width:300px;height:300px;border-radius:50%;background:radial-gradient(circle,rgba(45,212,191,0.08) 0%,transparent 60%);transform:translate(-50%,-50%);transition:opacity .3s;opacity:0}
     @media(max-width:480px){.hero-text .text{font-size:1.6rem;padding:.4em .6em}}
+
+    /* ===== 考研备考 Section Styles ===== */
+    .exam-section{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:6rem 1.5rem;position:relative;overflow:hidden}
+    .exam-container{width:100%;max-width:1100px;margin:0 auto;text-align:center}
+    .section-title{font-family:var(--font-display);font-size:clamp(1.8rem,4vw,2.8rem);font-weight:600;margin-bottom:0.5rem;display:flex;align-items:center;justify-content:center;gap:0.5rem}
+    .section-subtitle{color:var(--exam-muted);font-size:1.05rem;margin-bottom:3.5rem}
+    .section-icon{font-size:1.2em}
+    /* Countdown */
+    .countdown-grid{display:flex;align-items:center;justify-content:center;gap:1rem;flex-wrap:wrap}
+    .cd-item{display:flex;flex-direction:column;align-items:center;min-width:90px}
+    .cd-number{font-family:var(--font-display);font-size:clamp(3rem,10vw,6rem);font-weight:700;line-height:1;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:16px;padding:0.3em 0.4em;min-width:1.8em;text-align:center;color:var(--exam-gold);text-shadow:0 0 40px rgba(245,158,11,0.15)}
+    .cd-label{font-size:0.9rem;color:var(--exam-muted);margin-top:0.6rem;text-transform:uppercase;letter-spacing:0.08em}
+    .cd-sep{font-family:var(--font-display);font-size:clamp(2rem,6vw,4rem);font-weight:300;color:var(--exam-muted);padding-bottom:1.5rem}
+    .countdown-date{color:var(--exam-muted);font-size:0.95rem;margin-top:2rem}
+    /* Subjects */
+    .subjects-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:1.5rem;max-width:960px;margin:0 auto}
+    .subject-card{background:var(--exam-card);border:1px solid rgba(255,255,255,0.06);border-radius:16px;padding:2rem 1.2rem;text-align:center;cursor:default;transition:transform 0.3s,border-color 0.3s,box-shadow 0.3s}
+    .subject-card:hover{transform:translateY(-6px);border-color:var(--exam-gold);box-shadow:0 12px 40px rgba(245,158,11,0.08)}
+    .subject-icon{font-size:2.5rem;margin-bottom:0.8rem}
+    .subject-name{font-family:var(--font-display);font-size:1.15rem;font-weight:600;margin-bottom:0.2rem}
+    .subject-code{font-size:0.8rem;color:var(--exam-gold);margin-bottom:0.8rem}
+    .subject-info{display:flex;justify-content:center;gap:0.8rem;margin-bottom:0.6rem;flex-wrap:wrap}
+    .subject-info span{font-size:0.85rem;background:rgba(255,255,255,0.05);padding:0.2rem 0.7rem;border-radius:20px;color:var(--exam-text)}
+    .subject-tips{font-size:0.78rem;color:var(--exam-muted);line-height:1.5}
+    /* Timeline */
+    .timeline{position:relative;max-width:700px;margin:0 auto;padding:2rem 0}
+    .timeline-bar{position:absolute;left:50%;top:0;bottom:0;width:3px;background:rgba(255,255,255,0.08);transform:translateX(-50%)}
+    .timeline-bar-inner{position:absolute;left:0;top:0;width:100%;height:0%;background:linear-gradient(180deg,var(--exam-gold),#D97706);border-radius:2px;transition:height 0.1s}
+    .phase{position:relative;display:flex;flex-direction:column;align-items:center;text-align:center;padding:2rem 1rem;margin-bottom:1rem}
+    .phase-dot{width:16px;height:16px;border-radius:50%;background:var(--exam-gold);border:3px solid var(--exam-bg);position:absolute;left:50%;transform:translateX(-50%);z-index:2;top:0;box-shadow:0 0 20px rgba(245,158,11,0.2)}
+    .phase h3{font-family:var(--font-display);font-size:1.3rem;font-weight:600;margin:1rem 0 0.2rem}
+    .phase-date{color:var(--exam-gold);font-size:0.85rem;margin-bottom:0.5rem}
+    .phase p{color:var(--exam-muted);font-size:0.9rem;max-width:280px}
+    .phase-1,.phase-3{position:relative}
+    @media(min-width:768px){.phase{flex-direction:row;text-align:left;gap:2rem;padding:2rem 4rem;margin-bottom:0}.phase-dot{left:auto;right:50%;margin-right:-8px;top:50%;transform:translateY(-50%)}.phase h3{margin-top:0}}
+    /* Quote */
+    .quote-wrapper{max-width:700px;margin:0 auto;padding:2rem}
+    .quote-text{font-family:var(--font-display);font-size:clamp(1.4rem,4vw,2.2rem);font-weight:500;line-height:1.5;color:var(--exam-text);margin-bottom:1rem;min-height:3em}
+    .quote-author{color:var(--exam-gold);font-size:1rem}
+    /* Quiz Cards */
+    .quiz-cards{display:grid;grid-template-columns:repeat(2,1fr);gap:1.5rem;max-width:600px;margin:0 auto}
+    .quiz-card{background:var(--exam-card);border:1px solid rgba(255,255,255,0.06);border-radius:16px;padding:2rem;text-align:center;text-decoration:none;color:var(--exam-text);transition:transform 0.3s,border-color 0.3s,box-shadow 0.3s;display:block}
+    .quiz-card:hover{transform:translateY(-6px);border-color:var(--nova-teal);box-shadow:0 12px 40px rgba(45,212,191,0.08)}
+    .quiz-card h3{font-family:var(--font-display);font-size:1.2rem;font-weight:600;margin-bottom:0.5rem}
+    .quiz-card p{color:var(--exam-muted);font-size:0.85rem}
+    /* Footer */
+    .exam-footer{background:#070B14;text-align:center;padding:2rem;color:var(--exam-muted);font-size:0.85rem;border-top:1px solid rgba(255,255,255,0.04)}
+    /* Hero → Exam transition */
+    .hero-divider{height:3px;background:linear-gradient(90deg,transparent,var(--exam-gold),var(--nova-teal),transparent);border:none;margin:0}
+    /* Nav updates */
+    .nav{background:rgba(255,255,255,0.75);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border-bottom:1px solid rgba(0,0,0,0.05)}
+    .nav-links{display:flex;gap:1.2rem;align-items:center}
+    .nav-item{font-size:0.85rem;text-decoration:none;color:var(--dark-text);opacity:0.55;transition:opacity 0.2s;font-weight:500;white-space:nowrap}
+    .nav-item:hover{opacity:1}
+    /* Responsive */
+    @media(max-width:768px){.subjects-grid{grid-template-columns:repeat(2,1fr);gap:1rem}.quiz-cards{grid-template-columns:1fr;max-width:360px}.countdown-grid{gap:0.3rem}.cd-item{min-width:65px}.nav-links{gap:0.7rem}.nav-item{font-size:0.75rem}}
+    @media(max-width:480px){.subjects-grid{grid-template-columns:1fr;max-width:320px}.cd-item{min-width:55px}.cd-number{font-size:clamp(2rem,15vw,3.5rem);padding:0.2em 0.3em}.section-subtitle{font-size:0.9rem;margin-bottom:2rem}}
   </style>
 </head>
 <body>
-  <nav class="nav"><div class="nav-inner"><a href="#" class="nav-logo">Lnyeon</a></div></nav>
+  <nav class="nav"><div class="nav-inner"><a href="#" class="nav-logo">Lnyeon</a><div class="nav-links"><a href="#countdown" class="nav-item">倒计时</a><a href="#subjects" class="nav-item">科目</a><a href="#plan" class="nav-item">计划</a><a href="#quiz" class="nav-item">测验</a></div></div></nav>
   <section class="hero">
     <div class="hero-text" id="heroText">
       <h1 class="text chinese">你好，我是 Lnyeon</h1>
@@ -37,6 +94,114 @@
       </div>
     </div>
   </section>
+
+  <!-- ===== 考研备考 Sections ===== -->
+  <hr class="hero-divider">
+
+  <!-- 🎯 Section 1: Countdown -->
+  <section class="exam-section" id="countdown">
+    <div class="exam-container">
+      <h2 class="section-title"><span class="section-icon">🎯</span> 考研倒计时</h2>
+      <p class="section-subtitle">距离 2026 年全国硕士研究生招生考试</p>
+      <div class="countdown-grid">
+        <div class="cd-item"><div class="cd-number" id="cd-days">00</div><div class="cd-label">天</div></div>
+        <div class="cd-sep">:</div>
+        <div class="cd-item"><div class="cd-number" id="cd-hours">00</div><div class="cd-label">时</div></div>
+        <div class="cd-sep">:</div>
+        <div class="cd-item"><div class="cd-number" id="cd-minutes">00</div><div class="cd-label">分</div></div>
+        <div class="cd-sep">:</div>
+        <div class="cd-item"><div class="cd-number" id="cd-seconds">00</div><div class="cd-label">秒</div></div>
+      </div>
+      <p class="countdown-date">2026年12月19日 · 考研必胜</p>
+    </div>
+  </section>
+
+  <!-- 📚 Section 2: Exam Subjects -->
+  <section class="exam-section" id="subjects">
+    <div class="exam-container">
+      <h2 class="section-title"><span class="section-icon">📚</span> 考试科目</h2>
+      <p class="section-subtitle">全国硕士研究生招生统一考试科目</p>
+      <div class="subjects-grid">
+        <div class="subject-card">
+          <div class="subject-icon">📖</div>
+          <h3 class="subject-name">思想政治理论</h3>
+          <div class="subject-code">(101)</div>
+          <div class="subject-info"><span>100分</span><span>3小时</span></div>
+          <p class="subject-tips">马原·毛中特·史纲·思修·时政</p>
+        </div>
+        <div class="subject-card">
+          <div class="subject-icon">🌍</div>
+          <h3 class="subject-name">英语</h3>
+          <div class="subject-code">(201)</div>
+          <div class="subject-info"><span>100分</span><span>3小时</span></div>
+          <p class="subject-tips">完形·阅读·翻译·写作</p>
+        </div>
+        <div class="subject-card">
+          <div class="subject-icon">🔢</div>
+          <h3 class="subject-name">数学</h3>
+          <div class="subject-code">(301)</div>
+          <div class="subject-info"><span>150分</span><span>3小时</span></div>
+          <p class="subject-tips">高数·线代·概率论</p>
+        </div>
+        <div class="subject-card">
+          <div class="subject-icon">🎯</div>
+          <h3 class="subject-name">专业课</h3>
+          <div class="subject-code">(自命题)</div>
+          <div class="subject-info"><span>150分</span><span>3小时</span></div>
+          <p class="subject-tips">视目标院校而定</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 📅 Section 3: Study Plan Timeline -->
+  <section class="exam-section" id="plan">
+    <div class="exam-container">
+      <h2 class="section-title"><span class="section-icon">📅</span> 复习阶段计划</h2>
+      <p class="section-subtitle">科学规划，循序渐进</p>
+      <div class="timeline">
+        <div class="timeline-bar"><div class="timeline-bar-inner" id="timelineProgress"></div></div>
+        <div class="phase phase-1"><div class="phase-dot"></div><div><h3>基础阶段</h3><p class="phase-date">3月 — 6月</p><p>全面复习教材，建立知识框架</p></div></div>
+        <div class="phase phase-2"><div class="phase-dot"></div><div><h3>强化阶段</h3><p class="phase-date">7月 — 9月</p><p>专题突破，大量刷题训练</p></div></div>
+        <div class="phase phase-3"><div class="phase-dot"></div><div><h3>冲刺阶段</h3><p class="phase-date">10月 — 12月</p><p>真题模拟，查漏补缺</p></div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 💪 Section 4: Daily Quote -->
+  <section class="exam-section" id="quote">
+    <div class="exam-container">
+      <h2 class="section-title"><span class="section-icon">💪</span> 每日一句</h2>
+      <div class="quote-wrapper">
+        <p class="quote-text" id="quoteText">"坚持就是胜利"</p>
+        <p class="quote-author" id="quoteAuthor">— 考研人</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- 📝 Section 5: Quiz Portal -->
+  <section class="exam-section" id="quiz">
+    <div class="exam-container">
+      <h2 class="section-title"><span class="section-icon">📝</span> 真题练习</h2>
+      <p class="section-subtitle">检验学习成果，查漏补缺</p>
+      <div class="quiz-cards">
+        <a href="/app/" class="quiz-card">
+          <h3>CRM 测试</h3>
+          <p>43 道选择题 · 限时 2 分钟</p>
+        </a>
+        <a href="/app/" class="quiz-card">
+          <h3>网站建设测试</h3>
+          <p>203 道题 · 限时 20 分钟</p>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="exam-footer">
+    <p>© 2026 Lnyeon · 考研必胜 · 坚持到底</p>
+  </footer>
+
   <div class="scroll-bar" id="scrollBar"></div>
   <div class="cursor-glow" id="cursorGlow"></div>
   <script>
@@ -48,6 +213,146 @@
       hero.addEventListener('mousemove',function(e){var p=gp(e);sl.style.transition='none';mv(p.x,p.y,R);var cg=document.getElementById('cursorGlow');if(cg){cg.style.left=e.clientX+'px';cg.style.top=e.clientY+'px';cg.style.opacity='1'}});
       hero.addEventListener('mouseleave',function(){sl.style.transition='clip-path 0.35s cubic-bezier(0.4,0,0.2,1)';sl.style.clipPath='circle(0px at 0px 0px)';var cg=document.getElementById('cursorGlow');if(cg)cg.style.opacity='0'});
       window.addEventListener('scroll',function(){var h=document.documentElement.scrollHeight-window.innerHeight,b=document.getElementById('scrollBar');if(b)b.style.width=(window.scrollY/h*100)+'%'},{passive:true});
+    })();
+  </script>
+
+  <!-- GSAP CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/gsap.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/ScrollTrigger.min.js"></script>
+
+  <!-- 考研备考 Animations & Logic -->
+  <script>
+    (function(){
+      'use strict';
+      if(typeof gsap === 'undefined') return;
+
+      gsap.registerPlugin(ScrollTrigger);
+
+      /* ── GSAP Animations ── */
+
+      // 1. Countdown entrance
+      gsap.from('.cd-item', {
+        opacity:0,
+        y:40,
+        scale:0.8,
+        stagger:0.12,
+        duration:0.9,
+        ease:'back.out(1.7)',
+        scrollTrigger:{trigger:'#countdown',start:'top 70%',toggleActions:'play none none reverse'}
+      });
+
+      // 2. Subject cards stagger
+      gsap.from('.subject-card', {
+        opacity:0,
+        y:50,
+        stagger:0.15,
+        duration:0.8,
+        ease:'back.out(1.7)',
+        scrollTrigger:{trigger:'#subjects',start:'top 72%',toggleActions:'play none none reverse'}
+      });
+
+      // 3. Timeline phases
+      gsap.from('.phase', {
+        opacity:0,
+        x:-30,
+        stagger:0.2,
+        duration:0.8,
+        ease:'power3.out',
+        scrollTrigger:{trigger:'#plan',start:'top 72%',toggleActions:'play none none reverse'}
+      });
+
+      // 4. Timeline progress bar
+      ScrollTrigger.create({
+        trigger:'#plan',
+        start:'top center',
+        end:'bottom center',
+        onUpdate:function(self){
+          var p = document.getElementById('timelineProgress');
+          if(p) p.style.height = Math.min(self.progress * 100, 100) + '%';
+        }
+      });
+
+      // 5. Quiz cards
+      gsap.from('.quiz-card', {
+        opacity:0,
+        y:40,
+        stagger:0.2,
+        duration:0.8,
+        ease:'power3.out',
+        scrollTrigger:{trigger:'#quiz',start:'top 72%',toggleActions:'play none none reverse'}
+      });
+
+      // 6. Quote section heading
+      gsap.from('.quote-wrapper', {
+        opacity:0,
+        y:30,
+        duration:1,
+        ease:'power3.out',
+        scrollTrigger:{trigger:'#quote',start:'top 72%',toggleActions:'play none none reverse'}
+      });
+
+      /* ── Countdown Timer ── */
+      var TARGET = new Date('2026-12-19T08:30:00+08:00');
+      function updateCountdown(){
+        var now = new Date();
+        var diff = Math.max(0, TARGET - now);
+        var d = Math.floor(diff/86400000);
+        var h = Math.floor((diff%86400000)/3600000);
+        var m = Math.floor((diff%3600000)/60000);
+        var s = Math.floor((diff%60000)/1000);
+        var pad = function(n){return String(n).padStart(2,'0')};
+        var el = function(id,v){var e=document.getElementById(id);if(e)e.textContent=v};
+        el('cd-days',pad(d));
+        el('cd-hours',pad(h));
+        el('cd-minutes',pad(m));
+        el('cd-seconds',pad(s));
+      }
+      updateCountdown();
+      setInterval(updateCountdown, 1000);
+
+      /* ── Daily Quotes ── */
+      var QUOTES = [
+        {text:'坚持就是胜利',author:'考研人'},
+        {text:'不积跬步，无以至千里',author:'荀子'},
+        {text:'宝剑锋从磨砺出，梅花香自苦寒来',author:'古诗'},
+        {text:'天行健，君子以自强不息',author:'周易'},
+        {text:'书山有路勤为径，学海无涯苦作舟',author:'韩愈'},
+        {text:'功不唐捐，玉汝于成',author:'考研人'},
+        {text:'志之所趋，无远弗届',author:'格言联璧'},
+        {text:'千淘万漉虽辛苦，吹尽狂沙始到金',author:'刘禹锡'},
+        {text:'既然选择了远方，便只顾风雨兼程',author:'汪国真'},
+        {text:'乾坤未定，你我皆是黑马',author:'考研人'}
+      ];
+      var qIdx = 0;
+      var qText = document.getElementById('quoteText');
+      var qAuth = document.getElementById('quoteAuthor');
+      function showQuote(i){
+        if(!qText || !qAuth) return;
+        var q = QUOTES[i % QUOTES.length];
+        gsap.to(qText, {opacity:0,y:-8,duration:0.25,onComplete:function(){
+          qText.textContent = '“' + q.text + '”';
+          qAuth.textContent = '— ' + q.author;
+          gsap.to(qText, {opacity:1,y:0,duration:0.5,ease:'power2.out'});
+          gsap.fromTo(qAuth,{opacity:0},{opacity:1,duration:0.4,delay:0.15});
+        }});
+      }
+      if(QUOTES.length > 1) setInterval(function(){qIdx = (qIdx+1)%QUOTES.length;showQuote(qIdx);}, 5000);
+
+      /* ── Nav scroll effect (optional) ── */
+      var lastScroll = 0;
+      window.addEventListener('scroll',function(){
+        var sy = window.scrollY;
+        var nav = document.querySelector('.nav');
+        if(nav){
+          if(sy > window.innerHeight * 0.5){
+            nav.style.background = 'rgba(255,255,255,0.92)';
+            nav.style.borderBottom = '1px solid rgba(0,0,0,0.08)';
+          } else {
+            nav.style.background = 'rgba(255,255,255,0.75)';
+            nav.style.borderBottom = '1px solid rgba(0,0,0,0.05)';
+          }
+        }
+      }, {passive:true});
     })();
   </script>
 </body>
